@@ -36,68 +36,46 @@ object Administrator extends Controller with Secured {
     })
   )
   
-  def index = withAuth { username => implicit request =>
-    if (Application.isAdmin(username)) {
-      Redirect(routes.Administrator.listPhotoUploaded)
-    } else {
-      Redirect(routes.Application.index)
-    }
+  def index = withAdmin { username => implicit request =>
+     Redirect(routes.Administrator.listPhotoUploaded)
   }
   
-  def savePhoto = withAuth { username => implicit request =>
-    if (Application.isAdmin(username)) {
-      
-      addNewPhotoForm.bindFromRequest.fold(
-        // Form has errors, redisplay it
-        formWithErrors => BadRequest(html.adminAddPhoto(_TITLE_HTML, null, username, formWithErrors, Tag.list())),
-        // We got a valid User value
-        value =>  {
-          val files: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
-          Ok(views.html.adminListPhoto(_TITLE_HTML, null, username, Tag.list(), files))
-        }
-     )
-     
-    } else {
-      Redirect(routes.Authentication.logout)
-    }
-  }
-  
-  def upload = withAuth { username => implicit request =>
-    if (Application.isAdmin(username)) {
-      val files = request.body.asMultipartFormData.get.files.seq
-      for (image <- files) {
-        val filename = image.filename
-        val contentType = image.contentType
-	      val fileType: String = "." + FileUtils.getFileType(filename)
-	      val newFileName = "_" + DateTime.now().getMillis() + fileType
-      
-	      image.ref.moveTo(new File(Configuration.getPhotoUploadStandardDirectory() + newFileName))
-	
-	      FileUtils.createThumbnails(
-	          Configuration.getPhotoUploadStandardDirectory(),
-	          Configuration.getPhotoUploadThumbnailDirectory(), newFileName, 200, 150)
+  def savePhoto = withAdmin { username => implicit request =>
+    addNewPhotoForm.bindFromRequest.fold(
+      // Form has errors, redisplay it
+      formWithErrors => BadRequest(html.adminAddPhoto(_TITLE_HTML, null, username, formWithErrors, Tag.list())),
+      // We got a valid User value
+      value =>  {
+        val files: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
+        Ok(views.html.adminListPhoto(_TITLE_HTML, null, username, Tag.list(), files))
       }
-      Ok.as("success")
-    } else {
-      Redirect(routes.Authentication.logout)
-    }
+   )
   }
   
-  def listPhotoUploaded = withAuth { username => implicit request =>
-    if (Application.isAdmin(username)) {
-      val files: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
-      Ok(views.html.adminListPhoto(_TITLE_HTML, null, username, Tag.list(), files))
-    } else {
-      Redirect(routes.Application.index)
+  def upload = withAdmin { username => implicit request =>
+    val files = request.body.asMultipartFormData.get.files.seq
+    for (image <- files) {
+      val filename = image.filename
+      val contentType = image.contentType
+      val fileType: String = "." + FileUtils.getFileType(filename)
+      val newFileName = "_" + DateTime.now().getMillis() + fileType
+    
+      image.ref.moveTo(new File(Configuration.getPhotoUploadStandardDirectory() + newFileName))
+
+      FileUtils.createThumbnails(
+          Configuration.getPhotoUploadStandardDirectory(),
+          Configuration.getPhotoUploadThumbnailDirectory(), newFileName, 200, 150)
     }
+    Ok.as("success")
   }
   
-  def addNewPhoto(name: String) = withAuth { username => implicit request =>
-    if (Application.isAdmin(username)) {
-      val formFilled = addNewPhotoForm.fill(name, "", Option.empty, false, List("Kazakhstan"))
-      Ok(views.html.adminAddPhoto(_TITLE_HTML, null, username, formFilled, Tag.list()))  
-    } else {
-      Redirect(routes.Application.index)
-    }
+  def listPhotoUploaded = withAdmin { username => implicit request =>
+    val files: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
+    Ok(views.html.adminListPhoto(_TITLE_HTML, null, username, Tag.list(), files))
+  }
+  
+  def addNewPhoto(name: String) = withAdmin { username => implicit request =>
+    val formFilled = addNewPhotoForm.fill(name, "", Option.empty, false, List("Kazakhstan"))
+    Ok(views.html.adminAddPhoto(_TITLE_HTML, null, username, formFilled, Tag.list()))  
   }
 }

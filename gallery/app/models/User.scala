@@ -27,9 +27,9 @@ object User {
   }
   
   def createUser(login: String, password: String) : Boolean = {
-	if (!checkNotNullOrNotEmpty(login, password) || UserDB.findByLogin(login).isDefined) {
-	  return false;
-	}
+    if (!checkNotNullOrNotEmpty(login, password) || UserDB.findByLogin(login).isDefined) {
+    	return false;
+    }
     val newUser = User(null, login, DBUtils.encodeUserPassword(login, password), DateTime.now())
     val id: Int = UserDB.insert(newUser)
     return id.isInstanceOf[Int]
@@ -37,10 +37,14 @@ object User {
   
   def checkNotNullOrNotEmpty(login: String, password: String) : Boolean = {
     if (login == null || login.isEmpty() || password == null || password.isEmpty()) {
-	  return false
-	}
+    	return false
+    }
     return true
   }
   
   def findUser(login: String) = UserDB.findByLogin(login)
+  
+  def isAdmin(login: String) : Boolean = {
+    return login.equals(Configuration.getAdminLogin())
+  }
 }

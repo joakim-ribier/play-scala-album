@@ -44,47 +44,36 @@ object Application extends Controller with Secured {
     countPage
   }
   
-  def isAdmin(login: String) : Boolean = {
-    return login.equals(Configuration.getAdminLogin())
-  }
-  
-  // --> HTTP METHODS
-  
   def index = withAuth { username => implicit request =>
-    if (isAdmin(username)) {
-      Redirect(routes.Administrator.index)
-    } else {
-      Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(0, _LIMIT), 1, "all", countPage(Photo.total())))
-    }
+  	if (User.isAdmin(username)) {
+  		Redirect(routes.Administrator.index)
+  	} else {
+  		Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(0, _LIMIT), 1, "all", countPage(Photo.total())))
+  	}
   }
   
-  def page(page: String, tags: String) = withAuth { username => implicit request =>
-	  if (isAdmin(username)) {
-	     Redirect(routes.Administrator.index)
-	  } else {
-	    
-	    try {
-	      
-	      val pageToInt = page.asInstanceOf[String].toInt
-	      if (pageToInt >= 1) {
-	        
-	        val tagsSeq = tags.split("\\.").toList
-	        if (tagsSeq.size == 1 && tagsSeq(0) == "all") {
-	          Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, "all", countPage(Photo.total())))
-	        } else {
-	          val photosId: Seq[Long] = Tag.list(tagsSeq)
-	    	  Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(photosId, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(tagsSeq.size)))
-	        }
-	        
-	      } else {
-	        
-	        Redirect(routes.Application.index)
-	      }
-	      
-	    } catch {
-	      case _ => Redirect(routes.Application.index)
-	    }
-	  }
+  def page(page: String, tags: String) = withUser { username => implicit request =>
+    try {
+      
+      val pageToInt = page.asInstanceOf[String].toInt
+      if (pageToInt >= 1) {
+        
+        val tagsSeq = tags.split("\\.").toList
+        if (tagsSeq.size == 1 && tagsSeq(0) == "all") {
+          Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, "all", countPage(Photo.total())))
+        } else {
+          val photosId: Seq[Long] = Tag.list(tagsSeq)
+    	  Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(photosId, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(tagsSeq.size)))
+        }
+        
+      } else {
+        
+        Redirect(routes.Application.index)
+      }
+      
+    } catch {
+      case _ => Redirect(routes.Application.index)
+    }
   }
   
   def configuration = Action {
