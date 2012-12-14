@@ -1,0 +1,238 @@
+#administrator-form {
+	width: 100%;
+	margin:0 auto;
+}
+
+#administrator-form-menu {
+	float: left;
+}
+
+#admin-upload-form {
+	width: 400px;
+	background-color: #FFFFFF;
+	background-image : url('../images/kazakhstan_map.gif');
+	background-repeat: no-repeat; 
+	
+	padding: 5px;
+	
+	-webkit-transform: rotate(5deg);
+	-moz-transform: rotate(5deg);
+	
+	border-style: solid;
+	border-width: 4px;
+	border-color: #FFFFFF;
+	
+	box-shadow: 0px 4px 8px #000000;
+	-moz-box-shadow: 0px 4px 8px #000000;
+	-webkit-box-shadow: 0px 4px 8px #000000;
+}
+
+#admin-photo-list {
+	width: 400px;
+	background-color: #FFFFFF;
+	background-image : url('../images/kazakhstan_map.gif');
+	background-repeat: no-repeat; 
+	
+	padding: 5px;
+	margin-top: 10px;
+	
+	border-style: solid;
+	border-width: 4px;
+	border-color: #FFFFFF;
+	
+	box-shadow: 0px 4px 8px #000000;
+	-moz-box-shadow: 0px 4px 8px #000000;
+	-webkit-box-shadow: 0px 4px 8px #000000;
+	
+	-webkit-transform: rotate(-3deg);
+	-moz-transform: rotate(-3deg);
+	
+	cursor: pointer;
+}
+
+#administrator-content-list {
+	width: 700px;
+	float:left;
+	margin-top: -50px;
+	margin-left: 50px;
+	
+	border-style: solid;
+	border-width: 10px;
+	border-color: #FFFFFF;
+	
+	background-color: #000000;
+	
+	box-shadow: 0px 4px 8px #000000;
+	-moz-box-shadow: 0px 4px 8px #000000;
+	-webkit-box-shadow: 0px 4px 8px #000000;
+	
+	-webkit-transform: rotate(5deg);
+	-moz-transform: rotate(5deg);
+}
+
+#administrator-content-list-photo {
+	float:left;
+	
+	width: 200px;
+	height: 150px;
+	
+	text-align: center;
+	background-color: #000000;
+	margin: 14px;
+
+	border-style: solid;
+	border-width: 2px;
+	border-color: #FFFFFF;
+	
+	cursor: pointer;
+}
+
+#admin-update-account {
+	width: 400px;
+	background-color: #FFFFFF;
+	background-image : url('../images/kazakhstan_map.gif');
+	background-repeat: no-repeat; 
+	
+	padding: 5px;
+	margin-top: 10px;
+	
+	border-style: solid;
+	border-width: 4px;
+	border-color: #FFFFFF;
+	
+	box-shadow: 0px 4px 8px #000000;
+	-moz-box-shadow: 0px 4px 8px #000000;
+	-webkit-box-shadow: 0px 4px 8px #000000;
+	
+	 opacity: 0.6;
+}
+
+#admin-application-tag {
+	width: 400px;
+	background-color: #FFFFFF;
+	background-image : url('../images/kazakhstan_map.gif');
+	background-repeat: no-repeat; 
+	
+	padding: 5px;
+	margin-top: 80px;
+	
+	border-style: solid;
+	border-width: 4px;
+	border-color: #FFFFFF;
+	
+	box-shadow: 0px 4px 8px #000000;
+	-moz-box-shadow: 0px 4px 8px #000000;
+	-webkit-box-shadow: 0px 4px 8px #000000;
+	
+	-webkit-transform: rotate(-5deg);
+	-moz-transform: rotate(-5deg);
+}
+
+#administrator-content {
+	float: left;
+}
+
+#administrator-content-add-new-photo {
+	text-align: center;
+	padding: 5px;
+	float:left;
+	
+	border-style: solid;
+	border-width: 4px;
+	border-color: #FFFFFF;
+	
+	box-shadow: 0px 4px 8px #000000;
+	-moz-box-shadow: 0px 4px 8px #000000;
+	-webkit-box-shadow: 0px 4px 8px #000000;
+	
+	background-color: #FFFFFF;
+	
+	margin-top: -50px;
+	margin-left: 50px;
+	
+	-webkit-transform: rotate(5deg);
+	-moz-transform: rotate(5deg);
+}
+
+#administrator-content-add-new-photo-img {
+	background-color: #000000;
+	padding: 10px;
+}
+
+#administrator-content-add-new-photo-form {
+	background-image : url('../images/kazakhstan_map.gif');
+	background-repeat: no-repeat;
+	text-align: left;
+	margin-bottom: 40px;
+}
+
+#administrator-content-add-new-photo-form-input-tags {
+	margin-top: 20px;
+	background-color: #000000;
+	width: 360px;
+}
+
+.add-new-tag {
+	margin: 5px;
+	padding: 5px;
+	float: left;
+	cursor: pointer;
+
+	background-color: #FFFFFF;
+	-webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  
+  -webkit-box-shadow: 0px 0px 5px rgb(0, 175, 202);
+	-moz-box-shadow: 0px 0px 5px rgb(0, 175, 202);
+	box-shadow: 0px 0px 5px rgb(0, 175, 202);
+}
+
+.admin-tag-already-exists {
+	margin: 5px;
+	padding: 5px;
+	float: left;
+	cursor: pointer;
+
+	background-color: #FFFFFF;
+	-webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  
+  -webkit-box-shadow: 0px 0px 5px rgb(250, 199, 19);
+	-moz-box-shadow: 0px 0px 5px rgb(250, 199, 19);
+	box-shadow: 0px 0px 5px rgb(250, 199, 19);
+}
+
+.admin-upload-form-photo-details {
+	display: none;
+	background-color: #FFFFFF;
+	padding-top: 5px;
+	font-size: 12px;
+	color: rgb(0, 175, 202);
+	font-weight: bold;
+	
+	clear: both;
+}
+
+#admin-upload-form-photo-details-upload {
+	display: none;
+	padding-top: 15px;
+	font-size: 12px;
+	color: rgb(0, 175, 202);
+	font-weight: bold;
+	background-color: #FFFFFF;
+	
+	clear: both;
+}
+
+#admin-upload-form-photo-details-upload-error {
+	display: none;
+	padding-top: 15px;
+	font-size: 12px;
+	color: red;
+	font-weight: bold;
+	background-color: #FFFFFF;
+	
+	clear: both;
+}

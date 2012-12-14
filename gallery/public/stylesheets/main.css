@@ -1,0 +1,258 @@
+body {
+	margin: 0px;
+	font-family: Arial;
+	height: 100%;
+	background-color: rgb(250, 199, 19);
+	font-size: 12px;
+}
+
+button {  
+	padding: 5px;  
+  font-size: 15px;  
+    
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+
+  border: 1px solid rgb(0, 175, 202);
+  
+  cursor: pointer;
+}
+
+input:focus {  
+	-webkit-box-shadow: 0px 0px 5px rgb(250, 199, 19);
+	-moz-box-shadow: 0px 0px 5px rgb(250, 199, 19);
+	box-shadow: 0px 0px 5px rgb(250, 199, 19);
+}
+
+input, textarea {  
+	padding: 5px;  
+  font-size: 15px;  
+    
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  
+  border: 1px solid rgb(0, 175, 202);  
+}  
+
+input:focus, textarea:focus {  
+	-webkit-box-shadow: 0px 0px 5px rgb(250, 199, 19);
+	-moz-box-shadow: 0px 0px 5px rgb(250, 199, 19);
+	box-shadow: 0px 0px 5px rgb(250, 199, 19);
+}
+
+.rotate-deg-minus-1 {
+	-webkit-transform: rotate(-1deg);
+	-moz-transform: rotate(-1deg);
+}
+
+.rotate-deg-minus1 {
+	-webkit-transform: rotate(1deg);
+	-moz-transform: rotate(1deg);
+}
+
+.rotate-deg-minus-2 {
+	-webkit-transform: rotate(-2deg);
+	-moz-transform: rotate(-2deg);
+}
+
+.rotate-deg-minus2 {
+	-webkit-transform: rotate(2deg);
+	-moz-transform: rotate(2deg);
+}
+
+.rotate-deg-minus-3 {
+	-webkit-transform: rotate(-3deg);
+	-moz-transform: rotate(-3deg);
+}
+
+.rotate-deg-minus3 {
+	-webkit-transform: rotate(3deg);
+	-moz-transform: rotate(3deg);
+}
+
+.rotate-deg-minus-4 {
+	-webkit-transform: rotate(-4deg);
+	-moz-transform: rotate(-4deg);
+}
+
+.rotate-deg-minus4 {
+	-webkit-transform: rotate(4deg);
+	-moz-transform: rotate(4deg);
+}
+
+.rotate-deg-minus-5 {
+	-webkit-transform: rotate(-5deg);
+	-moz-transform: rotate(-5deg);
+}
+
+.rotate-deg-minus5 {
+	-webkit-transform: rotate(5deg);
+	-moz-transform: rotate(5deg);
+}
+
+.rotate-deg-minus-6 {
+	-webkit-transform: rotate(-6deg);
+	-moz-transform: rotate(-6deg);
+}
+
+.rotate-deg-minus6 {
+	-webkit-transform: rotate(6deg);
+	-moz-transform: rotate(6deg);
+}
+
+.rotate-deg-minus-7 {
+	-webkit-transform: rotate(-7deg);
+	-moz-transform: rotate(-7deg);
+}
+
+.rotate-deg-minus7 {
+	-webkit-transform: rotate(7deg);
+	-moz-transform: rotate(7deg);
+}
+
+.feedback-ok {
+	padding: 5px;
+	color: green;
+	font-weight: bold;
+	position: relative;
+	z-index: 1;
+}
+
+.feedback-ko {
+	padding: 5px;
+	color: red;
+	font-weight: bold;
+	position: relative;
+	z-index: 1;
+}
+
+#header {
+	background-color: rgb(0, 175, 202);
+	box-shadow: 0px 4px 8px #000000;
+	-moz-box-shadow: 0px 4px 8px #000000;
+	-webkit-box-shadow: 0px 4px 8px #000000;
+}
+
+#header-image {
+	display: table-cell;
+}
+
+#header-image img {
+	margin-top: 3px;
+	border-style: solid;
+	border-width: 0px 2px 0px 0px;
+	border-color: rgb(250, 199, 19);
+}
+
+#header-title {
+	width: 100%;
+	text-align: right;
+	font-size: 20px;
+	color: #FFFFFF;
+	
+	padding-left: 40px;
+	padding-bottom: 10px;
+	display: table-cell;
+}
+
+#content {
+	width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+	z-index: 0;
+	clear: both;
+}
+
+#display-photo-standard {
+	display:none;
+	position: absolute;
+	z-index: 10;
+	width: 100%;
+	margin-top: 10px;
+	
+	-webkit-transform: rotate(-0deg);
+	-moz-transform: rotate(-0deg);
+}
+
+#display-photo-standard-content {
+	width: 1280px;
+	margin-left: auto;
+	margin-right: auto;
+
+	border-style: solid;
+	border-width: 10px;
+	border-color: #FFFFFF;
+	
+	box-shadow: 0px 4px 8px #000000;
+	-moz-box-shadow: 0px 4px 8px #000000;
+	-webkit-box-shadow: 0px 4px 8px #000000;
+	cursor: pointer;
+}
+
+#display-photo-standard-content-img {
+	text-align: center;
+	background-color: #000000;
+	padding-top: 6px;
+}
+
+#display-photo-standard-content-title {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+	background-color: #FFFFFF;
+	font-size: 16px;
+}
+
+#display-photo-standard-content-description {
+	background-color: #000000;
+	color: #FFFFFF;
+	font-size: 16px;
+  text-align: justify;
+	padding: 2px;
+}
+
+#checkbox-label {
+	background-color: #FFFFFF;
+	padding: 5px;  
+  font-size: 15px;  
+    
+  border-style: solid;
+  border-width: 1px;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-color: rgb(0, 175, 202);
+	
+}
+
+#form-error {
+	padding: 15px;
+	font-weight: bold;
+	color: red;
+	clear: both;
+}
+
+#footer {
+	clear: both;
+	width: 100%;
+	margin-top: 40px;
+	margin-bottom: 10px;
+	text-align: center;
+	font-weight: bold;
+}
+
+#footer-2 {
+	margin-top: 15px;
+}
+
+#footer-title-ie {
+	display: none;
+	padding-top: 35px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 16px;
+	clear: both;
+	color: red;
+}

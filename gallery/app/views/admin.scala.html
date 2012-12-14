@@ -1,0 +1,55 @@
+@(title: String, feedback: Feedback, user: String, tags: Seq[String])(content: Html)
+
+@* NOTE this import is required to be able to use the @form tags below*@
+@import helper._
+
+@main(title, feedback, user) {
+
+	<div id="administrator-form">
+		
+		<div id="administrator-form-menu">
+		
+			<div id="admin-upload-form">
+				@form(action = routes.Administrator.upload, 'enctype -> "multipart/form-data") {
+				    <p><input type="file" id="photos" multiple="multiple" onchange="fileSelected()"; /></p>
+				
+						<div class="admin-upload-form-photo-details" id="admin-upload-form-photo-count">
+							Nombre de photo à uploader : <span id="admin-upload-form-count-photo-value">0</span>
+						</div>
+						<div class="admin-upload-form-photo-details" id="admin-upload-form-photo-size">
+							Taille totale de photo : <span id="admin-upload-form-size-photo-value">0MB</span>
+						</div>
+				
+						<div id="admin-upload-form-photo-details-upload">
+							Pourcentage d'upload ( redirection automatique ) : <span id="admin-upload-form-photo-progress-number">0%</span>
+						</div>
+						<div id="admin-upload-form-photo-details-upload-error">Erreur d'upload, veuillez recommencer ou contacter l'administrateur de l'application.</div>
+						
+				    <p><input type="button" onclick="uploadFile()" value="Uploader une/des photo(s)" /></p>
+				}
+				<div id="form-title">Choisir des photos ?</div>
+			</div>
+			
+			<div id="admin-photo-list">
+				<div id="form-title">Voir les photos disponibles ?</div>
+			</div>
+			
+			<div id="admin-update-account">
+				<div id="form-title">Changer le mot de passe du compte administrateur ?</div>
+			</div>
+
+			<div id="admin-application-tag">
+				@for(tag <- tags) {
+					<div class="admin-tag-already-exists">@tag</div>
+				}
+				<div id="form-title">&Eacute;tiquettes déjà présentes dans l'album !</div>
+			</div>
+			
+		</div>
+		
+		<div id="administrator-content">
+			@content
+		</div>
+
+	</div>
+}

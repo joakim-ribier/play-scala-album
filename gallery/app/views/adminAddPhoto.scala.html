@@ -1,0 +1,79 @@
+@(title: String, feedback: Feedback, user: String, form: Form[(String, String, Option[String], Boolean, List[String])], tags: Seq[String])
+
+@tagToId(tag: String) = @{
+	tag.replace("tags", "").replace("_", "")
+}
+		
+@admin(title + ".Administration.Nouvelle.Photo", feedback, user, tags) {
+
+	<div id="administrator-content-add-new-photo">
+		
+			<div id="administrator-content-add-new-photo-img">
+			@if(form("filename").value) {
+				@if(form("filename").value.get == "nophoto") {
+					<img src="@routes.Assets.at("images/nophotox200x150.png")" />
+				} else {
+					<img src="/get/photo/upload/thumbnail/@form("filename").value.get" />
+				}
+			} else {
+				<img src="@routes.Assets.at("images/nophotox200x150.png")" />
+			}
+			</div>
+					
+		@helper.form(routes.Administrator.savePhoto) {
+    	<input type="hidden" name="filename" value="@form("filename").value.get" id="filename" />
+    	<div id="administrator-content-add-new-photo-form-input-tags-hidden">
+    		@helper.repeat(form("tags"), min = 0) { tag =>
+					<input type="hidden" name="tags[@tagToId(tag.id)]" value="@tag.value">
+				}
+    	</div>
+    		
+    	<div id="administrator-content-add-new-photo-form">
+	    	<p>
+					<input type="text" style="background-color: transparent;" size="30" placeholder="donnez un titre à votre image" name="title" value="@form("title").value.get" maxlength="25"/>
+				</p>
+				
+	    	<p>
+	    		@if(form("description").value) {
+	    			<textarea style="background-color: transparent;" rows="4" cols="55" name="description" id="description" value="@form("description").value.get" placeholder="description de la photo ..."></textarea>
+	    		} else {
+	    			<textarea style="background-color: transparent;" rows="4" cols="55" name="description" id="description" value="" placeholder="description de la photo ..."></textarea>
+	    		}
+	    	</p>
+				
+				<p>
+				<input type="text" size="30" style="background-color: transparent;" id="add-new-tag-input" placeholder="tapez votre étiquette + (barre d'espace)"/>
+				</p>
+				
+				<p>
+					@defining(
+						if(form("public").value) {
+							if(form("public").value.get == "true") {
+								"checked"			
+							}
+						}
+					) { checked =>
+	  				<input type="checkbox" id="public" name="public" value="true" @checked />
+						<span id="checkbox-label">rendre la photo public</span>
+					}
+				</p>
+				
+				<div id="administrator-content-add-new-photo-form-input-tags">
+					@helper.repeat(form("tags"), min = 0) { tag =>
+						<div class="add-new-tag">@tag.value</div>
+					}
+				</div>
+				 
+				<div id="form-error">
+					@form.globalError.map { error =>
+	            @error.message
+	        }
+				 </div>
+
+    		<button type="submit" >Sauvegarder la photo</button>
+			</div>
+			
+			<div id="form-title">Informations supplémentaires sur la photo</div>
+		}
+	</div>
+}

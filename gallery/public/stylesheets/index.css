@@ -1,0 +1,154 @@
+#index-application {
+	width: 100%;
+	margin:0 auto;
+	
+	border-style: solid;
+	border-width: 10px;
+	border-color: #FFFFFF;
+	
+	background-color: #000000;
+	
+	box-shadow: 0px 4px 8px #000000;
+	-moz-box-shadow: 0px 4px 8px #000000;
+	-webkit-box-shadow: 0px 4px 8px #000000;
+	
+	-webkit-transform: rotate(5deg);
+	-moz-transform: rotate(5deg);
+	
+	margin-top: -100px;	
+}
+
+.index-application-photos-menu-content-tool {
+	float: left;
+	padding: 10px;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.index-application-photos-menu-content-tool a {
+	color: #FFFFFF;
+}
+
+.index-application-photos-menu-content-tool a:hover {
+	color: rgb(250, 199, 19);
+}
+
+#index-application-page-number {
+	float: left;
+	padding: 10px;
+	cursor: pointer;
+	margin-left: 100px;
+}
+
+#index-application-tag {
+	background-color: #FFFFFF;
+	clear: both;
+	padding: 10px;
+}
+
+.index-tag-already-exists {
+	margin: 5px;
+	padding: 5px;
+	float: left;
+	cursor: pointer;
+
+	background-color: #FFFFFF;
+	-webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  
+  -webkit-box-shadow: 0px 0px 5px rgb(250, 199, 19);
+	-moz-box-shadow: 0px 0px 5px rgb(250, 199, 19);
+	box-shadow: 0px 0px 5px rgb(250, 199, 19);
+}
+
+.index-tag-already-exists-select {
+	margin: 5px;
+	padding: 5px;
+	float: left;
+	cursor: pointer;
+
+	background-color: #FFFFFF;
+	
+	-webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  
+  -webkit-box-shadow: 0px 0px 5px rgb(0, 175, 202);
+	-moz-box-shadow: 0px 0px 5px rgb(0, 175, 202);
+	box-shadow: 0px 0px 5px rgb(0, 175, 202);
+}
+
+#index-application-content {
+	clear: both;
+}
+
+#index-application-photos {
+	
+}
+
+#index-application-photos-menu {
+	width: 100%;
+	background-color: #000000;
+}
+
+#index-application-photos-menu-content {
+	margin-left: 350px;
+	color: #FFFFFF;
+}
+
+#index-application-photo {
+	float: left;
+
+	border-style: solid;
+	border-width: 5px;
+	border-color: #FFFFFF;
+	
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 15px;
+	margin-right: 15px;
+
+	cursor: pointer;
+}
+
+#index-application-photo-img {
+	width: 200px;
+	height: 150px;
+	text-align: center;
+	background-color: #000000;
+}
+
+#index-application-photo-title {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+	background-color: #FFFFFF;
+}
+
+#index-tag-search-title {
+	padding-top: 20px;
+	text-align: center;
+	font-size: 18px;
+	color: rgb(0, 175, 202);
+	font-weight: bold;
+	background-color: #FFFFFF;
+	
+	clear: both;
+}
+
+#index-tag-search-title a {
+	color: rgb(0, 175, 202);
+	text-decoration: none;
+}
+
+#index-tag-search-title-explication {
+	padding-top: 5px;
+	text-align: center;
+	font-size: 12px;
+	color: rgb(0, 175, 202);
+	font-weight: bold;
+	background-color: #FFFFFF;
+	
+	clear: both;
+}

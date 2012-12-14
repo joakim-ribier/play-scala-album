@@ -1,0 +1,26 @@
+@(title: String, feedback: Feedback, user: String, tags: Seq[String], files: Seq[String])
+
+@random() = @{
+	val rnd = new scala.util.Random
+	val range = -3 to 3
+	range(rnd.nextInt(range length))
+}
+
+@compute(files: Seq[String]) = @{ 12 - files.length }
+
+@admin(title + ".Administration.Photos", feedback, user, tags) {
+
+	<div id="administrator-content-list">
+		@for(file <- files) {
+			<div id="administrator-content-list-photo" class="rotate-deg-minus@random">
+				<img src="/get/photo/upload/thumbnail/@file" onclick="accesstoNewPhoto('@file');" />
+			</div>
+		}
+		
+		@for(i <- 1 to compute(files)) {
+			<div id="administrator-content-list-photo" class="rotate-deg-minus@random">
+				<img src="@routes.Assets.at("images/nophotox200x150.png")" />
+			</div>
+		}
+	</div>
+}
