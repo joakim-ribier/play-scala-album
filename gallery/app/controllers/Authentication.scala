@@ -24,14 +24,14 @@ object Authentication extends Controller {
   
   def login = Action { request =>
     request.session.get("user").map { user =>
-      Redirect("/album")
+      Redirect(routes.Application.index)
     }.getOrElse {
       Ok(views.html.login(form, _TITLE_HTML, null))
     }
   }
   
   def redirect = Action { request =>
-    Redirect("/album")
+    Redirect(routes.Application.index)
   }
   
   def authenticate = Action { implicit request =>

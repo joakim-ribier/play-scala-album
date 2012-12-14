@@ -39,12 +39,12 @@ object Administrator extends Controller {
   def index = Action { request =>
     request.session.get("user").map { user =>
       if (Application.isAdmin(user)) {
-        Redirect("/admin/list/photo")
+        Redirect(routes.Administrator.listPhotoUploaded)
       } else {
-        Redirect("/album")
+        Redirect(routes.Application.index)
       }
     }.getOrElse {
-      Redirect("/album")
+      Redirect(routes.Application.index)
     }
   }
   
@@ -63,10 +63,10 @@ object Administrator extends Controller {
        )
        
       } else {
-        Redirect("/logout")
+        Redirect(routes.Authentication.logout)
       }
     }.getOrElse {
-      Redirect("/logout")
+      Redirect(routes.Authentication.logout)
     }
   }
   
@@ -89,10 +89,10 @@ object Administrator extends Controller {
         }
         Ok.as("success")
       } else {
-        Redirect("/logout")
+        Redirect(routes.Authentication.logout)
       }
     }.getOrElse {
-      Redirect("/logout")
+      Redirect(routes.Authentication.logout)
     }
   }
   
@@ -102,10 +102,10 @@ object Administrator extends Controller {
         val files: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
         Ok(views.html.adminListPhoto(_TITLE_HTML, null, user, Tag.list(), files))
       } else {
-        Redirect("/album")
+        Redirect(routes.Application.index)
       }
     }.getOrElse {
-      Redirect("/album")
+      Redirect(routes.Application.index)
     }
   }
   
@@ -115,10 +115,10 @@ object Administrator extends Controller {
         val formFilled = addNewPhotoForm.fill(name, "", Option.empty, false, List("Kazakhstan"))
         Ok(views.html.adminAddPhoto(_TITLE_HTML, null, user, formFilled, Tag.list()))  
       } else {
-        Redirect("/album")
+        Redirect(routes.Application.index)
       }
     }.getOrElse {
-      Redirect("/album")
+      Redirect(routes.Application.index)
     }
   }
 }

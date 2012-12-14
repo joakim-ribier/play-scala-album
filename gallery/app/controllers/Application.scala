@@ -54,19 +54,19 @@ object Application extends Controller {
   def index = Action { request =>
     request.session.get("user").map { user =>
       if (isAdmin(user)) {
-         Redirect("/admin")
+         Redirect(routes.Administrator.index)
       } else {
         Ok(views.html.index(_TITLE_HTML, null, user, Tag.list(), Photo.list(0, _LIMIT), 1, "all", countPage(Photo.total())))
       }
     }.getOrElse {
-      Redirect("/configuration")
+      Redirect(routes.Application.configuration)
     }
   }
   
   def page(page: String, tags: String) = Action { request =>
     request.session.get("user").map { user =>
       if (isAdmin(user)) {
-         Redirect("/admin")
+         Redirect(routes.Administrator.index)
       } else {
         
         try {
@@ -84,15 +84,15 @@ object Application extends Controller {
             
           } else {
             
-            Redirect("/album")
+            Redirect(routes.Application.index)
           }
           
         } catch {
-          case _ => Redirect("/album")
+          case _ => Redirect(routes.Application.index)
         }
       }
     }.getOrElse {
-      Redirect("/configuration")
+      Redirect(routes.Application.configuration)
     }
   }
   
