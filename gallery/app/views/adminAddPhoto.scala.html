@@ -13,7 +13,7 @@
 				@if(form("filename").value.get == "nophoto") {
 					<img src="@routes.Assets.at("images/nophotox200x150.png")" />
 				} else {
-					<img src="/get/photo/upload/thumbnail/@form("filename").value.get" />
+					<img src="/album/get/photo/upload/thumbnail/@form("filename").value.get" />
 				}
 			} else {
 				<img src="@routes.Assets.at("images/nophotox200x150.png")" />

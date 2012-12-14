@@ -36,7 +36,7 @@ function uploadFile() {
 	  xhr.addEventListener("load", uploadComplete, false);
 	  xhr.addEventListener("error", uploadFailed, false);
 	  xhr.addEventListener("abort", uploadCanceled, false);
-	  xhr.open("POST", "/upload");
+	  xhr.open("POST", "/album/upload");
 	  
 	  xhr.send(fd);
 	  
@@ -53,7 +53,7 @@ function uploadProgress(evt) {
 
 function uploadComplete(evt) {
   document.getElementById('admin-upload-form-photo-progress-number').innerHTML = '100%';
-  window.location.replace("/admin/list/photo");
+  window.location.replace("/album/admin/list/photo");
 }
 
 function uploadFailed(evt) {
@@ -77,7 +77,7 @@ function changeDisableState(checkbox, elementToEnableOrDisable) {
 
 function fadeInPhoto(filename, title, description) {
 	$('#display-photo-standard').fadeIn();
-	var img = '<img src="/get/800x600/photo/' + filename + '" onclick="fadeOutPhoto();" />';
+	var img = '<img src="/album/get/800x600/photo/' + filename + '" onclick="fadeOutPhoto();" />';
 	$('#display-photo-standard-content-img').html(img);
 	$('#display-photo-standard-content-title').html(title);
 	$('#display-photo-standard-content-description').html(description);
@@ -88,7 +88,7 @@ function fadeOutPhoto() {
 }
 
 function accesstoNewPhoto(name) {
-	window.location.replace("/admin/add/new/photo/" + name);
+	window.location.replace("/album/admin/add/new/photo/" + name);
 }
 
 $(document).ready(function() {
@@ -186,6 +186,6 @@ $(document).ready(function() {
 		});
 		
 		$("#admin-photo-list").live("click", function() {
-			window.location.replace("/admin/list/photo");
+			window.location.replace("/album/admin/list/photo");
 		});
 });

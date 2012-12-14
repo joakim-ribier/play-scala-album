@@ -2,46 +2,41 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-
+GET		/								   														controllers.Authentication.redirect
+GET		/album								   											controllers.Application.index
 
 # Home page
-GET		/album								   								controllers.Application.index
 
-GET		/get/photo/upload/thumbnail/:photo			controllers.Application.getPhotoInUploadThumbailDirectory(photo: String)
-
-GET		/get/photo/:photo												controllers.Application.getPhotoInStandardDirectory(photo: String)
-GET		/get/thumbnail/photo/:photo							controllers.Application.getPhotoInThumbailDirectory(photo: String)
-GET		/get/800x600/photo/:photo								controllers.Application.getPhotoIn800x600Directory(photo: String)
-
-GET    /album/page/:page/tags/:tags    				controllers.Application.page(page: String, tags: String)
-
+GET		/album/get/photo/upload/thumbnail/:photo			controllers.Application.getPhotoInUploadThumbailDirectory(photo: String)
+GET		/album/get/photo/:photo												controllers.Application.getPhotoInStandardDirectory(photo: String)
+GET		/album/get/thumbnail/photo/:photo							controllers.Application.getPhotoInThumbailDirectory(photo: String)
+GET		/album/get/800x600/photo/:photo								controllers.Application.getPhotoIn800x600Directory(photo: String)
+GET   /album/page/:page/tags/:tags    							controllers.Application.page(page: String, tags: String)
 
 
 # Configuration project page
-GET		/configuration													controllers.Application.configuration
-POST	/configuration													controllers.Application.createAdministrator
 
+GET		/album/configuration													controllers.Application.configuration
+POST	/album/configuration													controllers.Application.createAdministrator
 
 
 # Administrator page
-GET		/admin							   									controllers.Administrator.index
-GET		/admin/list/photo												controllers.Administrator.listPhotoUploaded
-GET		/admin/add/new/photo/:name							controllers.Administrator.addNewPhoto(name: String)
 
-POST /upload																	controllers.Administrator.upload
-POST /savePhoto																controllers.Administrator.savePhoto
-
+GET		/album/admin							   									controllers.Administrator.index
+GET		/album/admin/list/photo												controllers.Administrator.listPhotoUploaded
+GET		/album/admin/add/new/photo/:name							controllers.Administrator.addNewPhoto(name: String)
+POST 	/album/upload																	controllers.Administrator.upload
+POST 	/album/savePhoto															controllers.Administrator.savePhoto
 
 
 # Authentication page
-GET		/								   											controllers.Authentication.redirect
 
-GET		/login																	controllers.Authentication.login
-
-GET		/logout																	controllers.Authentication.logout
-POST	/authenticate														controllers.Authentication.authenticate
-
+GET		/album/login																	controllers.Authentication.login
+GET		/album/logout																	controllers.Authentication.logout
+POST	/album/authenticate														controllers.Authentication.authenticate
+GET		/album/authenticate														controllers.Authentication.redirectAuthenticate
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET   /assets/*file               	controllers.Assets.at(path="/public", file)
+
+GET   /assets/*file               									controllers.Assets.at(path="/public", file)

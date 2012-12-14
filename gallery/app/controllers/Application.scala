@@ -12,7 +12,7 @@ import play.Play
 import utils.Configuration
 import utils.FileUtils
 
-object Application extends Controller {
+object Application extends Controller with Secured {
 
   private val _TITLE_HTML: String = Configuration.getHTMLTitle()
   private val _LIMIT = Configuration.getDisplayPhotoLimit()
@@ -27,12 +27,12 @@ object Application extends Controller {
   )
   
   private def getFile(dir: String, name: String) = Action {
-    try {
-	  val file = FileUtils.getFile(dir, name)
-	  Ok.sendFile(file)
-    } catch {
-      case _ => NotFound
-    }
+	  try {
+	  	val file = FileUtils.getFile(dir, name)
+	  	Ok.sendFile(file)
+	  } catch {
+	    case _ => NotFound
+	  }
   }
   
   private def countPage(count: Long) : Long = {
@@ -47,60 +47,50 @@ object Application extends Controller {
   def isAdmin(login: String) : Boolean = {
     return login.equals(Configuration.getAdminLogin())
   }
-
   
   // --> HTTP METHODS
   
-  def index = Action { request =>
-    request.session.get("user").map { user =>
-      if (isAdmin(user)) {
-         Redirect(routes.Administrator.index)
-      } else {
-        Ok(views.html.index(_TITLE_HTML, null, user, Tag.list(), Photo.list(0, _LIMIT), 1, "all", countPage(Photo.total())))
-      }
-    }.getOrElse {
-      Redirect(routes.Application.configuration)
+  def index = withAuth { username => implicit request =>
+    if (isAdmin(username)) {
+      Redirect(routes.Administrator.index)
+    } else {
+      Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(0, _LIMIT), 1, "all", countPage(Photo.total())))
     }
   }
   
-  def page(page: String, tags: String) = Action { request =>
-    request.session.get("user").map { user =>
-      if (isAdmin(user)) {
-         Redirect(routes.Administrator.index)
-      } else {
-        
-        try {
-          
-          val pageToInt = page.asInstanceOf[String].toInt
-          if (pageToInt >= 1) {
-            
-            val tagsSeq = tags.split("\\.").toList
-            if (tagsSeq.size == 1 && tagsSeq(0) == "all") {
-              Ok(views.html.index(_TITLE_HTML, null, user, Tag.list(), Photo.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, "all", countPage(Photo.total())))
-            } else {
-              val photosId: Seq[Long] = Tag.list(tagsSeq)
-        	  Ok(views.html.index(_TITLE_HTML, null, user, Tag.list(), Photo.list(photosId, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(tagsSeq.size)))
-            }
-            
-          } else {
-            
-            Redirect(routes.Application.index)
-          }
-          
-        } catch {
-          case _ => Redirect(routes.Application.index)
-        }
-      }
-    }.getOrElse {
-      Redirect(routes.Application.configuration)
-    }
+  def page(page: String, tags: String) = withAuth { username => implicit request =>
+	  if (isAdmin(username)) {
+	     Redirect(routes.Administrator.index)
+	  } else {
+	    
+	    try {
+	      
+	      val pageToInt = page.asInstanceOf[String].toInt
+	      if (pageToInt >= 1) {
+	        
+	        val tagsSeq = tags.split("\\.").toList
+	        if (tagsSeq.size == 1 && tagsSeq(0) == "all") {
+	          Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, "all", countPage(Photo.total())))
+	        } else {
+	          val photosId: Seq[Long] = Tag.list(tagsSeq)
+	    	  Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(photosId, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(tagsSeq.size)))
+	        }
+	        
+	      } else {
+	        
+	        Redirect(routes.Application.index)
+	      }
+	      
+	    } catch {
+	      case _ => Redirect(routes.Application.index)
+	    }
+	  }
   }
   
   def configuration = Action {
     val u = User.findUser(Configuration.getAdminLogin())
     if (u.isDefined) {
-       Redirect("/login").withNewSession.flashing(
-           "success" -> "You've been logged out")
+       Redirect(routes.Application.index)
     } else {
       val filledForm = formNewAdmin.fill(Configuration.getAdminLogin(), null)
       Ok(views.html.configuration(filledForm, _TITLE_HTML))   
@@ -116,19 +106,19 @@ object Application extends Controller {
     )
   }
   
-  def getPhotoInUploadThumbailDirectory(photo: String) = Action {
-    getFile(Configuration.getPhotoUploadThumbnailDirectory(), photo)
+  def getPhotoInUploadThumbailDirectory(photo: String) = withAuth { username => implicit request =>
+    getFile(Configuration.getPhotoUploadThumbnailDirectory(), photo)(request)
   }
    
-  def getPhotoInStandardDirectory(photo: String) = Action {
-    getFile(Configuration.getPhotoStandardDirectory(), photo)
+  def getPhotoInStandardDirectory(photo: String) = withAuth { username => implicit request =>
+    getFile(Configuration.getPhotoStandardDirectory(), photo)(request)
   }
   
-  def getPhotoInThumbailDirectory(photo: String) = Action {
-    getFile(Configuration.getPhotoThumbnailDirectory(), photo)
+  def getPhotoInThumbailDirectory(photo: String) = withAuth { username => implicit request =>
+    getFile(Configuration.getPhotoThumbnailDirectory(), photo)(request)
   }
   
-  def getPhotoIn800x600Directory(photo: String) = Action {
-    getFile(Configuration.getPhoto800x600Directory(), photo)
+  def getPhotoIn800x600Directory(photo: String) = withAuth { username => implicit request =>
+    getFile(Configuration.getPhoto800x600Directory(), photo)(request)
   }
 }

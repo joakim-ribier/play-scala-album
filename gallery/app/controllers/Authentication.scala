@@ -8,9 +8,21 @@ import views._
 import models._
 import utils.Configuration
 
-object Authentication extends Controller {
+trait Secured {
+  def username(request: RequestHeader) = request.session.get(Security.username)
 
-  private val _TITLE_HTML: String = Configuration.getHTMLTitle()
+  def onUnauthorized(request: RequestHeader) = Results.Redirect(routes.Authentication.login)
+
+  def withAuth(f: => String => Request[AnyContent] => Result) = {
+    Security.Authenticated(username, onUnauthorized) { user =>
+      Action(request => f(user)(request))
+    }
+  }
+}
+
+object Authentication extends Controller {
+  	
+	private val _TITLE_HTML: String = Configuration.getHTMLTitle()
   
   val form = Form (
     tuple (
@@ -23,15 +35,16 @@ object Authentication extends Controller {
   )
   
   def login = Action { request =>
-    request.session.get("user").map { user =>
-      Redirect(routes.Application.index)
-    }.getOrElse {
-      Ok(views.html.login(form, _TITLE_HTML, null))
+  	val u = User.findUser(Configuration.getAdminLogin())
+    if (u.isDefined) {
+    	Ok(views.html.login(form, _TITLE_HTML, null))
+    } else {
+    	Redirect(routes.Application.configuration)
     }
   }
   
   def redirect = Action { request =>
-    Redirect(routes.Application.index)
+  	Redirect(routes.Application.configuration)
   }
   
   def authenticate = Action { implicit request =>
@@ -39,8 +52,14 @@ object Authentication extends Controller {
       // Form has errors, redisplay it
       formWithErrors => BadRequest(html.login(formWithErrors, _TITLE_HTML, null)),
       // We got a valid User value
-      value => Redirect(routes.Application.index).withSession("user" -> value._1)
+      value => {
+        Redirect(routes.Application.index).withSession(Security.username -> value._1) 
+      }
     )
+  }
+  
+  def redirectAuthenticate = Action {
+  	Redirect(routes.Application.index)
   }
   
   def logout = Action {

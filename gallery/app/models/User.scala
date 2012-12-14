@@ -5,6 +5,7 @@ import org.joda.time.DateTime
 import anorm._
 import utils.Configuration
 import utils.DBUtils
+import play.api.Logger
 
 case class User(id: Pk[Long] = NotAssigned, login: String, password: String, created: DateTime)
 

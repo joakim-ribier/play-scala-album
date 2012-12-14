@@ -21,7 +21,7 @@ import scala.collection.immutable.Seq
 import scala.collection.immutable.Nil
 import utils.FileUtils
 
-object Administrator extends Controller {
+object Administrator extends Controller with Secured {
 
   private val _TITLE_HTML: String = Configuration.getHTMLTitle()
   private val addNewPhotoForm = Form (
@@ -36,88 +36,67 @@ object Administrator extends Controller {
     })
   )
   
-  def index = Action { request =>
-    request.session.get("user").map { user =>
-      if (Application.isAdmin(user)) {
-        Redirect(routes.Administrator.listPhotoUploaded)
-      } else {
-        Redirect(routes.Application.index)
-      }
-    }.getOrElse {
+  def index = withAuth { username => implicit request =>
+    if (Application.isAdmin(username)) {
+      Redirect(routes.Administrator.listPhotoUploaded)
+    } else {
       Redirect(routes.Application.index)
     }
   }
   
-  def savePhoto = Action { implicit request =>
-    request.session.get("user").map { user =>
-      if (Application.isAdmin(user)) {
-        
-        addNewPhotoForm.bindFromRequest.fold(
-          // Form has errors, redisplay it
-          formWithErrors => BadRequest(html.adminAddPhoto(_TITLE_HTML, null, user, formWithErrors, Tag.list())),
-          // We got a valid User value
-          value =>  {
-            val files: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
-            Ok(views.html.adminListPhoto(_TITLE_HTML, null, user, Tag.list(), files))
-          }
-       )
-       
-      } else {
-        Redirect(routes.Authentication.logout)
-      }
-    }.getOrElse {
+  def savePhoto = withAuth { username => implicit request =>
+    if (Application.isAdmin(username)) {
+      
+      addNewPhotoForm.bindFromRequest.fold(
+        // Form has errors, redisplay it
+        formWithErrors => BadRequest(html.adminAddPhoto(_TITLE_HTML, null, username, formWithErrors, Tag.list())),
+        // We got a valid User value
+        value =>  {
+          val files: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
+          Ok(views.html.adminListPhoto(_TITLE_HTML, null, username, Tag.list(), files))
+        }
+     )
+     
+    } else {
       Redirect(routes.Authentication.logout)
     }
   }
   
-  def upload = Action(parse.multipartFormData) { request =>
-    request.session.get("user").map { user =>
-      if (Application.isAdmin(user)) {
-        
-        val files = request.body.files.seq
-        for (image <- files) {
-          val filename = image.filename
-          val contentType = image.contentType
+  def upload = withAuth { username => implicit request =>
+    if (Application.isAdmin(username)) {
+      val files = request.body.asMultipartFormData.get.files.seq
+      for (image <- files) {
+        val filename = image.filename
+        val contentType = image.contentType
 	      val fileType: String = "." + FileUtils.getFileType(filename)
 	      val newFileName = "_" + DateTime.now().getMillis() + fileType
-	      
+      
 	      image.ref.moveTo(new File(Configuration.getPhotoUploadStandardDirectory() + newFileName))
-
+	
 	      FileUtils.createThumbnails(
-            Configuration.getPhotoUploadStandardDirectory(),
-            Configuration.getPhotoUploadThumbnailDirectory(), newFileName, 200, 150)
-        }
-        Ok.as("success")
-      } else {
-        Redirect(routes.Authentication.logout)
+	          Configuration.getPhotoUploadStandardDirectory(),
+	          Configuration.getPhotoUploadThumbnailDirectory(), newFileName, 200, 150)
       }
-    }.getOrElse {
+      Ok.as("success")
+    } else {
       Redirect(routes.Authentication.logout)
     }
   }
   
-  def listPhotoUploaded = Action { request =>
-    request.session.get("user").map { user =>
-      if (Application.isAdmin(user)) {
-        val files: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
-        Ok(views.html.adminListPhoto(_TITLE_HTML, null, user, Tag.list(), files))
-      } else {
-        Redirect(routes.Application.index)
-      }
-    }.getOrElse {
+  def listPhotoUploaded = withAuth { username => implicit request =>
+    if (Application.isAdmin(username)) {
+      val files: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
+      Ok(views.html.adminListPhoto(_TITLE_HTML, null, username, Tag.list(), files))
+    } else {
       Redirect(routes.Application.index)
     }
   }
   
-  def addNewPhoto(name: String) = Action { request =>
-    request.session.get("user").map { user =>
-      if (Application.isAdmin(user)) {
-        val formFilled = addNewPhotoForm.fill(name, "", Option.empty, false, List("Kazakhstan"))
-        Ok(views.html.adminAddPhoto(_TITLE_HTML, null, user, formFilled, Tag.list()))  
-      } else {
-        Redirect(routes.Application.index)
-      }
-    }.getOrElse {
+  def addNewPhoto(name: String) = withAuth { username => implicit request =>
+    if (Application.isAdmin(username)) {
+      val formFilled = addNewPhotoForm.fill(name, "", Option.empty, false, List("Kazakhstan"))
+      Ok(views.html.adminAddPhoto(_TITLE_HTML, null, username, formFilled, Tag.list()))  
+    } else {
       Redirect(routes.Application.index)
     }
   }
