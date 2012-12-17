@@ -11,12 +11,15 @@ import anorm._
 import java.io.File
 import utils._
 import db.PhotoDB
+import play.api.Logger
+import db.OrderENUM
 
 object Visibility extends Enumeration {
   type Visibility = Value
   val PUBLIC, PRIVATE = Value
 }
 import Visibility._
+
 
 case class Photo(id: Pk[Long] = NotAssigned, filename: String, title: String, description: Option[String], visibility: Visibility, created: DateTime)
 
@@ -74,6 +77,42 @@ object Photo {
   def list(photos: Seq[Long], offset: Long, limit: Int) : Seq[Photo] = {
 	 return PhotoDB.findAll(photos, offset, limit)
   }
+  
+  def list(photos: Seq[Long]) : Seq[Photo] = {
+    return PhotoDB.findAll(photos)
+  }
    
   def total() = PhotoDB.count()
+  
+  def getPreviousPhoto(photoId: Long) : Photo = {
+    val photos = PhotoDB.findAll()
+    return getNextElement(photoId, photos)
+  }
+  
+  def getNextPhoto(photoId: Long) : Photo = {
+    val photos = PhotoDB.findAll(OrderENUM.ASC)
+    return getNextElement(photoId, photos)
+  }
+  
+  def getPreviousPhoto(photoId: Long, photoIds: Seq[Long]) : Photo = {
+    val photos = PhotoDB.findAll(photoIds)
+    return getNextElement(photoId, photos)
+  }
+  
+  def getNextPhoto(photoId: Long, photoIds: Seq[Long]) : Photo = {
+    val photos = PhotoDB.findAll(photoIds, OrderENUM.ASC)
+    return getNextElement(photoId, photos)
+  }
+  
+  private def getNextElement(photoId: Long, photos: Seq[Photo]) : Photo = {
+    var find: Photo = null
+  	val ite = photos.iterator
+  	while(ite.hasNext) {
+  		val photo = ite.next()
+  		if (photo.id.get == photoId && ite.hasNext) {
+  			return ite.next()
+  		}
+  	}
+  	return null
+  }
 }

@@ -21,7 +21,6 @@ object Global extends GlobalSettings {
     checkApplicationConnection()
     checkDBConfiguration()
     checkDBPasswordToken()
-    
     checkFolderStorePhotos();
     
     getValue("app.google.analytics")

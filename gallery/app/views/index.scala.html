@@ -50,7 +50,7 @@
 							
 				<div id="index-application-photos">
 					@for(photo <- photos) {
-							<div id="index-application-photo" class="rotate-deg-minus@random" onclick="fadeInPhoto('@photo.filename', '@stringFormat(photo.title)', '@optionStringFormat(photo.description)');">
+							<div id="index-application-photo" class="rotate-deg-minus@random" onclick="fadeInPhoto(@photo.id, '@photo.filename', '@stringFormat(photo.title)', '@optionStringFormat(photo.description)', '@byTags');">
 								
 								<div id="index-application-photo-img">
 									<img src="/album/get/thumbnail/photo/@photo.filename" />

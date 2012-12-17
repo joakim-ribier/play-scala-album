@@ -13,6 +13,8 @@ GET		/album/get/thumbnail/photo/:photo							controllers.Application.getPhotoInT
 GET		/album/get/800x600/photo/:photo								controllers.Application.getPhotoIn800x600Directory(photo: String)
 GET   /album/page/:page/tags/:tags    							controllers.Application.page(page: String, tags: String)
 
+GET   /album/photo/previous/:id/tags/:tags 					controllers.Application.getPreviousPhoto(id: String, tags: String)
+GET   /album/photo/next/:id/tags/:tags 							controllers.Application.getNextPhoto(id: String, tags: String)
 
 # Configuration project page
 

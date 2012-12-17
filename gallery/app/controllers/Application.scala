@@ -11,12 +11,16 @@ import java.io.IOException
 import play.Play
 import utils.Configuration
 import utils.FileUtils
+import play.api.libs.json.Json
 
 object Application extends Controller with Secured {
 
   private val _TITLE_HTML: String = Configuration.getHTMLTitle()
   private val _LIMIT = Configuration.getDisplayPhotoLimit()
   
+  private val _TAG_ALL = "all"
+  private val _TAG_SEPARATOR = "\\."
+    
   private val formNewAdmin = Form (
     tuple (
       "login" -> text,
@@ -48,7 +52,7 @@ object Application extends Controller with Secured {
   	if (User.isAdmin(username)) {
   		Redirect(routes.Administrator.index)
   	} else {
-  	  Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(0, _LIMIT), 1, "all", countPage(Photo.total())))
+  	  Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(0, _LIMIT), 1, _TAG_ALL, countPage(Photo.total())))
   	}
   }
   
@@ -58,12 +62,12 @@ object Application extends Controller with Secured {
       val pageToInt = page.asInstanceOf[String].toInt
       if (pageToInt >= 1) {
         
-        val tagsSeq = tags.split("\\.").toList
-        if (tagsSeq.size == 1 && tagsSeq(0) == "all") {
-          Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, "all", countPage(Photo.total())))
+        val tagsSeq = tags.split(_TAG_SEPARATOR).toList
+        if (tagsSeq.size == 1 && tagsSeq(0) == _TAG_ALL) {
+          Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, _TAG_ALL, countPage(Photo.total())))
         } else {
           val photosId: Seq[Long] = Tag.list(tagsSeq)
-    	  Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(photosId, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(tagsSeq.size)))
+          Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(photosId, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(tagsSeq.size)))
         }
         
       } else {
@@ -73,6 +77,53 @@ object Application extends Controller with Secured {
       
     } catch {
       case _ => Redirect(routes.Application.index)
+    }
+  }
+  
+  def getPreviousPhoto(id: String, tags: String) = withUser { username => implicit request =>
+    try {
+      val photoId = id.asInstanceOf[String].toInt
+      val tagsSeq = tags.split(_TAG_SEPARATOR).toList
+      if (tagsSeq.size == 1 && tagsSeq(0) == _TAG_ALL) {
+        toJSON(Photo.getPreviousPhoto(photoId))
+      } else {
+        val photosId: Seq[Long] = Tag.list(tagsSeq)
+        toJSON(Photo.getPreviousPhoto(photoId, photosId))
+      }
+    } catch {
+      case _ =>  Ok(Json.toJson(Map("status" -> "failed")))
+    }
+  }
+  
+  def getNextPhoto(id: String, tags: String) = withUser { username => implicit request =>
+    try {
+      val photoId = id.asInstanceOf[String].toInt
+      val tagsSeq = tags.split(_TAG_SEPARATOR).toList
+      if (tagsSeq.size == 1 && tagsSeq(0) == _TAG_ALL) {
+        toJSON(Photo.getNextPhoto(photoId))
+      } else {
+        val photosId: Seq[Long] = Tag.list(tagsSeq)
+        toJSON(Photo.getNextPhoto(photoId, photosId))
+      }
+    } catch {
+      case _ =>  Ok(Json.toJson(Map("status" -> "failed")))
+    }
+  }
+  
+  private def toJSON(photo: Photo) : Result = {
+    if (photo != null) {
+      var desc = ""
+      if (photo.description.isDefined) {
+        desc = photo.description.get
+      }
+      Ok(Json.toJson(
+          Map("status" -> "success",
+              "id" -> String.valueOf(photo.id),
+              "filename" -> photo.filename,
+              "title" -> photo.title,
+              "desc" -> desc)))
+    } else {
+      Ok(Json.toJson(Map("status" -> "nothing")))
     }
   }
   

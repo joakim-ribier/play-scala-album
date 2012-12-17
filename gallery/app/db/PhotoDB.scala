@@ -43,10 +43,14 @@ object PhotoDB {
   }
   
   def findAll() : Seq[Photo] = {
+    return findAll(OrderENUM.DESC)
+  }
+  
+  def findAll(order: OrderENUM.ORDER) : Seq[Photo] = {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
-          SELECT * FROM """ + _DB_TBL_PHOTO + """ ORDER BY created DESC
+          SELECT * FROM """ + _DB_TBL_PHOTO + """ ORDER BY created """ + order + """
         """
       )
       sql.as(PhotoDB.simple *)
@@ -87,6 +91,23 @@ object PhotoDB {
       ).on(
         'offset -> offset,
         'limit -> limit)
+      sql.as(PhotoDB.simple *)
+    }
+  }
+  
+  def findAll(photos: Seq[Long]) : Seq[Photo] = {
+    return findAll(photos, OrderENUM.DESC) 
+  }
+  
+  def findAll(photos: Seq[Long], order: OrderENUM.ORDER) : Seq[Photo] = {
+    return DB.withConnection { implicit connection =>
+      val sql = SQL(
+        """
+          SELECT * FROM """ + _DB_TBL_PHOTO + """ 
+          WHERE id IN ( """ + DBUtils.formatSEQLongToString(photos) + """) 
+          ORDER BY created """ + order + """
+        """
+      )
       sql.as(PhotoDB.simple *)
     }
   }

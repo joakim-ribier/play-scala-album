@@ -177,7 +177,7 @@ input:focus, textarea:focus {
 }
 
 #display-photo-standard-content {
-	width: 1280px;
+	width: 1200px;
 	margin-left: auto;
 	margin-right: auto;
 
@@ -188,13 +188,52 @@ input:focus, textarea:focus {
 	box-shadow: 0px 4px 8px #000000;
 	-moz-box-shadow: 0px 4px 8px #000000;
 	-webkit-box-shadow: 0px 4px 8px #000000;
+
+	background-color: #000000;
+}
+
+#display-photo-standard-content-header span {
+	color: #FFFFFF;
+}
+
+#display-photo-standard-content-header-prev {
 	cursor: pointer;
+	margin: 5px;
+	float: left;
+	
+  border-left: 26px solid #FFFFFF;
+  border-bottom: 13px solid transparent;
+  border-top: 13px solid transparent;	
+}
+
+#display-photo-standard-content-header-prev:hover {
+	border-left: 26px solid  rgb(250, 199, 19);
+  border-bottom: 13px solid transparent;
+  border-top: 13px solid transparent;
+}
+
+#display-photo-standard-content-header-next {
+	cursor: pointer;
+	margin: 5px;
+	float: left;
+	
+  border-right: 26px solid #FFFFFF;
+  border-bottom: 13px solid transparent;
+  border-top: 13px solid transparent;
+}
+
+#display-photo-standard-content-header-next:hover {
+	border-right: 26px solid  rgb(250, 199, 19);
+  border-bottom: 13px solid transparent;
+  border-top: 13px solid transparent;
 }
 
 #display-photo-standard-content-img {
+	clear: both;
 	text-align: center;
 	background-color: #000000;
 	padding-top: 6px;
+	cursor: pointer;
 }
 
 #display-photo-standard-content-title {
