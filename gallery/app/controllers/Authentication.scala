@@ -7,38 +7,10 @@ import play.api._
 import views._
 import models._
 import utils.Configuration
-
-trait Secured {
-  def username(request: RequestHeader) = request.session.get(Security.username)
-
-  def onUnauthorized(request: RequestHeader) = Results.Redirect(routes.Authentication.logout)
-  
-  def userUnauthorized(request: RequestHeader) = Results.Redirect(routes.Authentication.logout)
-  
-  def adminUnauthorized(request: RequestHeader) = Results.Redirect(routes.Authentication.logout)
-
-  def withAuth(f: => String => Request[AnyContent] => Result) = {
-    Security.Authenticated(username, onUnauthorized) { user =>
-      Action(request => f(user)(request))
-    }
-  }
-  
-  def withUser(f: String => Request[AnyContent] => Result) = withAuth { username => implicit request =>
-    if (User.isAdmin(username)) {
-    	userUnauthorized(request)
-    } else {
-    	f(username)(request)
-    }
-  }
-  
-  def withAdmin(f: String => Request[AnyContent] => Result) = withAuth { username => implicit request =>
-    if (User.isAdmin(username)) {
-    	f(username)(request)
-    } else {
-    	adminUnauthorized(request)
-    }
-  }
-}
+import org.slf4j.MDC
+import java.util.Calendar
+import java.text.SimpleDateFormat
+import utils.MDCUtils
 
 object Authentication extends Controller {
   	
@@ -73,7 +45,14 @@ object Authentication extends Controller {
       formWithErrors => BadRequest(html.login(formWithErrors, _TITLE_HTML, null)),
       // We got a valid User value
       value => {
-        Redirect(routes.Application.index).withSession(Security.username -> value._1) 
+        val sessionId = generateSessionId(value._1)
+        MDCUtils.getOrOpenSession(value._1, sessionId)
+        
+        Logger.info("You've been logged in")
+        
+        Redirect(routes.Application.index).withSession(
+            Security.username -> value._1,
+            "sessionId" -> sessionId)
       }
     )
   }
@@ -82,9 +61,16 @@ object Authentication extends Controller {
   	Redirect(routes.Application.index)
   }
   
-  def logout = Action {
-    Redirect(routes.Authentication.login).withNewSession.flashing(
-      "success" -> "You've been logged out"
-    )
+  def logout = Action { request =>
+    Logger.info("You've been logged out")
+    MDCUtils.closeSession()
+    Redirect(routes.Authentication.login).withNewSession
+  }
+
+  private def generateSessionId(username: String) : String = {
+  	val date: Calendar = Calendar.getInstance();
+		val dateformatter: SimpleDateFormat  = new SimpleDateFormat("yyyy.MM.dd_hh:mm:ss")
+		val now: String = dateformatter.format(date.getTime())
+		return username + "-" + now 
   }
 }

@@ -3,6 +3,10 @@ import play.api.GlobalSettings
 import play.api.Logger
 import java.io._
 import utils.Configuration
+import play.api.mvc.RequestHeader
+import play.api.mvc.Handler
+import play.api.mvc.Security
+import utils.MDCUtils
 
 object Global extends GlobalSettings {
 
@@ -25,6 +29,17 @@ object Global extends GlobalSettings {
   
   override def onStop(app: Application) {
     Logger.info(getApplicationName() + " application shutdown...")
+  }
+  
+  override def onRouteRequest(request: RequestHeader): Option[Handler] = {
+    val username = request.session.get(Security.username)
+    val sessionId = request.session.get("sessionId")
+    if (username.isDefined && sessionId.isDefined) {
+      MDCUtils.getOrOpenSession(username.get, sessionId.get)
+    } else {
+    	MDCUtils.closeSession()
+    }
+    super.onRouteRequest(request)
   }
   
   def checkApplicationConnection() {

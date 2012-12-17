@@ -48,7 +48,7 @@ object Application extends Controller with Secured {
   	if (User.isAdmin(username)) {
   		Redirect(routes.Administrator.index)
   	} else {
-  		Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(0, _LIMIT), 1, "all", countPage(Photo.total())))
+  	  Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(0, _LIMIT), 1, "all", countPage(Photo.total())))
   	}
   }
   
