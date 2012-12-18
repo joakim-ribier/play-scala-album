@@ -12,6 +12,7 @@ object Global extends GlobalSettings {
 
   val appTablesDB = List(
       Configuration._TABLE_USER_KEY,
+      Configuration._TABLE_EMAIL_KEY,
       Configuration._TABLE_PHOTO_KEY,
       Configuration._TABLE_TAG_KEY)
   
