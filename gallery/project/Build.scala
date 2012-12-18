@@ -10,7 +10,8 @@ object ApplicationBuild extends Build {
     val appDependencies = Seq(
       // Add your project dependencies here,
       "postgresql" % "postgresql" % "9.1-901.jdbc4",
-      "net.coobird" % "thumbnailator" % "0.4.2"
+      "net.coobird" % "thumbnailator" % "0.4.2",
+      "com.typesafe" %% "play-plugins-mailer" % "2.0.4"
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
