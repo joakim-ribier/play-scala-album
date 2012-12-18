@@ -235,4 +235,12 @@ $(document).ready(function() {
 	$("#admin-photo-list").live("click", function() {
 		window.location.replace("/album/admin/list/photo");
 	});
+	
+	$("#footer-information-email-ckx").live("change", function() {
+		if ($(this).is(':checked')) {
+			$('#footer-information-new-email').fadeIn();
+		} else {
+			$('#footer-information-new-email').fadeOut();
+		}
+	});
 });

@@ -67,6 +67,20 @@
     		}
     		</div>
     		
+    		@if(user != null) {
+    			@if(!user.email.isDefined || user.email.get == "nothing") {
+    				<div id="footer-information-email">
+    					<input type="checkbox" id="footer-information-email-ckx">
+    					<span>Etre informé des mises à jour du site</span>
+    					
+    					<div id="footer-information-new-email">
+    						<input type="text" id="footer-information-email-input" placeholder="adresse mail valide" id="login">
+    						<input type="button" id="footer-information-email-button" value="Recevoir un mail de validation" />				
+    					</div>
+    				</div>
+    			}
+    		}
+    	
     		<div id="footer-2">
     			<span><a href="@routes.Application.index" />@getTitleWithVersion(title)</a></span>
     			 - 
