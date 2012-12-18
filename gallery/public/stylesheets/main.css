@@ -298,6 +298,10 @@ input:focus, textarea:focus {
 	margin-top: 10px;
 }
 
+#footer-information-new-email-return {
+	margin-top: 10px;	
+}
+
 #footer-2 {
 	margin-top: 15px;
 }

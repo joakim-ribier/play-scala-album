@@ -21,6 +21,7 @@ GET   /album/photo/next/:id/tags/:tags 							controllers.Application.getNextPho
 GET		/album/configuration													controllers.Application.configuration
 POST	/album/configuration													controllers.Application.createAdministrator
 
+POST	/album/configuration/user/new/address/mail		controllers.Application.sendValidationEmail
 
 # Administrator page
 

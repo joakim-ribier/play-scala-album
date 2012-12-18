@@ -243,4 +243,28 @@ $(document).ready(function() {
 			$('#footer-information-new-email').fadeOut();
 		}
 	});
+	
+	$("#footer-information-email-button").live("click", function() {
+		$("#footer-information-new-email-return").html('Envoi en cours ...');
+		
+		var value = $("#footer-information-email-input").val();
+		if (value != null && value != "") {
+			$.post('/album/configuration/user/new/address/mail',
+				{'address-post': value},
+				function(data) {
+				switch (data['status']) {
+					case 'success':
+						$("#footer-information-new-email-return").html('E-mail de validation envoyé à [' + data['return'] + '], veuillez vérifier dans votre boite de réception.');
+						break;
+					case 'nothing' :
+					case 'failed' :
+					default :
+						$("#footer-information-new-email-return").html("Adresse mail invalide, veuillez recommencer ...");
+				}
+			});
+		} else {
+			$("#footer-information-new-email-return").html("Adresse mail invalide, veuillez recommencer ...");
+		}
+	});
+	
 });

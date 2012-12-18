@@ -19,7 +19,7 @@ object DBUtils {
   }
   
   def encodeUserPassword(login: String, password: String) : String = {
-    val s = login + Configuration.getPasswordToken() + password
+    val s = login + Configuration.getToken + password
     val md = java.security.MessageDigest.getInstance("SHA-1")
     return new sun.misc.BASE64Encoder().encode(md.digest(s.getBytes))
   }

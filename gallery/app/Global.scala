@@ -18,10 +18,12 @@ object Global extends GlobalSettings {
   
   override def onStart(app: Application) {
     Logger.info(getApplicationName() + " application has started")
+    
     getValue("app.version")
+    getValue(Configuration.getToken)
+     
     checkApplicationConnection()
     checkDBConfiguration()
-    checkDBPasswordToken()
     checkFolderStorePhotos();
     
     getValue("app.google.analytics")
@@ -49,10 +51,6 @@ object Global extends GlobalSettings {
     getValue(Configuration._APP_HTML_TITLE)
   }
 
-  def checkDBPasswordToken() {
-    getValue(Configuration._APP_DB_PASSWORD_TOKEN)
-  }
-  
   def checkDBConfiguration() {
     Logger.info("Check database configuration")
     for (table <- appTablesDB) {
@@ -72,11 +70,11 @@ object Global extends GlobalSettings {
   }
   
   def checkFolderStorePhotos() {
-	createDirectoryIfNotExists(Configuration._APP_UPLOAD_PHOTO)
+    createDirectoryIfNotExists(Configuration._APP_UPLOAD_PHOTO)
     createDirectoryIfNotExists(Configuration._APP_UPLOAD_STANDARD_PHOTO)
     createDirectoryIfNotExists(Configuration._APP_UPLOAD_THUMBNAIL_PHOTO)
     
-	createDirectoryIfNotExists(Configuration._APP_STANDARD_PHOTO)
+	  createDirectoryIfNotExists(Configuration._APP_STANDARD_PHOTO)
     createDirectoryIfNotExists(Configuration._APP_THUMBNAIL_PHOTO)
     createDirectoryIfNotExists(Configuration._APP_800x600_PHOTO)
   }

@@ -3,26 +3,31 @@ import play.Play
 
 object Configuration {
 
-  // -- SESSION KEY
+	val _APP_HOST = "app.host"
+	val _APP_TOKEN = "token"
+
+	//:MAIL CONFIGURATION KEY
+	val _MAIL_FROM = "app.send.mail.from"
+  
+	//:SESSION KEY
   val _SESSION_EMAIL_KEY = "user_email"
   val _SESSION_ID_KEY = "sessionId"
   
-  // -- DATABASE KEY
+  //:DATABASE KEY
   val _TABLE_USER_KEY = "app.db.tbl.user"
   val _TABLE_EMAIL_KEY = "app.db.tbl.email"
   val _TABLE_PHOTO_KEY = "app.db.tbl.photo"
   val _TABLE_TAG_KEY = "app.db.tbl.tag"
   
-  // -- APPLICATION KEY
+  //:APPLICATION KEY
   val _APP_CREATE_NEW_USER_CODE = "app.connection.code"
   val _APP_ADMIN_LOGIN = "app.connection.admin.login"
   val _APP_CONNECTION_DATE = "app.connection.date"
   val _APP_HTML_TITLE = "app.html.title"
   val _APP_TITLE = "app.name"
-  val _APP_DB_PASSWORD_TOKEN = "app.db.password.token"
   val _APP_DISPLAY_PHOTO_LIMIT= "app.display.photo.limit"
 
-  // -- DIRECTORY KEY
+  //:DIRECTORY KEY
   val _APP_UPLOAD_PHOTO = "app.folder.store.upload.photo"
   val _APP_UPLOAD_STANDARD_PHOTO = "app.folder.store.upload.standard.photo"
   val _APP_UPLOAD_THUMBNAIL_PHOTO = "app.folder.store.upload.thumbnail.photo"
@@ -50,7 +55,7 @@ object Configuration {
   
   def getAdminLogin() = getStringValue(_APP_ADMIN_LOGIN)
   
-  def getPasswordToken() = getStringValue(_APP_DB_PASSWORD_TOKEN)
+  def getToken() = getStringValue(_APP_TOKEN)
   def getCreateNewUserCode() = getStringValue(_APP_CREATE_NEW_USER_CODE)
   
   def getDisplayPhotoLimit() = getIntValue(_APP_DISPLAY_PHOTO_LIMIT)
