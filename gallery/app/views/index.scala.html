@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: String, tags: Seq[String], photos: Seq[Photo], page: Int, byTags: String, count: Long)
+@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], photos: Seq[Photo], page: Int, byTags: String, count: Long)
 
 @random() = @{
 	val rnd = new scala.util.Random

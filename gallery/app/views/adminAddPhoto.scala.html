@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: String, form: Form[(String, String, Option[String], Boolean, List[String])], tags: Seq[String])
+@(title: String, feedback: Feedback, user: UserTemplate, form: Form[(String, String, Option[String], Boolean, List[String])], tags: Seq[String])
 
 @tagToId(tag: String) = @{
 	tag.replace("tags", "").replace("_", "")

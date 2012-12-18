@@ -15,7 +15,7 @@ object UserDB {
     get[String](_DB_TBL_USER + ".login") ~
     get[String](_DB_TBL_USER + ".password") ~
     get[Date](_DB_TBL_USER + ".created") map {
-      case id~login~password~created => User(id, login, password, new DateTime(created))
+      case id~login~password~created => User(id, login, password, new DateTime(created), Option.empty)
     }
   }
   

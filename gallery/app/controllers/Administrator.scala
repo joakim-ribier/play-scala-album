@@ -20,6 +20,7 @@ import views.html
 import scala.collection.immutable.Seq
 import scala.collection.immutable.Nil
 import utils.FileUtils
+import models.UserTemplate
 
 object Administrator extends Controller with Secured {
 
@@ -41,13 +42,14 @@ object Administrator extends Controller with Secured {
   }
   
   def savePhoto = withAdmin { username => implicit request =>
+    val userTemplate = new UserTemplate(username, request.session.get(Configuration._SESSION_EMAIL_KEY))
     addNewPhotoForm.bindFromRequest.fold(
       // Form has errors, redisplay it
-      formWithErrors => BadRequest(html.adminAddPhoto(_TITLE_HTML, null, username, formWithErrors, Tag.list())),
+      formWithErrors => BadRequest(html.adminAddPhoto(_TITLE_HTML, null, userTemplate, formWithErrors, Tag.list())),
       // We got a valid User value
       value =>  {
         val files: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
-        Ok(views.html.adminListPhoto(_TITLE_HTML, null, username, Tag.list(), files))
+        Ok(views.html.adminListPhoto(_TITLE_HTML, null, userTemplate, Tag.list(), files))
       }
    )
   }
@@ -70,12 +72,14 @@ object Administrator extends Controller with Secured {
   }
   
   def listPhotoUploaded = withAdmin { username => implicit request =>
+    val userTemplate = new UserTemplate(username, request.session.get(Configuration._SESSION_EMAIL_KEY))
     val files: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
-    Ok(views.html.adminListPhoto(_TITLE_HTML, null, username, Tag.list(), files))
+    Ok(views.html.adminListPhoto(_TITLE_HTML, null, userTemplate, Tag.list(), files))
   }
   
   def addNewPhoto(name: String) = withAdmin { username => implicit request =>
+    val userTemplate = new UserTemplate(username, request.session.get(Configuration._SESSION_EMAIL_KEY))
     val formFilled = addNewPhotoForm.fill(name, "", Option.empty, false, List("Kazakhstan"))
-    Ok(views.html.adminAddPhoto(_TITLE_HTML, null, username, formFilled, Tag.list()))  
+    Ok(views.html.adminAddPhoto(_TITLE_HTML, null, userTemplate, formFilled, Tag.list()))  
   }
 }

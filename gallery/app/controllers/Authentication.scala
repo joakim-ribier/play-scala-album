@@ -11,6 +11,8 @@ import org.slf4j.MDC
 import java.util.Calendar
 import java.text.SimpleDateFormat
 import utils.MDCUtils
+import utils.Configuration
+import utils.Configuration
 
 object Authentication extends Controller {
   	
@@ -45,14 +47,17 @@ object Authentication extends Controller {
       formWithErrors => BadRequest(html.login(formWithErrors, _TITLE_HTML, null)),
       // We got a valid User value
       value => {
-        val sessionId = generateSessionId(value._1)
-        MDCUtils.getOrOpenSession(value._1, sessionId)
+        val username = value._1
+        val sessionId = generateSessionId(username)
+        MDCUtils.getOrOpenSession(username, sessionId)
+        
+        val email = UserEmail.getFromLogin(username)
         
         Logger.info("You've been logged in")
-        
         Redirect(routes.Application.index).withSession(
-            Security.username -> value._1,
-            "sessionId" -> sessionId)
+            Security.username -> username,
+            Configuration._SESSION_ID_KEY -> sessionId,
+            Configuration._SESSION_EMAIL_KEY -> formatSessionEmail(email))
       }
     )
   }
@@ -72,5 +77,13 @@ object Authentication extends Controller {
 		val dateformatter: SimpleDateFormat  = new SimpleDateFormat("yyyy.MM.dd_hh:mm:ss")
 		val now: String = dateformatter.format(date.getTime())
 		return username + "-" + now 
+  }
+  
+  private def formatSessionEmail(email: Option[String]) : String = {
+    var sessionEmail = "nothing"
+    if (email.isDefined) {
+      sessionEmail = email.get
+    }
+    return sessionEmail
   }
 }

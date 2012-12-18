@@ -13,7 +13,7 @@ object UserEmailDB {
   private val _DB_TBL_USER_EMAIL: String = play.Configuration.root().getString(Configuration._TABLE_EMAIL_KEY)
   private val _DB_TBL_USER: String = play.Configuration.root().getString(Configuration._TABLE_USER_KEY)
   
-  def findByLogin(login: String): String = {
+  def findByLogin(login: String): Option[String] = {
     return DB.withConnection { implicit connection =>
       SQL("""
           select * from """ + _DB_TBL_USER_EMAIL + """
@@ -23,7 +23,7 @@ object UserEmailDB {
           """)
       .on(
         'login-> login
-        ).as(str("email").single)
+        ).as(str(_DB_TBL_USER_EMAIL + ".email").singleOpt)
     }
   }
 }

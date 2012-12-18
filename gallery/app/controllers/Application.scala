@@ -49,25 +49,27 @@ object Application extends Controller with Secured {
   }
   
   def index = withAuth { username => implicit request =>
+    val userTemplate = new UserTemplate(username, request.session.get(Configuration._SESSION_EMAIL_KEY))
   	if (User.isAdmin(username)) {
   		Redirect(routes.Administrator.index)
   	} else {
-  	  Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(0, _LIMIT), 1, _TAG_ALL, countPage(Photo.total())))
+  	  Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list(0, _LIMIT), 1, _TAG_ALL, countPage(Photo.total())))
   	}
   }
   
   def page(page: String, tags: String) = withUser { username => implicit request =>
     try {
-      
+      val userTemplate = new UserTemplate(username, request.session.get(Configuration._SESSION_EMAIL_KEY))
+       
       val pageToInt = page.asInstanceOf[String].toInt
       if (pageToInt >= 1) {
         
         val tagsSeq = tags.split(_TAG_SEPARATOR).toList
         if (tagsSeq.size == 1 && tagsSeq(0) == _TAG_ALL) {
-          Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, _TAG_ALL, countPage(Photo.total())))
+          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, _TAG_ALL, countPage(Photo.total())))
         } else {
           val photosId: Seq[Long] = Tag.list(tagsSeq)
-          Ok(views.html.index(_TITLE_HTML, null, username, Tag.list(), Photo.list(photosId, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(tagsSeq.size)))
+          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list(photosId, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(tagsSeq.size)))
         }
         
       } else {

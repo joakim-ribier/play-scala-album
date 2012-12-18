@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: String)(content: Html)
+@(title: String, feedback: Feedback, user: UserTemplate)(content: Html)
 
 @getTitleWithVersion(title: String) = @{
   title + " - " + play.Play.application().configuration().getString("app.version")
@@ -58,7 +58,11 @@
     		
     		<div id="footer-1">
     		@if(user != null) {
-    			<span>Connecté en tant que  [@user] - </span>
+    			<span>Connecté en tant que  [ @user.login ]</span>
+    			@if(user.email.isDefined && user.email.get != "nothing") {
+    				<span>- [ @user.email ]</span>
+    			}
+    			<span> - </span>
     			<a href="@routes.Authentication.logout">Se déconnecter</a>
     		}
     		</div>

@@ -3,6 +3,10 @@ import play.Play
 
 object Configuration {
 
+  // -- SESSION KEY
+  val _SESSION_EMAIL_KEY = "user_email"
+  val _SESSION_ID_KEY = "sessionId"
+  
   // -- DATABASE KEY
   val _TABLE_USER_KEY = "app.db.tbl.user"
   val _TABLE_EMAIL_KEY = "app.db.tbl.email"

@@ -7,7 +7,8 @@ import utils.Configuration
 import utils.DBUtils
 import play.api.Logger
 
-case class User(id: Pk[Long] = NotAssigned, login: String, password: String, created: DateTime)
+case class UserTemplate(login: String, email: Option[String])
+case class User(id: Pk[Long] = NotAssigned, login: String, password: String, created: DateTime, userEmail: Option[UserEmail])
 
 object User {
 
@@ -30,7 +31,7 @@ object User {
     if (!checkNotNullOrNotEmpty(login, password) || UserDB.findByLogin(login).isDefined) {
     	return false;
     }
-    val newUser = User(null, login, DBUtils.encodeUserPassword(login, password), DateTime.now())
+    val newUser = User(null, login, DBUtils.encodeUserPassword(login, password), DateTime.now(), Option.empty)
     val id: Int = UserDB.insert(newUser)
     return id.isInstanceOf[Int]
   }
