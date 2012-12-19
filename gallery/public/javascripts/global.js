@@ -249,7 +249,7 @@ $(document).ready(function() {
 		
 		var value = $("#footer-information-email-input").val();
 		if (value != null && value != "") {
-			$.post('/album/configuration/user/new/address/mail',
+			$.post('/album/user/new/address/mail',
 				{'address-post': value},
 				function(data) {
 				switch (data['status']) {

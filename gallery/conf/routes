@@ -5,7 +5,7 @@
 GET		/								   														controllers.Authentication.redirect
 GET		/album								   											controllers.Application.index
 
-# Home page
+# APPLICATION CONTROLLER
 
 GET		/album/get/photo/upload/thumbnail/:photo			controllers.Application.getPhotoInUploadThumbailDirectory(photo: String)
 GET		/album/get/photo/:photo												controllers.Application.getPhotoInStandardDirectory(photo: String)
@@ -16,14 +16,19 @@ GET   /album/page/:page/tags/:tags    							controllers.Application.page(page: 
 GET   /album/photo/previous/:id/tags/:tags 					controllers.Application.getPreviousPhoto(id: String, tags: String)
 GET   /album/photo/next/:id/tags/:tags 							controllers.Application.getNextPhoto(id: String, tags: String)
 
-# Configuration project page
+
+# CONFIGURATION CONTROLLER
 
 GET		/album/configuration													controllers.Application.configuration
 POST	/album/configuration													controllers.Application.createAdministrator
 
-POST	/album/configuration/user/new/address/mail		controllers.Application.sendValidationEmail
 
-# Administrator page
+# SEND MAIL CONTROLLER
+
+POST	/album/user/new/address/mail									controllers.SendMail.newEmail
+
+
+# ADMINSTRATOR CONTROLLER
 
 GET		/album/admin							   									controllers.Administrator.index
 GET		/album/admin/list/photo												controllers.Administrator.listPhotoUploaded
@@ -32,7 +37,7 @@ POST 	/album/upload																	controllers.Administrator.upload
 POST 	/album/savePhoto															controllers.Administrator.savePhoto
 
 
-# Authentication page
+# AUTHENTICATION CONTROLLER
 
 GET		/album/login																	controllers.Authentication.login
 GET		/album/logout																	controllers.Authentication.logout
