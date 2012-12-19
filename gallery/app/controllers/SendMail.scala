@@ -5,7 +5,6 @@ import com.typesafe.plugin._
 import play.api.Play.current
 import play.api.libs.json.Json
 import java.net.URLDecoder
-import utils.URLEncoderDecoderUtils
 import utils.Configuration
 import utils.TokenUtils
 import play.api.Logger
@@ -41,9 +40,7 @@ object SendMail extends Controller with Secured {
   private def buildUrl(username: String, addressMail: String) : String = {
     val validationURL = "/album/user/new/address/mail/validation/"
     val token = TokenUtils.validationAddressMail(username, addressMail)
-		val encodedMail = URLEncoderDecoderUtils.encode(addressMail)
-    val encodedToken = URLEncoderDecoderUtils.encode(token)
-    return Configuration.getHost() + validationURL + encodedMail + "/token/" + encodedToken
+    return Configuration.getHost() + validationURL + addressMail + "/token/" + token
   }
   
   private def sendMail(recipient: String, content: String) {

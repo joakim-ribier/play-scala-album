@@ -1,10 +1,19 @@
 package utils
+import sun.misc.BASE64Encoder
+import play.api.Logger
 
 object TokenUtils {
 
   def validationAddressMail(username: String, addressMail: String) : String = {
-    val str = username + Configuration.getToken() + addressMail
-    val md = java.security.MessageDigest.getInstance("SHA-1")
-    return new sun.misc.BASE64Encoder().encode(md.digest(str.getBytes)).replaceAll("/", "")
+    val str = trim(username) + Configuration.getToken() + trim(addressMail)
+    val encoder: BASE64Encoder = new BASE64Encoder()
+    return trim(new String(encoder.encodeBuffer(str.getBytes())))
+  }
+  
+  private def trim(str: String) : String = {
+    if (str == null) {
+      return ""
+    }
+    return str.trim()
   }
 }

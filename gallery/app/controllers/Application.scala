@@ -13,7 +13,6 @@ import play.api.libs.json.Json
 import utils.Configuration
 import utils.FileUtils
 import utils.TokenUtils
-import utils.URLEncoderDecoderUtils
 
 object Application extends Controller with Secured {
 
@@ -155,18 +154,16 @@ object Application extends Controller with Secured {
     try {
       val userEmailExist = UserEmail.getFromLogin(username)
     	if (!userEmailExist.isDefined) {
-	    	val decodedMail = URLEncoderDecoderUtils.decode(email)
-	    	val decodedToken = URLEncoderDecoderUtils.decode(token)
-	    			
-	    	val tokenTo = TokenUtils.validationAddressMail(username, decodedMail)
-	    	if (tokenTo.equals(decodedToken)) {
+
+    	  val tokenTo = TokenUtils.validationAddressMail(username, email)
+	    	if (tokenTo.equals(token)) {
 	    		val user = User.findUser(username)
-	    		if (user.isDefined && User.setAddressMail(user.get, decodedMail)) {
-	    			feedBack = new Feedback("Validation de l'adresse mail [ " + decodedMail + " ] pour l'utilisateur [ " + username + " ].", FeedbackClass.ok)
+	    		if (user.isDefined && User.setAddressMail(user.get, email)) {
+	    		  feedBack = new Feedback("Validation de l'adresse mail [ " + email + " ] pour l'utilisateur [ " + username + " ].", FeedbackClass.ok)
 	    		}
 	    	}  
     	} else {
-    		feedBack = new Feedback("L'adresse mail [ " + userEmailExist.get + " ] est déjà associée à l'utilisateur [ " +  username + " ]", FeedbackClass.ok)
+    		feedBack = new Feedback("L'utilisateur [ " +  username + " ] a déjà une adresse mail associée.", FeedbackClass.ok)
     	}
       
     	Ok(views.html.login(Authentication.form, _TITLE_HTML, feedBack)).withNewSession
