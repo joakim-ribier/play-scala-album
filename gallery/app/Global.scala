@@ -19,7 +19,7 @@ object Global extends GlobalSettings {
     Logger.info(getApplicationName() + " application has started")
     
     getValue("app.version")
-    getValue(Configuration.getToken)
+    getValue(Configuration._APP_TOKEN)
      
     checkApplicationConnection()
     checkDBConfiguration()
