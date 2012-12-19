@@ -6,7 +6,7 @@ import play.api.db._
 import play.api.Play.current
 import anorm.SqlParser._
 import anorm._
-import utils.Configuration
+import utils._
 
 object UserEmailDB {
 
@@ -24,6 +24,21 @@ object UserEmailDB {
       .on(
         'login-> login
         ).as(str(_DB_TBL_USER_EMAIL + ".email").singleOpt)
+    }
+  }
+  
+  def insert(userId: Long, email: String) : Long = {
+    return DB.withConnection { implicit connection =>
+      SQL(
+        """
+          insert into """ + _DB_TBL_USER_EMAIL + """ (user_id, email) values (
+            {userId}, {email}
+          ) RETURNING id
+        """
+      ).on(
+        'userId -> userId,
+        'email -> email
+      ).as(long("id").single)
     }
   }
 }

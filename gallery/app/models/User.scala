@@ -3,9 +3,8 @@ package models
 import java.util.Date
 import org.joda.time.DateTime
 import anorm._
-import utils.Configuration
-import utils.DBUtils
 import play.api.Logger
+import utils._
 
 case class UserTemplate(login: String, email: Option[String])
 case class User(id: Pk[Long] = NotAssigned, login: String, password: String, created: DateTime, userEmail: Option[UserEmail])
@@ -47,5 +46,10 @@ object User {
   
   def isAdmin(login: String) : Boolean = {
     return login.equals(Configuration.getAdminLogin())
+  }
+  
+  def setAddressMail(user: User, email: String) : Boolean = {
+    val id = UserEmail.createEmail(user, email)
+    return id.isInstanceOf[Long]
   }
 }

@@ -15,12 +15,12 @@ import play.api.mvc._
 import play.api.mvc.Action
 import play.api.mvc.Controller
 import play.api._
-import utils.Configuration
 import views.html
 import scala.collection.immutable.Seq
 import scala.collection.immutable.Nil
-import utils.FileUtils
 import models.UserTemplate
+import utils.FileUtils
+import utils.Configuration
 
 object Administrator extends Controller with Secured {
 

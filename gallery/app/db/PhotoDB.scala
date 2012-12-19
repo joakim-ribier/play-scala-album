@@ -7,7 +7,7 @@ import anorm.SqlParser._
 import anorm._
 import java.util.Date
 import org.joda.time.DateTime
-import utils.DBUtils
+import utils._
 
 object PhotoDB {
 

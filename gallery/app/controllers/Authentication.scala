@@ -6,12 +6,10 @@ import play.api.mvc._
 import play.api._
 import views._
 import models._
-import utils.Configuration
 import org.slf4j.MDC
 import java.util.Calendar
 import java.text.SimpleDateFormat
 import utils.MDCUtils
-import utils.Configuration
 import utils.Configuration
 
 object Authentication extends Controller {

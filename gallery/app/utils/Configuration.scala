@@ -1,4 +1,5 @@
 package utils
+
 import play.Play
 
 object Configuration {
@@ -59,4 +60,6 @@ object Configuration {
   def getCreateNewUserCode() = getStringValue(_APP_CREATE_NEW_USER_CODE)
   
   def getDisplayPhotoLimit() = getIntValue(_APP_DISPLAY_PHOTO_LIMIT)
+  
+  def getHost() = Configuration.getStringValue(Configuration._APP_HOST)
 }

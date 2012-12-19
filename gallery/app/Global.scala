@@ -2,11 +2,10 @@ import play.api.Application
 import play.api.GlobalSettings
 import play.api.Logger
 import java.io._
-import utils.Configuration
 import play.api.mvc.RequestHeader
 import play.api.mvc.Handler
 import play.api.mvc.Security
-import utils.MDCUtils
+import utils._
 
 object Global extends GlobalSettings {
 

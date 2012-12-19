@@ -1,4 +1,5 @@
 package utils
+
 import org.slf4j.MDC
 
 object MDCUtils {

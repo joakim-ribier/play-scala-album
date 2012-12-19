@@ -7,14 +7,16 @@ GET		/album								   											controllers.Application.index
 
 # APPLICATION CONTROLLER
 
-GET		/album/get/photo/upload/thumbnail/:photo			controllers.Application.getPhotoInUploadThumbailDirectory(photo: String)
-GET		/album/get/photo/:photo												controllers.Application.getPhotoInStandardDirectory(photo: String)
-GET		/album/get/thumbnail/photo/:photo							controllers.Application.getPhotoInThumbailDirectory(photo: String)
-GET		/album/get/800x600/photo/:photo								controllers.Application.getPhotoIn800x600Directory(photo: String)
-GET   /album/page/:page/tags/:tags    							controllers.Application.page(page: String, tags: String)
+GET		/album/get/photo/upload/thumbnail/:photo														controllers.Application.getPhotoInUploadThumbailDirectory(photo: String)
+GET		/album/get/photo/:photo																							controllers.Application.getPhotoInStandardDirectory(photo: String)
+GET		/album/get/thumbnail/photo/:photo																		controllers.Application.getPhotoInThumbailDirectory(photo: String)
+GET		/album/get/800x600/photo/:photo																			controllers.Application.getPhotoIn800x600Directory(photo: String)
+GET   /album/page/:page/tags/:tags    																		controllers.Application.page(page: String, tags: String)
 
-GET   /album/photo/previous/:id/tags/:tags 					controllers.Application.getPreviousPhoto(id: String, tags: String)
-GET   /album/photo/next/:id/tags/:tags 							controllers.Application.getNextPhoto(id: String, tags: String)
+GET   /album/photo/previous/:id/tags/:tags 																controllers.Application.getPreviousPhoto(id: String, tags: String)
+GET   /album/photo/next/:id/tags/:tags 																		controllers.Application.getNextPhoto(id: String, tags: String)
+
+GET /album/user/new/address/mail/validation/:email/token/:token						controllers.Application.saveNewUserEmail(email: String, token: String)
 
 
 # CONFIGURATION CONTROLLER

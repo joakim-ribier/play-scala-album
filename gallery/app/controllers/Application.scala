@@ -9,10 +9,12 @@ import models._
 import java.io.File
 import java.io.IOException
 import play.Play
+import play.api.libs.json.Json
 import utils.Configuration
 import utils.FileUtils
-import play.api.libs.json.Json
-  	
+import utils.TokenUtils
+import utils.URLEncoderDecoderUtils
+
 object Application extends Controller with Secured {
 
   private val _TITLE_HTML: String = Configuration.getHTMLTitle()
@@ -146,6 +148,34 @@ object Application extends Controller with Secured {
       // We got a valid User value
       value => Ok(views.html.login(Authentication.form, _TITLE_HTML, new Feedback("Administrateur créé", FeedbackClass.ok)))
     )
+  }
+  
+  def saveNewUserEmail(email: String, token: String) = withUser { username => implicit request =>
+  	var feedBack = new Feedback("Erreur de validation de l'email, veuillez recommencer ou contacter l'administrateur de l'application.", FeedbackClass.ko)
+    try {
+      val userEmailExist = UserEmail.getFromLogin(username)
+    	if (!userEmailExist.isDefined) {
+	    	val decodedMail = URLEncoderDecoderUtils.decode(email)
+	    	val decodedToken = URLEncoderDecoderUtils.decode(token)
+	    			
+	    	val tokenTo = TokenUtils.validationAddressMail(username, decodedMail)
+	    	if (tokenTo.equals(decodedToken)) {
+	    		val user = User.findUser(username)
+	    		if (user.isDefined && User.setAddressMail(user.get, decodedMail)) {
+	    			feedBack = new Feedback("Validation de l'e-mail [ " + decodedMail + " ] pour l'utilisateur [ " + username + " ].", FeedbackClass.ok)
+	    		}
+	    	}  
+    	} else {
+    		feedBack = new Feedback("L'e-mail [ " + userEmailExist.get + " ] est déjà associé à l'utilisateur [ " +  username + " ]", FeedbackClass.ok)
+    	}
+      
+    	Ok(views.html.login(Authentication.form, _TITLE_HTML, feedBack)).withNewSession
+    } catch {
+      case e => {
+        Logger.error(e.getMessage(), e)
+        Ok(views.html.login(Authentication.form, _TITLE_HTML, feedBack)).withNewSession 
+      }
+    }
   }
   
   def getPhotoInUploadThumbailDirectory(photo: String) = withAuth { username => implicit request =>

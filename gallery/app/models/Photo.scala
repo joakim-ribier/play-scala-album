@@ -9,10 +9,10 @@ import play.api.Play.current
 import anorm.SqlParser._
 import anorm._
 import java.io.File
-import utils._
 import db.PhotoDB
 import play.api.Logger
 import db.OrderENUM
+import utils._
 
 object Visibility extends Enumeration {
   type Visibility = Value

@@ -259,11 +259,11 @@ $(document).ready(function() {
 					case 'nothing' :
 					case 'failed' :
 					default :
-						$("#footer-information-new-email-return").html("Adresse mail invalide, veuillez recommencer ...");
+						$("#footer-information-new-email-return").html("Impossible d'envoyer le mail, veuillez vérifier votre e-mail puis recommencer.");
 				}
 			});
 		} else {
-			$("#footer-information-new-email-return").html("Adresse mail invalide, veuillez recommencer ...");
+			$("#footer-information-new-email-return").html("Impossible d'envoyer le mail, veuillez vérifier votre e-mail puis recommencer.");
 		}
 	});
 	
