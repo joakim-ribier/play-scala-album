@@ -245,7 +245,10 @@ $(document).ready(function() {
 	});
 	
 	$("#footer-information-email-button").live("click", function() {
-		$("#footer-information-new-email-return").html('Envoi en cours ...');
+		var waitText = 'Envoi en cours ...';
+		$("#footer-information-new-email-return").html(waitText);
+		
+		var errorText = "Impossible d'envoyer le courrier électronique, veuillez vérifier votre adresse mail puis recommencer.";
 		
 		var value = $("#footer-information-email-input").val();
 		if (value != null && value != "") {
@@ -254,16 +257,18 @@ $(document).ready(function() {
 				function(data) {
 				switch (data['status']) {
 					case 'success':
-						$("#footer-information-new-email-return").html('E-mail de validation envoyé à [' + data['return'] + '], veuillez vérifier dans votre boite de réception.');
+						var okText1 = 'Le courrier électronique de validation a été envoyé à [ ' + data['return'] + ' ], veuillez vérifier votre boite de réception.';
+						var okText2 = '<br />(si vous ne le recevez pas, vérifiez également votre dossier spam)';
+						$("#footer-information-new-email-return").html(okText1 + okText2);
 						break;
 					case 'nothing' :
 					case 'failed' :
 					default :
-						$("#footer-information-new-email-return").html("Impossible d'envoyer le mail, veuillez vérifier votre e-mail puis recommencer.");
+						$("#footer-information-new-email-return").html(errorText);
 				}
 			});
 		} else {
-			$("#footer-information-new-email-return").html("Impossible d'envoyer le mail, veuillez vérifier votre e-mail puis recommencer.");
+			$("#footer-information-new-email-return").html(errorText);
 		}
 	});
 	

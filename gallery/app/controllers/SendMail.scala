@@ -9,6 +9,8 @@ import utils.URLEncoderDecoderUtils
 import utils.Configuration
 import utils.TokenUtils
 import play.api.Logger
+import play.api.i18n.Messages
+import play.api.i18n.Lang
 
 object SendMail extends Controller with Secured {
 
@@ -49,6 +51,8 @@ object SendMail extends Controller with Secured {
 		mail.setSubject(_TITLE_HTML + " : Validation de l'adresse mail")
 		mail.addRecipient(recipient)
 		mail.addFrom(Configuration.getStringValue(Configuration._MAIL_FROM))
-		mail.send(content)
+		mail.send(
+		    Messages("sendmail.validation.email.text", Configuration.getHost(), content, "\n\r")(Lang("fr")),
+		    Messages("sendmail.validation.email.html", Configuration.getHost(), content)(Lang("fr")))
   }
 }

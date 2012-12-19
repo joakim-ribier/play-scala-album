@@ -151,7 +151,7 @@ object Application extends Controller with Secured {
   }
   
   def saveNewUserEmail(email: String, token: String) = withUser { username => implicit request =>
-  	var feedBack = new Feedback("Erreur de validation de l'email, veuillez recommencer ou contacter l'administrateur de l'application.", FeedbackClass.ko)
+  	var feedBack = new Feedback("Erreur de validation de l'adresse mail, veuillez recommencer ou contacter l'administrateur de l'application.", FeedbackClass.ko)
     try {
       val userEmailExist = UserEmail.getFromLogin(username)
     	if (!userEmailExist.isDefined) {
@@ -162,11 +162,11 @@ object Application extends Controller with Secured {
 	    	if (tokenTo.equals(decodedToken)) {
 	    		val user = User.findUser(username)
 	    		if (user.isDefined && User.setAddressMail(user.get, decodedMail)) {
-	    			feedBack = new Feedback("Validation de l'e-mail [ " + decodedMail + " ] pour l'utilisateur [ " + username + " ].", FeedbackClass.ok)
+	    			feedBack = new Feedback("Validation de l'adresse mail [ " + decodedMail + " ] pour l'utilisateur [ " + username + " ].", FeedbackClass.ok)
 	    		}
 	    	}  
     	} else {
-    		feedBack = new Feedback("L'e-mail [ " + userEmailExist.get + " ] est déjà associé à l'utilisateur [ " +  username + " ]", FeedbackClass.ok)
+    		feedBack = new Feedback("L'adresse mail [ " + userEmailExist.get + " ] est déjà associée à l'utilisateur [ " +  username + " ]", FeedbackClass.ok)
     	}
       
     	Ok(views.html.login(Authentication.form, _TITLE_HTML, feedBack)).withNewSession
