@@ -6,6 +6,7 @@ object Configuration {
 
 	val _APP_HOST = "app.host"
 	val _APP_TOKEN = "token"
+	val _APP_TAG_DEFAULT = "tag.default"
 
 	//:MAIL CONFIGURATION KEY
 	val _MAIL_FROM = "app.send.mail.from"

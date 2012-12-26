@@ -21,6 +21,8 @@ import scala.collection.immutable.Nil
 import models.UserTemplate
 import utils.FileUtils
 import utils.Configuration
+import play.api.i18n.Messages
+import play.api.i18n.Lang
 
 object Administrator extends Controller with Secured {
 
@@ -32,7 +34,7 @@ object Administrator extends Controller with Secured {
       "description" -> optional(text),
       "public" -> boolean,
       "tags" -> list(text)
-    ) verifying ("Impossible de sauvegarder la photo, veuillez vérifier le formulaire et recommencer.", result => result match {
+    ) verifying (Messages("administrator.add.new.photo.verifying.text")(Lang("fr")), result => result match {
       case (filename, title, description, public, tags) => Photo.create(filename, title, description, public, tags)
     })
   )
@@ -79,7 +81,7 @@ object Administrator extends Controller with Secured {
   
   def addNewPhoto(name: String) = withAdmin { username => implicit request =>
     val userTemplate = new UserTemplate(username, request.session.get(Configuration._SESSION_EMAIL_KEY))
-    val formFilled = addNewPhotoForm.fill(name, "", Option.empty, false, List("Kazakhstan"))
+    val formFilled = addNewPhotoForm.fill(name, "", Option.empty, false, List(Configuration.getStringValue(Configuration._APP_TAG_DEFAULT)))
     Ok(views.html.adminAddPhoto(_TITLE_HTML, null, userTemplate, formFilled, Tag.list()))  
   }
 }

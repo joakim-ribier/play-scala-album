@@ -11,6 +11,8 @@ import java.util.Calendar
 import java.text.SimpleDateFormat
 import utils.MDCUtils
 import utils.Configuration
+import play.api.i18n.Messages
+import play.api.i18n.Lang
 
 object Authentication extends Controller {
   	
@@ -21,7 +23,7 @@ object Authentication extends Controller {
       "login" -> text,
       "password" -> text,
       "code-access" -> optional(text)
-    ) verifying ("Connexion impossible, vérifiez votre identifiant et / ou mot de passe.", result => result match {
+    ) verifying (Messages("authentication.login.verifying.text")(Lang("fr")), result => result match {
       case (login, password, codeAccess) => User.authenticate(login, password, codeAccess)
     })
   )

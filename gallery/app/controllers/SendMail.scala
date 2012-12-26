@@ -45,7 +45,7 @@ object SendMail extends Controller with Secured {
   
   private def sendMail(recipient: String, content: String) {
   	val mail = use[MailerPlugin].email
-		mail.setSubject(_TITLE_HTML + " : Validation de l'adresse mail")
+		mail.setSubject(_TITLE_HTML + Messages("sendmail.validation.email.subject")(Lang("fr")))
 		mail.addRecipient(recipient)
 		mail.addFrom(Configuration.getStringValue(Configuration._MAIL_FROM))
 		mail.send(

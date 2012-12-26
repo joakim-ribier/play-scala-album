@@ -13,6 +13,8 @@ import play.api.libs.json.Json
 import utils.Configuration
 import utils.FileUtils
 import utils.TokenUtils
+import play.api.i18n.Messages
+import play.api.i18n.Lang
 
 object Application extends Controller with Secured {
 
@@ -26,7 +28,7 @@ object Application extends Controller with Secured {
     tuple (
       "login" -> text,
       "password" -> text
-    ) verifying ("Configuration impossible, vérifiez votre identifiant et / ou mot de passe administrateur.", result => result match {
+    ) verifying (Messages("application.add.new.admin.verifying.text")(Lang("fr")), result => result match {
       case (login, password) => User.createUser(login, password)
     })
   )
@@ -145,12 +147,15 @@ object Application extends Controller with Secured {
       // Form has errors, redisplay it
       formWithErrors => BadRequest(html.configuration(formWithErrors, _TITLE_HTML)),
       // We got a valid User value
-      value => Ok(views.html.login(Authentication.form, _TITLE_HTML, new Feedback("Administrateur créé", FeedbackClass.ok)))
+      value => {
+        val successText = Messages("application.add.new.admin.success.text")(Lang("fr"))
+        Ok(views.html.login(Authentication.form, _TITLE_HTML, new Feedback(successText, FeedbackClass.ok))) 
+      }
     )
   }
-  
+
   def saveNewUserEmail(email: String, token: String) = withUser { username => implicit request =>
-  	var feedBack = new Feedback("Erreur de validation de l'adresse mail, veuillez recommencer ou contacter l'administrateur de l'application.", FeedbackClass.ko)
+  	var feedBack = new Feedback(Messages("application.create.new.user.email.failed.text")(Lang("fr")), FeedbackClass.ko)
     try {
       val userEmailExist = UserEmail.getFromLogin(username)
     	if (!userEmailExist.isDefined) {
@@ -159,11 +164,13 @@ object Application extends Controller with Secured {
 	    	if (tokenTo.equals(token)) {
 	    		val user = User.findUser(username)
 	    		if (user.isDefined && User.setAddressMail(user.get, email)) {
-	    		  feedBack = new Feedback("Validation de l'adresse mail [ " + email + " ] pour l'utilisateur [ " + username + " ].", FeedbackClass.ok)
+	    		  val successText = Messages("application.create.new.user.email.success.text", email, username)(Lang("fr"))
+	    		  feedBack = new Feedback(successText, FeedbackClass.ok)
 	    		}
 	    	}  
     	} else {
-    		feedBack = new Feedback("L'utilisateur [ " +  username + " ] a déjà une adresse mail associée.", FeedbackClass.ok)
+    	  val existsText = Messages("application.create.new.user.email.exists.text", username)(Lang("fr"))
+    		feedBack = new Feedback(existsText, FeedbackClass.ok)
     	}
       
     	Ok(views.html.login(Authentication.form, _TITLE_HTML, feedBack)).withNewSession
