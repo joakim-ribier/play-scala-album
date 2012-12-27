@@ -11,3 +11,10 @@ authentication.login.verifying.text=Connexion impossible, vérifiez votre identi
 sendmail.validation.email.subject= : Validation de l''adresse mail
 sendmail.validation.email.html=Ceci est un courrier électronique automatique envoyé par {0}.<br /><br />Vous avez demandé à ''<strong>Être informé des mises à jour du site</strong>'', vous recevez donc ce courrier électronique afin de valider votre adresse mail.<br /><br /><br />Pour valider votre adresse mail, veuillez cliquer sur le lien internet ci-dessous :<br /><a href="{1}">{1}<a>
 sendmail.validation.email.text=Ceci est un courrier électronique automatique envoyé par {0}.{2}{2}Vous avez demandé à ''Être informé des mises à jour du site'', vous recevez donc ce courrier électronique afin de valider votre adresse mail.{2}{2}{2}Pour valider votre adresse mail, veuillez cliquer sur le lien internet ci-dessous :{2}{1}
+
+page.login.form.field.login=Identifiant
+page.login.form.field.password=Mot de passe
+page.login.form.field.submit=Se connecter ...
+page.login.form.field.new.account=je veux créer un nouveau compte
+page.login.form.field.new.account.code=Code d''accès à l''application
+page.login.form.title=Formulaire de connexion
