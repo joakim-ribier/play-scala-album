@@ -27,3 +27,13 @@ page.main.update.site.register=Je veux m''enregister ...
 page.main.update.site.create.of=Création de
 page.main.update.site.disponibility.of=disponible sur
 page.main.update.site.ie.redirection.html=Pour une expérience utilisateur optimale le navigateur Microsoft Internet Explorer n''est pas recommandé ! <br /> <br />redirection en cours dans 4 secondes ...
+
+page.admin.form.upload.field.count=Nombre de photo à uploader :
+page.admin.form.upload.field.size=Taille totale de photo :
+page.admin.form.upload.field.percent=Pourcentage d''upload ( redirection automatique ) :
+page.admin.form.upload.failed=Erreur d''upload, veuillez recommencer ou contacter l''administrateur de l''application.
+page.admin.form.upload.submit=Uploader une/des photo(s)
+page.admin.form.upload.title=Choisir des photos ?
+page.admin.show.photo.title=Voir les photos disponibles ?
+page.admin.update.admin.password.title=Changer le mot de passe du compte administrateur ?
+page.admin.tag.already.exists.title=&Eacute;tiquettes déjà présentes dans l''album !
