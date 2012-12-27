@@ -58,12 +58,12 @@
     		
     		<div id="footer-1">
     		@if(user != null) {
-    			<span>Connecté en tant que  [ @user.login ]</span>
+    			<span>@Messages("page.main.connected.user", user.login)(Lang("fr"))</span>
     			@if(user.email.isDefined && user.email.get != "nothing") {
     				<span>- [ @user.email ]</span>
     			}
     			<span> - </span>
-    			<a href="@routes.Authentication.logout">Se déconnecter</a>
+    			<a href="@routes.Authentication.logout">@Messages("page.main.disconnecte")(Lang("fr"))</a>
     		}
     		</div>
     		
@@ -71,11 +71,11 @@
     			@if(!user.email.isDefined || user.email.get == "nothing") {
     				<div id="footer-information-email">
     					<input type="checkbox" id="footer-information-email-ckx">
-    					<span>&Ecirc;tre informé des mises à jour du site</span>
+    					<span>@Html(Messages("page.main.update.site.html")(Lang("fr")))</span>
     					
     					<div id="footer-information-new-email">
-    						<input type="text" id="footer-information-email-input" placeholder="adresse mail valide" id="login">
-    						<button id="footer-information-email-button">Je veux m'enregister ...</button>				
+    						<input type="text" id="footer-information-email-input" placeholder="@Messages("page.main.update.site.valid.email")(Lang("fr"))" id="login">
+    						<button id="footer-information-email-button">@Messages("page.main.update.site.register")(Lang("fr"))</button>				
     						<div id="footer-information-new-email-return"></div>
     					</div>
     				</div>
@@ -90,11 +90,11 @@
     			<span><a href="http://www.scala-lang.org/" target="_blank"/>Scala</a></span>
     			 - 
     		  
-    			<span>Création de <a href="http://www.joakim-ribier.fr/" target="_blank"/>Joakim Ribier</a></span>
-    			<span>disponible sur <a href="https://github.com/joakim-ribier/play2-scala-gallery/" target="_blank"/>GitHub</a></span>
+    			<span>@Messages("page.main.update.site.create.of")(Lang("fr")) <a href="http://www.joakim-ribier.fr/" target="_blank"/>Joakim Ribier</a></span>
+    			<span>@Messages("page.main.update.site.disponibility.of")(Lang("fr")) <a href="https://github.com/joakim-ribier/play2-scala-gallery/" target="_blank"/>GitHub</a></span>
     		</div>
     		
-    		<div id="footer-title-ie">Pour une expérience utilisateur optimale le navigateur Microsoft Internet Explorer n'est pas recommandé ! <br /> <br />redirection en cours dans 4 secondes ...</div>
+    		<div id="footer-title-ie">@Html(Messages("page.main.update.site.ie.redirection.html")(Lang("fr")))</div>
     	</div>
     	
     </body>

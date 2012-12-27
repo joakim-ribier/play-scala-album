@@ -18,3 +18,12 @@ page.login.form.field.submit=Se connecter ...
 page.login.form.field.new.account=je veux créer un nouveau compte
 page.login.form.field.new.account.code=Code d''accès à l''application
 page.login.form.title=Formulaire de connexion
+
+page.main.connected.user=Connecté en tant que  [ {0} ]
+page.main.disconnecte=Se déconnecter
+page.main.update.site.html=&Ecirc;tre informé des mises à jour du site
+page.main.update.site.valid.email=adresse mail valide
+page.main.update.site.register=Je veux m''enregister ...
+page.main.update.site.create.of=Création de
+page.main.update.site.disponibility.of=disponible sur
+page.main.update.site.ie.redirection.html=Pour une expérience utilisateur optimale le navigateur Microsoft Internet Explorer n''est pas recommandé ! <br /> <br />redirection en cours dans 4 secondes ...
