@@ -37,12 +37,12 @@
 			<div id="index-application-photos-menu">
 				<div id="index-application-photos-menu-content">
 					<div class="index-application-photos-menu-content-tool">
-						<a href="/album/page/@previousPage(page)/tags/@byTags" />page précédente</a>
+						<a href="/album/page/@previousPage(page)/tags/@byTags" />@Messages("page.index.previous.page.label")(Lang("fr"))</a>
 					</div>
 					<div class="index-application-photos-menu-content-tool">
-						<a href="/album/page/@nextPage(page)/tags/@byTags" />page suivante</a>
+						<a href="/album/page/@nextPage(page)/tags/@byTags" />@Messages("page.index.next.page.label")(Lang("fr"))</a>
 					</div>
-					<div id="index-application-page-number">page n° <span id="index-application-page-number-value">@page</span> / @count</div>
+					<div id="index-application-page-number">@Messages("page.index.number.page.label")(Lang("fr")) <span id="index-application-page-number-value">@page</span> / @count</div>
 				</div>
 			</div>
 			
@@ -64,7 +64,7 @@
 								<div id="index-application-photo-img">
 									<img src="@routes.Assets.at("images/nophotox200x150.png")" />
 								</div>
-								<div id="index-application-photo-title">pas de photo</div>
+								<div id="index-application-photo-title">@Messages("page.index.no.photo.label")(Lang("fr"))</div>
 							</div>
 						}
 					</div>
@@ -75,8 +75,8 @@
 				@for(tag <- tags) {
 					<div class="index-tag-already-exists">@tag</div>
 				}
-				<div id="index-tag-search-title"><a id="index-tag-search-title-href" href="/album/page/@page/tags/all" />Rechercher par étiquette(s) ?</a></div>
-				<div id="index-tag-search-title-explication">( sélectionnez les étiquettes puis cliquez sur 'Rechercher par étiquette(s) ?' )</div>
+				<div id="index-tag-search-title"><a id="index-tag-search-title-href" href="/album/page/@page/tags/all" />@Messages("page.index.search.by.tag.title")(Lang("fr"))</a></div>
+				<div id="index-tag-search-title-explication">@Messages("page.index.search.by.tag.explication")(Lang("fr"))</div>
 			</div>
 			
 	</div>

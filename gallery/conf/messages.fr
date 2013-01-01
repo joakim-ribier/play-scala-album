@@ -48,3 +48,10 @@ page.adminAddPhoto.form.title=Informations supplémentaires sur la photo
 page.configuration.form.field.password=Mot de passe
 page.configuration.form.field.submit=Créer le compte administrateur
 page.configuration.form.title=Configuration de l''application
+
+page.index.previous.page.label=page précédente
+page.index.next.page.label=page suivante
+page.index.number.page.label=page n°
+page.index.no.photo.label=pas de photo
+page.index.search.by.tag.title=Rechercher par étiquette(s) ?
+page.index.search.by.tag.explication=( sélectionnez les étiquettes puis cliquez sur ''Rechercher par étiquette(s) ?'' )
