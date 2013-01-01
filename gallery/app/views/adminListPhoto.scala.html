@@ -8,7 +8,7 @@
 
 @compute(files: Seq[String]) = @{ 12 - files.length }
 
-@admin(title + ".Administration.Photos", feedback, user, tags) {
+@admin(title, feedback, user, tags) {
 
 	<div id="administrator-content-list">
 		@for(file <- files) {
