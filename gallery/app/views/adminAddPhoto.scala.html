@@ -4,7 +4,7 @@
 	tag.replace("tags", "").replace("_", "")
 }
 		
-@admin(title + ".Administration.Nouvelle.Photo", feedback, user, tags) {
+@admin(title, feedback, user, tags) {
 
 	<div id="administrator-content-add-new-photo">
 		
@@ -30,19 +30,19 @@
     		
     	<div id="administrator-content-add-new-photo-form">
 	    	<p>
-					<input type="text" style="background-color: transparent;" size="30" placeholder="donnez un titre à votre image" name="title" value="@form("title").value.get" maxlength="25"/>
+					<input type="text" style="background-color: transparent;" size="30" placeholder="@Messages("page.adminAddPhoto.form.field.title")(Lang("fr"))" name="title" value="@form("title").value.get" maxlength="25"/>
 				</p>
 				
 	    	<p>
 	    		@if(form("description").value) {
-	    			<textarea style="background-color: transparent;" rows="4" cols="55" name="description" id="description" value="@form("description").value.get" placeholder="description de la photo ..."></textarea>
+	    			<textarea style="background-color: transparent;" rows="4" cols="55" name="description" id="description" value="@form("description").value.get" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
 	    		} else {
-	    			<textarea style="background-color: transparent;" rows="4" cols="55" name="description" id="description" value="" placeholder="description de la photo ..."></textarea>
+	    			<textarea style="background-color: transparent;" rows="4" cols="55" name="description" id="description" value="" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
 	    		}
 	    	</p>
 				
 				<p>
-				<input type="text" size="30" style="background-color: transparent;" id="add-new-tag-input" placeholder="tapez votre étiquette + (barre d'espace)"/>
+				<input type="text" size="30" style="background-color: transparent;" id="add-new-tag-input" placeholder="@Messages("page.adminAddPhoto.form.field.tag")(Lang("fr"))"/>
 				</p>
 				
 				<p>
@@ -54,7 +54,7 @@
 						}
 					) { checked =>
 	  				<input type="checkbox" id="public" name="public" value="true" @checked />
-						<span id="checkbox-label">rendre la photo public</span>
+						<span id="checkbox-label">@Messages("page.adminAddPhoto.form.field.public")(Lang("fr"))</span>
 					}
 				</p>
 				
@@ -70,10 +70,10 @@
 	        }
 				 </div>
 
-    		<button type="submit" >Sauvegarder la photo</button>
+    		<button type="submit" >@Messages("page.adminAddPhoto.form.field.submit")(Lang("fr"))</button>
 			</div>
 			
-			<div id="form-title">Informations supplémentaires sur la photo</div>
+			<div id="form-title">@Messages("page.adminAddPhoto.form.title")(Lang("fr"))</div>
 		}
 	</div>
 }

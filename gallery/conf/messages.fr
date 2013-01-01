@@ -37,3 +37,10 @@ page.admin.form.upload.title=Choisir des photos ?
 page.admin.show.photo.title=Voir les photos disponibles ?
 page.admin.update.admin.password.title=Changer le mot de passe du compte administrateur ?
 page.admin.tag.already.exists.title=&Eacute;tiquettes déjà présentes dans l''album !
+
+page.adminAddPhoto.form.field.title=donnez un titre à votre image
+page.adminAddPhoto.form.field.description=description de la photo ...
+page.adminAddPhoto.form.field.tag=tapez votre étiquette + (barre d''espace)
+page.adminAddPhoto.form.field.public=rendre la photo public
+page.adminAddPhoto.form.field.submit=Sauvegarder la photo
+page.adminAddPhoto.form.title=Informations supplémentaires sur la photo
