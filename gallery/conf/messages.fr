@@ -1,3 +1,7 @@
+js.global.send.user.email.failed=Impossible d''envoyer le courrier électronique, veuillez vérifier votre adresse mail puis recommencer.
+js.global.send.user.email.success.1=Le courrier électronique de validation a été envoyé à [ {0} ], veuillez vérifier votre boite de réception.
+js.global.send.user.email.success.2=<br />(si vous ne le recevez pas, vérifiez également votre dossier spam)
+
 administrator.add.new.photo.verifying.text=Impossible de sauvegarder la photo, veuillez vérifier le formulaire et recommencer.
 
 application.add.new.admin.verifying.text=Configuration impossible, vérifiez votre identifiant et / ou mot de passe administrateur.

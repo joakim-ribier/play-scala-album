@@ -248,7 +248,7 @@ $(document).ready(function() {
 		var waitText = 'Envoi en cours ...';
 		$("#footer-information-new-email-return").html(waitText);
 		
-		var errorText = "Impossible d'envoyer le courrier électronique, veuillez vérifier votre adresse mail puis recommencer.";
+		var errorText = getI18NValue('js.global.send.user.email.failed');
 		
 		var value = $("#footer-information-email-input").val();
 		if (value != null && value != "") {
@@ -257,8 +257,8 @@ $(document).ready(function() {
 				function(data) {
 				switch (data['status']) {
 					case 'success':
-						var okText1 = 'Le courrier électronique de validation a été envoyé à [ ' + data['return'] + ' ], veuillez vérifier votre boite de réception.';
-						var okText2 = '<br />(si vous ne le recevez pas, vérifiez également votre dossier spam)';
+						var okText1 = getI18NValue('js.global.send.user.email.success.1', data['return']);
+						var okText2 = getI18NValue('js.global.send.user.email.success.2');
 						$("#footer-information-new-email-return").html(okText1 + okText2);
 						break;
 					case 'nothing' :

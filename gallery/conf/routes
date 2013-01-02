@@ -47,6 +47,11 @@ POST	/album/authenticate														controllers.Authentication.authenticate
 GET		/album/authenticate														controllers.Authentication.redirectAuthenticate
 
 
+# JS CONTROLLER
+
+GET 	/album/i18n/lang/:lang												controllers.JavaScriptController.i18n(lang: String)
+
+
 # Map static resources from the /public folder to the /assets URL path
 
 GET   /assets/*file               									controllers.Assets.at(path="/public", file)

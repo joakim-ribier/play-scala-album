@@ -16,13 +16,21 @@
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/administrator.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/index.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        
         <script src="@routes.Assets.at("javascripts/jquery-1.8.3.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/jquery.i18n.properties-min-1.0.9.js")" type="text/javascript"></script>
+
+				<script src="@routes.Assets.at("javascripts/global-i18n.js")" type="text/javascript"></script>				
 				<script src="@routes.Assets.at("javascripts/global.js")" type="text/javascript"></script>
-				@if(play.Play.application().configuration().getString("app.google.analytics") != "nothing") {
+				
 				<script type="text/javascript">
-					@play.Play.application().configuration().getString("app.google.analytics")
+					loadI18NFile('/album/i18n/lang/', '@play.Play.application().configuration().getString("app.default.lang")');
+				
+					@if(play.Play.application().configuration().getString("app.google.analytics") != "nothing") {
+						@play.Play.application().configuration().getString("app.google.analytics")
+					}
 				</script>
-				}
+		
     </head>
 
     <body>
