@@ -22,9 +22,11 @@ object Authentication extends Controller {
     tuple (
       "login" -> text,
       "password" -> text,
-      "code-access" -> optional(text)
+      "code-access" -> optional(text),
+      "email" -> optional(text),
+      "token" -> optional(text)
     ) verifying (Messages("authentication.login.verifying.text")(Lang("fr")), result => result match {
-      case (login, password, codeAccess) => User.authenticate(login, password, codeAccess)
+      case (login, password, codeAccess, email, token) => User.authenticate(login, password, codeAccess)
     })
   )
   
@@ -47,17 +49,30 @@ object Authentication extends Controller {
       formWithErrors => BadRequest(html.login(formWithErrors, _TITLE_HTML, null)),
       // We got a valid User value
       value => {
-        val username = value._1
-        val sessionId = generateSessionId(username)
-        MDCUtils.getOrOpenSession(username, sessionId)
         
-        val email = UserEmail.getFromLogin(username)
+      	val username = value._1
+  			val sessionId = generateSessionId(username)
+  			MDCUtils.getOrOpenSession(username, sessionId)
+  			
+  			val email = formatSessionEmail(UserEmail.getFromLogin(username))
         
-        Logger.info("You've been logged in")
-        Redirect(routes.Application.index).withSession(
-            Security.username -> username,
-            Configuration._SESSION_ID_KEY -> sessionId,
-            Configuration._SESSION_EMAIL_KEY -> formatSessionEmail(email))
+  			if (value._4.isDefined && value._5.isDefined) {
+
+  			  Logger.info("Redirection on validation email with token parameters url")
+          Redirect(routes.Application.saveNewUserEmail(value._4.get, value._5.get))
+          	.withSession(
+	            Security.username -> username,
+	            Configuration._SESSION_ID_KEY -> sessionId,
+	            Configuration._SESSION_EMAIL_KEY -> email)
+        } else {
+	        
+	        Logger.info("You've been logged in")
+	        Redirect(routes.Application.index).withSession(
+	            Security.username -> username,
+	            Configuration._SESSION_ID_KEY -> sessionId,
+	            Configuration._SESSION_EMAIL_KEY -> email)
+        }
+        
       }
     )
   }

@@ -9,6 +9,7 @@ application.add.new.admin.success.text=L''administrateur a été créé.
 application.create.new.user.email.failed.text=Erreur de validation de l''adresse mail, veuillez recommencer ou contacter l''administrateur de l''application.
 application.create.new.user.email.success.text=Validation de l''adresse mail [ {0} ] pour l''utilisateur [ {1} ].
 application.create.new.user.email.exists.text=L''utilisateur [ {0} ] a déjà une adresse mail associée.
+application.create.new.user.email.redirection.to.login=Veuillez vous identifier afin de valider votre adresse mail.
 
 authentication.login.verifying.text=Connexion impossible, vérifiez votre identifiant et / ou mot de passe.
 

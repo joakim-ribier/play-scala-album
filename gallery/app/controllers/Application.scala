@@ -154,31 +154,42 @@ object Application extends Controller with Secured {
     )
   }
 
-  def saveNewUserEmail(email: String, token: String) = withUser { username => implicit request =>
-  	var feedBack = new Feedback(Messages("application.create.new.user.email.failed.text")(Lang("fr")), FeedbackClass.ko)
-    try {
-      val userEmailExist = UserEmail.getFromLogin(username)
-    	if (!userEmailExist.isDefined) {
-
-    	  val tokenTo = TokenUtils.validationAddressMail(username, email)
-	    	if (tokenTo.equals(token)) {
-	    		val user = User.findUser(username)
-	    		if (user.isDefined && User.setAddressMail(user.get, email)) {
-	    		  val successText = Messages("application.create.new.user.email.success.text", email, username)(Lang("fr"))
-	    		  feedBack = new Feedback(successText, FeedbackClass.ok)
-	    		}
-	    	}  
-    	} else {
-    	  val existsText = Messages("application.create.new.user.email.exists.text", username)(Lang("fr"))
-    		feedBack = new Feedback(existsText, FeedbackClass.ok)
-    	}
+  def saveNewUserEmail(email: String, token: String) = Action { implicit request =>
+    request.session.get("username").map { username =>
       
-    	Ok(views.html.login(Authentication.form, _TITLE_HTML, feedBack)).withNewSession
-    } catch {
-      case e => {
-        Logger.error(e.getMessage(), e)
-        Ok(views.html.login(Authentication.form, _TITLE_HTML, feedBack)).withNewSession 
-      }
+	    var feedBack = new Feedback(Messages("application.create.new.user.email.failed.text")(Lang("fr")), FeedbackClass.ko)
+	    try {
+	      val userEmailExist = UserEmail.getFromLogin(username)
+	    	if (!userEmailExist.isDefined) {
+	
+	    	  val tokenTo = TokenUtils.validationAddressMail(username, email)
+		    	if (tokenTo.equals(token)) {
+		    		val user = User.findUser(username)
+		    		if (user.isDefined && User.setAddressMail(user.get, email)) {
+		    		  val successText = Messages("application.create.new.user.email.success.text", email, username)(Lang("fr"))
+		    		  feedBack = new Feedback(successText, FeedbackClass.ok)
+		    		}
+		    	}  
+	    	} else {
+	    	  val existsText = Messages("application.create.new.user.email.exists.text", username)(Lang("fr"))
+	    		feedBack = new Feedback(existsText, FeedbackClass.ok)
+	    	}
+	      
+	    	Ok(views.html.login(Authentication.form, _TITLE_HTML, feedBack)).withNewSession
+	    } catch {
+	      case e => {
+	        Logger.error(e.getMessage(), e)
+	        Ok(views.html.login(Authentication.form, _TITLE_HTML, feedBack)).withNewSession 
+	      }
+	    }
+	    
+    }.getOrElse {
+      
+      val form = Authentication.form.fill("nothing", "nothing", Option.empty, Option.apply(email), Option.apply(token))
+    	Ok(views.html.login(
+    	    form, _TITLE_HTML,
+    	    new Feedback(Messages("application.create.new.user.email.redirection.to.login")(Lang("fr")), FeedbackClass.ok)))
+    	    
     }
   }
   
