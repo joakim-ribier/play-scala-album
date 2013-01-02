@@ -10,7 +10,8 @@
 
     <head>
         <title>@title</title>
-        <meta name="description" content="Album photos Kazakhstan - Joakim Ribier" />
+        <meta name="description" content="@play.Play.application().configuration().getString("meta.description")" />
+        
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/login.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/administrator.css")">
