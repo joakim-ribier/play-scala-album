@@ -10,6 +10,7 @@ object Configuration {
 
 	//:MAIL CONFIGURATION KEY
 	val _MAIL_FROM = "app.send.mail.from"
+	val _MAIL_AUTO_SEND_PRIVATE_KEY= "app.send.mail.auto.private.key"
   
 	//:SESSION KEY
   val _SESSION_EMAIL_KEY = "user_email"
