@@ -111,4 +111,18 @@ object PhotoDB {
       sql.as(PhotoDB.simple *)
     }
   }
+  
+  def findAllFrom(datetime: DateTime) : Seq[Photo] = {
+    return DB.withConnection { implicit connection =>
+      val sql = SQL(
+        """
+          SELECT * FROM """ + _DB_TBL_PHOTO + """
+          WHERE created > {datetime}
+        """
+      ).on(
+        'datetime -> datetime.toDate())
+      sql.as(PhotoDB.simple *)
+    }
+  }
+  
 }

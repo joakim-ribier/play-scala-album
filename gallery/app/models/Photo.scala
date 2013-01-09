@@ -82,6 +82,8 @@ object Photo {
     return PhotoDB.findAll(photos)
   }
    
+  def list(dateTime: DateTime) : Seq[Photo] = PhotoDB.findAllFrom(dateTime)
+    
   def total() = PhotoDB.count()
   
   def getPreviousPhoto(photoId: Long) : Photo = {
