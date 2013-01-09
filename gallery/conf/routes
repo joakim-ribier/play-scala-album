@@ -27,7 +27,8 @@ POST	/album/configuration													controllers.Application.createAdministrato
 
 # SEND MAIL CONTROLLER
 
-POST	/album/user/new/address/mail									controllers.SendMail.newEmail
+POST	/album/user/new/address/mail										controllers.SendMail.newEmail
+GET		/album/notify/new/photo/private/:key						controllers.SendMail.notifyNewPhoto(key: String)
 
 
 # ADMINSTRATOR CONTROLLER

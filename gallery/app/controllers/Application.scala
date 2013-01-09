@@ -201,7 +201,7 @@ object Application extends Controller with Secured {
     getFile(Configuration.getPhotoStandardDirectory(), photo)(request)
   }
   
-  def getPhotoInThumbailDirectory(photo: String) = withAuth { username => implicit request =>
+  def getPhotoInThumbailDirectory(photo: String) = Action { implicit request =>
     getFile(Configuration.getPhotoThumbnailDirectory(), photo)(request)
   }
   
