@@ -16,4 +16,6 @@ object UserEmail {
     }
     UserEmailDB.insert(user.id.get, email)
   }
+  
+  def list() = UserEmailDB.findAll()
 }

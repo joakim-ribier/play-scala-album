@@ -41,4 +41,15 @@ object UserEmailDB {
       ).as(long("id").single)
     }
   }
+  
+  def findAll() : Seq[String] = {
+    return DB.withConnection { implicit connection =>
+      val sql = SQL(
+        """
+          SELECT email FROM """ + _DB_TBL_USER_EMAIL + """
+        """
+      )
+      sql().map(row => row[String]("email")).toList
+    }
+  }
 }
