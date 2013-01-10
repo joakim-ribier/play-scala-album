@@ -4,7 +4,8 @@ function loadI18NFile(url, lang) {
 		path: url,
 		mode: 'map',
 		cache: true,
-		language: lang
+		language: lang,
+		encoding: 'UTF-8'
 	});
 }
 

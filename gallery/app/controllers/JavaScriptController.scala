@@ -5,6 +5,8 @@ import play.api.mvc.Action
 import play.api.Logger
 import play.api.i18n.Lang
 import java.io.InputStream
+import java.io.InputStreamReader
+import java.nio.charset.Charset
 
 object JavaScriptController extends Controller {
 
@@ -17,14 +19,15 @@ object JavaScriptController extends Controller {
 	    var properties = _DEFAULT_RETURN
 	    try {
 	      val in: InputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(file)
-	      properties = new java.util.Scanner(in).useDelimiter("\\A").next();
+	      val inr: InputStreamReader = new InputStreamReader(in, Charset.forName("UTF-8"))
+	      properties = new java.util.Scanner(inr).useDelimiter("\\A").next();
 	    } catch {
 	      case e => {
 	        Logger.error("Failed to read messages file")
 	      }
 	    }
 	    
-	    Ok(properties).as("text/plain")  
+	    Ok(properties).as("text/plain; charset=utf-8")
     } else {
       Ok(_DEFAULT_RETURN).as("text/plain")
     }
