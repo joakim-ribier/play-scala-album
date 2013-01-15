@@ -4,9 +4,9 @@
 	tag.replace("tags", "").replace("_", "")
 }
 		
-@admin(title, feedback, user, tags) {
+@admin(title, feedback, user, tags, "adminAddPhoto") {
 
-	<div id="administrator-content-add-new-photo">
+	<div id="administrator-content-main">
 		
 			<div id="administrator-content-add-new-photo-img">
 			@if(form("filename").value) {
@@ -35,9 +35,9 @@
 				
 	    	<p>
 	    		@if(form("description").value) {
-	    			<textarea style="background-color: transparent;" rows="4" cols="55" name="description" id="description" value="@form("description").value.get" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
+	    			<textarea style="background-color: transparent;" rows="6" cols="65" name="description" id="description" value="@form("description").value.get" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
 	    		} else {
-	    			<textarea style="background-color: transparent;" rows="4" cols="55" name="description" id="description" value="" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
+	    			<textarea style="background-color: transparent;" rows="6" cols="65" name="description" id="description" value="" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
 	    		}
 	    	</p>
 				

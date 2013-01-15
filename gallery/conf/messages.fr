@@ -47,9 +47,10 @@ page.admin.form.upload.field.percent=Pourcentage d''upload ( redirection automat
 page.admin.form.upload.failed=Erreur d''upload, veuillez recommencer ou contacter l''administrateur de l''application.
 page.admin.form.upload.submit=Uploader une/des photo(s)
 page.admin.form.upload.title=Choisir des photos ?
-page.admin.show.photo.title=Voir les photos disponibles ?
+page.admin.show.photo.title=Afficher les photos déjà disponibles sur le serveur ?
 page.admin.update.admin.password.title=Changer le mot de passe du compte administrateur ?
 page.admin.tag.already.exists.title=&Eacute;tiquettes déjà présentes dans l''album !
+page.admin.notification.title=Gérer les messages de notifications ?
 
 page.adminAddPhoto.form.field.title=donnez un titre à votre image
 page.adminAddPhoto.form.field.description=description de la photo ...

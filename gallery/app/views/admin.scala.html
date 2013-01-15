@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String])(content: Html)
+@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], page: String)(content: Html)
 
 @* NOTE this import is required to be able to use the @form tags below*@
 @import helper._
@@ -9,7 +9,7 @@
 		
 		<div id="administrator-form-menu">
 		
-			<div id="admin-upload-form">
+			<div id="admin-upload-form" class="administrator-box-shadow">
 				@form(action = routes.Administrator.upload, 'enctype -> "multipart/form-data") {
 				    <p><input type="file" id="photos" multiple="multiple" onchange="fileSelected()"; /></p>
 				
@@ -30,15 +30,19 @@
 				<div id="form-title">@Messages("page.admin.form.upload.title")(Lang("fr"))</div>
 			</div>
 			
-			<div id="admin-photo-list">
+			<div id="admin-photo-list" class="@("administrator-active-div".when(page != "adminListPhoto"))">
 				<div id="form-title">@Messages("page.admin.show.photo.title")(Lang("fr"))</div>
 			</div>
 			
-			<div id="admin-update-account">
+			<div id="admin-update-account" class="administrator-box-shadow">
 				<div id="form-title">@Messages("page.admin.update.admin.password.title")(Lang("fr"))</div>
 			</div>
+			
+			<div id="admin-notification" class="@("administrator-active-div".when(page != "adminNotification"))">
+				<div id="form-title">@Messages("page.admin.notification.title")(Lang("fr"))</div>
+			</div>
 
-			<div id="admin-application-tag">
+			<div id="admin-application-tag" class="administrator-box-shadow">
 				@for(tag <- tags) {
 					<div class="admin-tag-already-exists">@tag</div>
 				}
