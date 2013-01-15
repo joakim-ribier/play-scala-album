@@ -22,7 +22,12 @@ object Configuration {
   val _TABLE_EMAIL_KEY = "app.db.tbl.email"
   val _TABLE_PHOTO_KEY = "app.db.tbl.photo"
   val _TABLE_TAG_KEY = "app.db.tbl.tag"
-  
+    
+  val _TABLE_MESSAGE_KEY = "app.db.tbl.message"
+  val _TABLE_MESSAGE_NOTIFICATION_KEY = "app.db.tbl.messagenotification"
+  val _TABLE_NOTIFICATION_KEY = "app.db.tbl.notification"
+  val _TABLE_NOTIFICATION_USER_KEY = "app.db.tbl.notificationuser"
+
   //:APPLICATION KEY
   val _APP_CREATE_NEW_USER_CODE = "app.connection.code"
   val _APP_ADMIN_LOGIN = "app.connection.admin.login"

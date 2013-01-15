@@ -13,7 +13,11 @@ object Global extends GlobalSettings {
       Configuration._TABLE_USER_KEY,
       Configuration._TABLE_EMAIL_KEY,
       Configuration._TABLE_PHOTO_KEY,
-      Configuration._TABLE_TAG_KEY)
+      Configuration._TABLE_TAG_KEY,
+      Configuration._TABLE_MESSAGE_KEY,
+      Configuration._TABLE_MESSAGE_NOTIFICATION_KEY,
+      Configuration._TABLE_NOTIFICATION_KEY,
+      Configuration._TABLE_NOTIFICATION_USER_KEY)
   
   override def onStart(app: Application) {
     Logger.info(getApplicationName() + " application has started")
