@@ -38,7 +38,11 @@ GET		/album/admin/list/photo												controllers.Administrator.listPhotoUploa
 GET		/album/admin/add/new/photo/:name							controllers.Administrator.addNewPhoto(name: String)
 POST 	/album/upload																	controllers.Administrator.upload
 POST 	/album/savePhoto															controllers.Administrator.savePhoto
-
+GET		/album/admin/notification											controllers.Administrator.notification
+POST 	/album/admin/notification/message/save				controllers.Administrator.saveNewNotification
+POST 	/album/admin/notification/save								controllers.Administrator.saveNewNotificationAlarm
+POST 	/album/admin/notification/message/delete			controllers.Administrator.deleteNotificationMessage
+POST 	/album/admin/notification/delete							controllers.Administrator.deleteNotification
 
 # AUTHENTICATION CONTROLLER
 

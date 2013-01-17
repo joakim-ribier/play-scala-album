@@ -138,6 +138,38 @@ function accesstoNewPhoto(name) {
 	window.location.replace("/album/admin/add/new/photo/" + name);
 }
 
+function deleteNotificationMessage(messageId) {
+	$.post('/album/admin/notification/message/delete',
+		{'messageid-post': messageId},
+		function(data) {
+			switch (data['status']) {
+					case 'success':
+						window.location.replace("/album/admin/notification");
+						break;
+					case 'nothing' :
+					case 'failed' :
+					default :
+						$("#notification-message-error-label").html(data['error-message']);
+			}
+	});
+}
+
+function deleteNotification(notificationId) {
+	$.post('/album/admin/notification/delete',
+		{'notificationid-post': notificationId},
+		function(data) {
+			switch (data['status']) {
+					case 'success':
+						window.location.replace("/album/admin/notification");
+						break;
+					case 'nothing' :
+					case 'failed' :
+					default :
+						$("#notification-message-error-label").html(data['error-message']);
+			}
+	});
+}
+
 $(document).ready(function() {
 		
 	$("#add-new-tag-input").keypress(function(event) {
@@ -173,7 +205,7 @@ $(document).ready(function() {
  		});
 		$('#administrator-content-add-new-photo-form-input-tags-hidden').html(contentInputHiddenTags);
 	});
-		
+	
 	$(".admin-tag-already-exists").live("click", function() {
 		var tagValue = $(this).html();
  		var contentInputTags = $("#administrator-content-add-new-photo-form-input-tags").html();
@@ -236,6 +268,10 @@ $(document).ready(function() {
 		window.location.replace("/album/admin/list/photo");
 	});
 	
+	$("#admin-notification-title").live("click", function() {
+		window.location.replace("/album/admin/notification");
+	});
+	
 	$("#footer-information-email-ckx").live("change", function() {
 		if ($(this).is(':checked')) {
 			$('#footer-information-new-email').fadeIn();
@@ -272,4 +308,24 @@ $(document).ready(function() {
 		}
 	});
 	
+	$("#textarea-notification").keyup(function(event) {
+		var html = $("#textarea-notification").val();
+		if (html == null || html == '') {
+			html = getI18NValue('page.adminNotification.form.field.notification.html');
+		}
+		$("#administrator-content-main-notification-create-preview").html('<span>' + html + '</span>');	
+	});
+	
+	$(".notification-list-checkbox").live("change", function(event) {
+		var divList = $("#notification-create-alarm-form input[type=checkbox]");
+	  var nbr = -1;
+	  for (var i = 0; i < divList.length; ++i) {
+	  	if (divList[i].checked) {
+	  		nbr++;
+	  		divList[i].name = 'messageIds[' + nbr + ']';
+	  	} else {
+				divList[i].name = 'nothing';
+	  	}
+	  }
+	});
 });

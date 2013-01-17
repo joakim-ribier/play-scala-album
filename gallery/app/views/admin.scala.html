@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], page: String)(content: Html)
+@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], page: String)(content: Html)(implicit flash: play.api.mvc.Flash)
 
 @* NOTE this import is required to be able to use the @form tags below*@
 @import helper._
@@ -34,12 +34,32 @@
 				<div id="form-title">@Messages("page.admin.show.photo.title")(Lang("fr"))</div>
 			</div>
 			
-			<div id="admin-update-account" class="administrator-box-shadow">
-				<div id="form-title">@Messages("page.admin.update.admin.password.title")(Lang("fr"))</div>
-			</div>
-			
 			<div id="admin-notification" class="@("administrator-active-div".when(page != "adminNotification"))">
-				<div id="form-title">@Messages("page.admin.notification.title")(Lang("fr"))</div>
+				
+				<div id="admin-notification-title"  class="admin-form-title">
+					<div id="form-title">@Messages("page.admin.notification.title")(Lang("fr"))</div>
+				</div>
+				
+				<div id="administrator-content-main-notification-create" >
+					@helper.form(routes.Administrator.saveNewNotification) {
+					
+						<div id="administrator-content-main-notification-create-textarea">
+							<textarea style="background-color: transparent;" rows="4" cols="45" name="notification" id="textarea-notification" placeholder="@Messages("page.adminNotification.form.field.notification.html")(Lang("fr"))"></textarea>
+						</div>
+						
+						<span>@Html(Messages("page.admin.notification.preview.html")(Lang("fr")))</span>
+						<div id="administrator-content-main-notification-create-preview">
+								<span>@Html(Messages("page.adminNotification.form.field.notification.html")(Lang("fr")))</span>
+						</div>
+						<div id="administrator-content-main-notification-create-submit">
+							<br />
+							<button type="submit" >@Messages("page.adminNotification.form.submit")(Lang("fr"))</button>
+						</div>
+						@if(flash.get("notifcation-create-error").isDefined) {
+							<span class="feedback-ko"><br />@flash.get("notifcation-create-error")</span>
+						}
+					}
+				</div>
 			</div>
 
 			<div id="admin-application-tag" class="administrator-box-shadow">

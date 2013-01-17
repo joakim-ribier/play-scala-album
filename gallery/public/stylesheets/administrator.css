@@ -7,28 +7,8 @@
 	float: left;
 }
 
-.administrator-box-shadow {
-	box-shadow: 0px 4px 8px #rgb(0, 175, 202);
-	-moz-box-shadow: 0px 4px 8px #000000;
-	-webkit-box-shadow: 0px 4px 8px #000000;
-}
-
-.administrator-active-div {
-	box-shadow: 0px 4px 8px #000000;
-	-moz-box-shadow: 0px 4px 8px #000000;
-	-webkit-box-shadow: 0px 4px 8px #000000;
-	
-	cursor: pointer;
-}
-
-.administrator-active-div:hover {
-	box-shadow: 0px 0px 8px rgb(0, 175, 202);
-	-moz-box-shadow: 0px 0px 0px rgb(0, 175, 202);
-	-webkit-box-shadow: 0px 0px 0px rgb(0, 175, 202);
-}
-
 #admin-upload-form {
-	width: 400px;
+	width: 450px;
 	background-color: #FFFFFF;
 	background-image : url('../images/kazakhstan_map.gif');
 	background-repeat: no-repeat; 
@@ -44,7 +24,7 @@
 }
 
 #admin-photo-list {
-	width: 400px;
+	width: 450px;
 	background-color: #FFFFFF;
 	background-image : url('../images/kazakhstan_map.gif');
 	background-repeat: no-repeat; 
@@ -58,9 +38,13 @@
 
 	-webkit-transform: rotate(-3deg);
 	-moz-transform: rotate(-3deg);
+	
+	cursor: pointer;
 }
 
 #admin-notification {
+	width: 450px;
+	
 	background-color: #FFFFFF;
 	background-image : url('../images/kazakhstan_map.gif');
 	background-repeat: no-repeat; 
@@ -71,6 +55,9 @@
 	border-style: solid;
 	border-width: 4px;
 	border-color: #FFFFFF;
+	
+	position: relative;
+	z-index: 100;
 }
 
 #administrator-content-list-photo {
@@ -91,7 +78,7 @@
 }
 
 #admin-update-account {
-	width: 400px;
+	width: 450px;
 	background-color: #FFFFFF;
 	background-image : url('../images/kazakhstan_map.gif');
 	background-repeat: no-repeat; 
@@ -107,14 +94,13 @@
 }
 
 #admin-application-tag {
-	width: 400px;
+	width: 450px;
 	background-color: #FFFFFF;
 	background-image : url('../images/kazakhstan_map.gif');
 	background-repeat: no-repeat; 
 	
 	padding: 5px;
-	margin-top: 80px;
-	
+	margin-top: 50px;
 	border-style: solid;
 	border-width: 4px;
 	border-color: #FFFFFF;
@@ -130,26 +116,23 @@
 #administrator-content-main {
 	width: 700px;
 
-	text-align: center;
-	padding: 5px;
 	float:left;
-	
-	border-style: solid;
-	border-width: 4px;
-	border-color: #FFFFFF;
 	
 	box-shadow: 0px 4px 8px #000000;
 	-moz-box-shadow: 0px 4px 8px #000000;
 	-webkit-box-shadow: 0px 4px 8px #000000;
 	
-	background-color: #FFFFFF;
-	
 	margin-top: -50px;
-	margin-left: 50px;
 	margin-bottom: 10px;
 }
 
+.administrator-content-main-border {
+	background-color: #FFFFFF;
+	padding: 15px;
+}
+
 #administrator-content-add-new-photo-img {
+	text-align: center;
 	background-color: #000000;
 	padding: 10px;
 }
@@ -230,4 +213,107 @@
 	background-color: #FFFFFF;
 	
 	clear: both;
+}
+
+#administrator-content-main-notification-create {
+	text-align: left;
+	margin-top: 10px;
+}
+
+#administrator-content-main-notification-create-preview {
+	padding: 10px;
+	
+	border-style: dashed;
+	border-width: 1px;
+	border-color: #000000;
+	
+	background-color: #F2F2F2;
+}
+
+.notification-list-float {
+	float: left;
+}
+
+.notification-list-separator {
+	clear: both;
+	padding-top: 10px;
+}
+
+.notification-list-checkbox {
+	width: 25px;
+}
+
+.notification-list-id {
+	width: 15px;
+}
+
+.notification-list-date {
+	margin-left: 2px;
+}
+
+.notification-list-message {
+	padding-top: 10px;
+	text-align: justify;
+	clear: both;
+}
+
+.notification-list-header {
+	font-weight: bold;
+}
+
+.notification-list-el {
+	padding: 10px 0px 10px 0px;
+
+	border-color: rgb(0, 175, 202);	
+	border-style: dashed;
+	border-width: 0px 0px 1px 0px;
+}
+
+#notification-create-alarm-form {
+	background-color: #FFFFFF;
+	background-image : url('../images/kazakhstan_map.gif');
+	background-repeat: no-repeat; 
+
+	margin-top: 15px;	
+	padding: 5px;
+	
+	-webkit-transform: rotate(3deg);
+	-moz-transform: rotate(3deg);
+	
+	border-style: solid;
+	border-width: 4px;
+	border-color: #FFFFFF;
+	
+	box-shadow: 0px 4px 8px #000000;
+	-moz-box-shadow: 0px 4px 8px #000000;
+	-webkit-box-shadow: 0px 4px 8px #000000;	
+}
+
+#admin-notification-title {
+	cursor: pointer;
+}
+
+.administrator-notififcation-display-message {
+	padding: 10px;
+}
+
+.administrator-notififcation-display-message-preview {
+	margin-top: 5px;
+	padding: 10px;
+	
+	border-style: dashed;
+	border-width: 1px;
+	border-color: #000000;
+	
+	background-color: #F2F2F2;
+}
+
+.notification-list-el-message-delete {
+	color: red;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.notification-list-el-message-delete:hover {
+	text-decoration: underline;
 }

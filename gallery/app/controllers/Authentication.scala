@@ -101,4 +101,8 @@ object Authentication extends Controller {
     }
     return sessionEmail
   }
+  
+  def userTemplate(username: String, session: Session) : UserTemplate = {
+    return new UserTemplate(username, session.get(Configuration._SESSION_EMAIL_KEY))
+  }
 }

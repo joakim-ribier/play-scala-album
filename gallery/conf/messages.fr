@@ -2,6 +2,10 @@ js.global.send.user.email.failed=Impossible d''envoyer le courrier électronique
 js.global.send.user.email.success.1=Le courrier électronique de validation a été envoyé à [ {0} ], veuillez vérifier votre boite de réception.
 js.global.send.user.email.success.2=<br />(si vous ne le recevez pas, vérifiez également votre dossier spam)
 
+app.global.error=Un problème est survenu, veuillez recommencer ou contacter l''administrateur de l''application.
+app.global.error.missing.field.form=Veuillez s''il vous plaît remplir correctement le formulaire.
+app.global.error.invalid.field.form=Les données renseignées ne sont pas correctes.
+
 administrator.add.new.photo.verifying.text=Impossible de sauvegarder la photo, veuillez vérifier le formulaire et recommencer.
 
 application.add.new.admin.verifying.text=Configuration impossible, vérifiez votre identifiant et / ou mot de passe administrateur.
@@ -46,11 +50,22 @@ page.admin.form.upload.field.size=Taille totale de photo :
 page.admin.form.upload.field.percent=Pourcentage d''upload ( redirection automatique ) :
 page.admin.form.upload.failed=Erreur d''upload, veuillez recommencer ou contacter l''administrateur de l''application.
 page.admin.form.upload.submit=Uploader une/des photo(s)
-page.admin.form.upload.title=Choisir des photos ?
-page.admin.show.photo.title=Afficher les photos déjà disponibles sur le serveur ?
-page.admin.update.admin.password.title=Changer le mot de passe du compte administrateur ?
-page.admin.tag.already.exists.title=&Eacute;tiquettes déjà présentes dans l''album !
-page.admin.notification.title=Gérer les messages de notifications ?
+page.admin.form.upload.title=Choisir des photos
+page.admin.show.photo.title=Afficher les photos déjà disponibles sur le serveur
+page.admin.update.admin.password.title=Changer le mot de passe du compte administrateur
+page.admin.tag.already.exists.title=&Eacute;tiquettes déjà présentes dans l''album
+page.admin.notification.title=Gestion du système de notifications
+page.admin.notification.message.empty.html=<h4>Il n''y a aucun message d''information.</h4>
+page.admin.notification.empty.html=<h4>Il n''y a aucune notification.</h4>
+page.admin.notification.preview.html=<h4>Aperçu html du message :</h4>
+page.adminNotification.form.field.notification.html=Le mot <strong>notification</strong> est en gras...<br/> Je suis un saut de ligne !
+page.adminNotification.form.submit=Ajouter le nouveau message d''information
+page.adminNotification.title=Paramétrage de l''affichage des messages<br /><i>( sélectionnez une liste de messages à afficher et une date )</i><br /><br />
+page.adminNotification.form.create.alarm.submit=Créer la notification
+page.adminNotification.delete.message=supprimer
+page.adminNotification.delete.message.failed=Problème lors de la suppression du message d''information.
+page.adminNotification.delete.failed=Problème lors de la suppression de la notification.
+page.admin.notification.list.title=Liste des notifications programmées :
 
 page.adminAddPhoto.form.field.title=donnez un titre à votre image
 page.adminAddPhoto.form.field.description=description de la photo ...

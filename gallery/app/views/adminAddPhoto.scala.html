@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate, form: Form[(String, String, Option[String], Boolean, List[String])], tags: Seq[String])
+@(title: String, feedback: Feedback, user: UserTemplate, form: Form[(String, String, Option[String], Boolean, List[String])], tags: Seq[String])(implicit flash: play.api.mvc.Flash)
 
 @tagToId(tag: String) = @{
 	tag.replace("tags", "").replace("_", "")
@@ -6,7 +6,7 @@
 		
 @admin(title, feedback, user, tags, "adminAddPhoto") {
 
-	<div id="administrator-content-main">
+	<div id="administrator-content-main" class="administrator-content-main-border">
 		
 			<div id="administrator-content-add-new-photo-img">
 			@if(form("filename").value) {
