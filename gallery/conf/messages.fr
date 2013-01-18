@@ -58,7 +58,7 @@ page.admin.tag.already.exists.title=&Eacute;tiquettes déjà présentes dans l''
 page.admin.notification.title=Gestion du système de notifications
 page.admin.notification.message.empty.html=<h4>Il n''y a aucun message d''information.</h4>
 page.admin.notification.empty.html=<h4>Il n''y a aucune notification.</h4>
-page.admin.notification.preview.html=<h4>Aperçu html du message :</h4>
+page.admin.notification.preview.html=<h4>Aperçu du texte en version html</h4>
 page.adminNotification.form.field.notification.html=Le mot <strong>notification</strong> est en gras...<br/> Je suis un saut de ligne !
 page.adminNotification.form.submit=Ajouter le nouveau message d''information
 page.adminNotification.title=Paramétrage de l''affichage des messages<br /><i>( sélectionnez une liste de messages à afficher et une date )</i><br /><br />
@@ -69,7 +69,7 @@ page.adminNotification.delete.failed=Problème lors de la suppression de la noti
 page.admin.notification.list.title=Liste des notifications programmées :
 
 page.adminAddPhoto.form.field.title=donnez un titre à votre image
-page.adminAddPhoto.form.field.description=description de la photo ...
+page.adminAddPhoto.form.field.description=<h4>DESCRIPTION DE LA PHOTO</h4>Ceci est la description ... <strong>je suis en gras!</strong>
 page.adminAddPhoto.form.field.tag=tapez votre étiquette + (barre d''espace)
 page.adminAddPhoto.form.field.public=rendre la photo public
 page.adminAddPhoto.form.field.submit=Sauvegarder la photo

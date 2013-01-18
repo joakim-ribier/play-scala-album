@@ -35,11 +35,16 @@
 				
 	    	<p>
 	    		@if(form("description").value) {
-	    			<textarea style="background-color: transparent;" rows="6" cols="65" name="description" id="description" value="@form("description").value.get" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
+	    			<textarea style="background-color: transparent;" rows="6" cols="65" name="description" id="create-photo-description" value="@form("description").value.get" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
 	    		} else {
-	    			<textarea style="background-color: transparent;" rows="6" cols="65" name="description" id="description" value="" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
+	    			<textarea style="background-color: transparent;" rows="6" cols="65" name="description" id="create-photo-description" value="" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
 	    		}
 	    	</p>
+				
+				<span>@Html(Messages("page.admin.notification.preview.html")(Lang("fr")))</span>
+				<div id="administrator-content-add-new-photo-form-description-preview" class="administrator-content-main-text-preview-html">
+					<span>@Html(Messages("page.adminAddPhoto.form.field.description")(Lang("fr")))</span>
+				</div>
 				
 				<p>
 				<input type="text" size="30" style="background-color: transparent;" id="add-new-tag-input" placeholder="@Messages("page.adminAddPhoto.form.field.tag")(Lang("fr"))"/>

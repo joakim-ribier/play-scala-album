@@ -332,4 +332,12 @@ $(document).ready(function() {
 	$("#app-message").live("click", function() {
 		$(this).fadeOut();
 	});
+	
+	$("#create-photo-description").keyup(function(event) {
+		var html = $("#create-photo-description").val();
+		if (html == null || html == '') {
+			html = getI18NValue('page.adminAddPhoto.form.field.description');
+		}
+		$("#administrator-content-add-new-photo-form-description-preview").html('<span>' + html + '</span>');	
+	});
 });
