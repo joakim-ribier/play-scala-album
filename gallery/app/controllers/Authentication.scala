@@ -13,6 +13,7 @@ import utils.MDCUtils
 import utils.Configuration
 import play.api.i18n.Messages
 import play.api.i18n.Lang
+import utils.TokenUtils
 
 object Authentication extends Controller {
   	
@@ -30,7 +31,7 @@ object Authentication extends Controller {
     })
   )
   
-  def login = Action { request =>
+  def login = Action { implicit request =>
   	val u = User.findUser(Configuration.getAdminLogin())
     if (u.isDefined) {
     	Ok(views.html.login(form, _TITLE_HTML, null))
@@ -52,29 +53,54 @@ object Authentication extends Controller {
         
       	val username = value._1
   			val sessionId = generateSessionId(username)
-  			MDCUtils.getOrOpenSession(username, sessionId)
+  			var email = UserEmail.getFromLogin(username)
+  			if (!email.isDefined) {
+  			  email = Option.apply("nothing")
+  			}
   			
-  			val email = formatSessionEmail(UserEmail.getFromLogin(username))
-        
-  			if (value._4.isDefined && value._5.isDefined) {
-
-  			  Logger.info("Redirection on validation email with token parameters url")
-          Redirect(routes.Application.saveNewUserEmail(value._4.get, value._5.get))
-          	.withSession(
-	            Security.username -> username,
-	            Configuration._SESSION_ID_KEY -> sessionId,
-	            Configuration._SESSION_EMAIL_KEY -> email)
-        } else {
-	        
-	        Logger.info("You've been logged in")
-	        Redirect(routes.Application.index).withSession(
-	            Security.username -> username,
-	            Configuration._SESSION_ID_KEY -> sessionId,
-	            Configuration._SESSION_EMAIL_KEY -> email)
-        }
-        
+      	var message = "nothing"
+			  if (value._4.isDefined && value._5.isDefined) {
+			    if (email.get.equals("nothing")) {
+			    	val tokenTo = TokenUtils.validationAddressMail(username, value._4.get)
+	    			if (tokenTo.equals(value._5.get)) {
+	    				val user = User.findUser(username)
+  						if (user.isDefined && User.setAddressMail(user.get, value._4.get)) {
+  							email = value._4
+  							message = Messages("application.create.new.user.email.success.html", email.get)(Lang("fr"))
+  						} else {
+  						  message = Messages("application.create.new.user.email.failed.html", value._4.get)(Lang("fr"))
+  						}
+	    			} else {
+	    			  message = Messages("application.create.new.user.email.failed.html", value._4.get)(Lang("fr"))
+	    			}  
+			    } else {
+			      message = Messages("application.create.new.user.email.exists.html", email.get)(Lang("fr"))
+			    }
+  			}
+      	
+      	MDCUtils.getOrOpenSession(username, sessionId)
+      	Logger.info("You've been logged in")
+      	if (message.equals("nothing")) {
+      	  redirectToIndex(username, sessionId, email.get)(request)
+      	} else {
+      	  redirectToIndex(username, sessionId, email.get, message)(request)
+      	}
       }
     )
+  }
+  
+  private def redirectToIndex(username: String, sessionId: String, email: String) = Action {
+  	Redirect(routes.Application.index).withSession(
+            Security.username -> username,
+            Configuration._SESSION_ID_KEY -> sessionId,
+            Configuration._SESSION_EMAIL_KEY -> email)
+  }
+  
+  private def redirectToIndex(username: String, sessionId: String, email: String, message: String) = Action {
+  	Redirect(routes.Application.index).withSession(
+            Security.username -> username,
+            Configuration._SESSION_ID_KEY -> sessionId,
+            Configuration._SESSION_EMAIL_KEY -> email).flashing("app-message" -> message)
   }
   
   def redirectAuthenticate = Action {
@@ -92,14 +118,6 @@ object Authentication extends Controller {
 		val dateformatter: SimpleDateFormat  = new SimpleDateFormat("yyyy.MM.dd_hh:mm:ss")
 		val now: String = dateformatter.format(date.getTime())
 		return username + "-" + now 
-  }
-  
-  private def formatSessionEmail(email: Option[String]) : String = {
-    var sessionEmail = "nothing"
-    if (email.isDefined) {
-      sessionEmail = email.get
-    }
-    return sessionEmail
   }
   
   def userTemplate(username: String, session: Session) : UserTemplate = {

@@ -56,7 +56,12 @@ object Application extends Controller with Secured {
   	if (User.isAdmin(username)) {
   		Redirect(routes.Administrator.index)
   	} else {
-  	  Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list(0, _LIMIT), 1, _TAG_ALL, countPage(Photo.total())))
+  	  if (request.flash.get("app-message").isDefined) {
+  	    val feedback = new Feedback(request.flash.get("app-message").get, FeedbackClass.ok)
+  	    Ok(views.html.index(_TITLE_HTML, feedback, userTemplate, Tag.list(), Photo.list(0, _LIMIT), 1, _TAG_ALL, countPage(Photo.total())))
+  	  } else {
+  	  	Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list(0, _LIMIT), 1, _TAG_ALL, countPage(Photo.total())))
+  	  }
   	}
   }
   
@@ -132,7 +137,7 @@ object Application extends Controller with Secured {
     }
   }
   
-  def configuration = Action {
+  def configuration = Action { implicit request =>
     val u = User.findUser(Configuration.getAdminLogin())
     if (u.isDefined) {
        Redirect(routes.Application.index)
@@ -148,49 +153,17 @@ object Application extends Controller with Secured {
       formWithErrors => BadRequest(html.configuration(formWithErrors, _TITLE_HTML)),
       // We got a valid User value
       value => {
-        val successText = Messages("application.add.new.admin.success.text")(Lang("fr"))
+        val successText = Messages("application.add.new.admin.success.html", value._1)(Lang("fr"))
         Ok(views.html.login(Authentication.form, _TITLE_HTML, new Feedback(successText, FeedbackClass.ok))) 
       }
     )
   }
 
   def saveNewUserEmail(email: String, token: String) = Action { implicit request =>
-    request.session.get("username").map { username =>
-      
-	    var feedBack = new Feedback(Messages("application.create.new.user.email.failed.text")(Lang("fr")), FeedbackClass.ko)
-	    try {
-	      val userEmailExist = UserEmail.getFromLogin(username)
-	    	if (!userEmailExist.isDefined) {
-	
-	    	  val tokenTo = TokenUtils.validationAddressMail(username, email)
-		    	if (tokenTo.equals(token)) {
-		    		val user = User.findUser(username)
-		    		if (user.isDefined && User.setAddressMail(user.get, email)) {
-		    		  val successText = Messages("application.create.new.user.email.success.text", email, username)(Lang("fr"))
-		    		  feedBack = new Feedback(successText, FeedbackClass.ok)
-		    		}
-		    	}  
-	    	} else {
-	    	  val existsText = Messages("application.create.new.user.email.exists.text", username)(Lang("fr"))
-	    		feedBack = new Feedback(existsText, FeedbackClass.ok)
-	    	}
-	      
-	    	Ok(views.html.login(Authentication.form, _TITLE_HTML, feedBack)).withNewSession
-	    } catch {
-	      case e => {
-	        Logger.error(e.getMessage(), e)
-	        Ok(views.html.login(Authentication.form, _TITLE_HTML, feedBack)).withNewSession 
-	      }
-	    }
-	    
-    }.getOrElse {
-      
-      val form = Authentication.form.fill("nothing", "nothing", Option.empty, Option.apply(email), Option.apply(token))
-    	Ok(views.html.login(
-    	    form, _TITLE_HTML,
-    	    new Feedback(Messages("application.create.new.user.email.redirection.to.login")(Lang("fr")), FeedbackClass.ok)))
-    	    
-    }
+    val form = Authentication.form.fill("nothing", "nothing", Option.empty, Option.apply(email), Option.apply(token))
+  	Ok(views.html.login(
+  	    form, _TITLE_HTML,
+  	    new Feedback(Messages("application.create.new.user.email.redirection.to.login", email)(Lang("fr")), FeedbackClass.ok))).withNewSession
   }
   
   def getPhotoInUploadThumbailDirectory(photo: String) = withAuth { username => implicit request =>

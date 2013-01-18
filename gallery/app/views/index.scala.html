@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], photos: Seq[Photo], page: Int, byTags: String, count: Long)
+@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], photos: Seq[Photo], page: Int, byTags: String, count: Long)(implicit flash: play.api.mvc.Flash)
 
 @random() = @{
 	val rnd = new scala.util.Random

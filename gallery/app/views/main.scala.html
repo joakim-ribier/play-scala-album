@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate)(content: Html)
+@(title: String, feedback: Feedback, user: UserTemplate)(content: Html)(implicit flash: play.api.mvc.Flash)
 
 @getTitleWithVersion(title: String) = @{
   title + " - " + play.Play.application().configuration().getString("app.version")
@@ -57,10 +57,32 @@
 			</div>
 			
     	<div id="content">
+    		@if(flash.get("app.message").isDefined) {
+					<div id="app-message">
+						<span>@Html(flash.get("app.message").get)</span>
+	    		</div>
+	    		<script type="text/javascript">
+    			setTimeout(function() {
+						$('#app-message').fadeOut();
+					}, 6000);
+					setTimeout(function() {
+						$('#app-message').fadeIn();
+					}, 500);
+    		</script>				
+				}
     		@if(feedback != null) {
-    			<div class="feedback-@feedback.feedbackClass">@feedback.message</div>
+    			<div id="app-message">
+						<span>@Html(feedback.message)</span>
+	    		</div>
+	    		<script type="text/javascript">
+    			setTimeout(function() {
+						$('#app-message').fadeOut();
+					}, 6000);
+					setTimeout(function() {
+						$('#app-message').fadeIn();
+					}, 500);
+    		</script>
     		}
-    	
       	@content
     	</div>
     	

@@ -2,6 +2,7 @@ js.global.send.user.email.failed=Impossible d''envoyer le courrier électronique
 js.global.send.user.email.success.1=Le courrier électronique de validation a été envoyé à [ {0} ], veuillez vérifier votre boite de réception.
 js.global.send.user.email.success.2=<br />(si vous ne le recevez pas, vérifiez également votre dossier spam)
 
+app.global.error.label.title=ERREUR
 app.global.error=Un problème est survenu, veuillez recommencer ou contacter l''administrateur de l''application.
 app.global.error.missing.field.form=Veuillez s''il vous plaît remplir correctement le formulaire.
 app.global.error.invalid.field.form=Les données renseignées ne sont pas correctes.
@@ -9,11 +10,11 @@ app.global.error.invalid.field.form=Les données renseignées ne sont pas correc
 administrator.add.new.photo.verifying.text=Impossible de sauvegarder la photo, veuillez vérifier le formulaire et recommencer.
 
 application.add.new.admin.verifying.text=Configuration impossible, vérifiez votre identifiant et / ou mot de passe administrateur.
-application.add.new.admin.success.text=L''administrateur a été créé.
-application.create.new.user.email.failed.text=Erreur de validation de l''adresse mail, veuillez recommencer ou contacter l''administrateur de l''application.
-application.create.new.user.email.success.text=Validation de l''adresse mail [ {0} ] pour l''utilisateur [ {1} ].
-application.create.new.user.email.exists.text=L''utilisateur [ {0} ] a déjà une adresse mail associée.
-application.create.new.user.email.redirection.to.login=Veuillez vous identifier afin de valider votre adresse mail.
+application.add.new.admin.success.html=<h3>INFORMATION</h3>L''administrateur <strong>{0}</strong> a été créé.
+application.create.new.user.email.failed.html=<h3>ERREUR</h3>Il est impossible de valider l''adresse mail <strong{0}</strong> pour ce compte, veuillez recommencer ou contacter l''administrateur de l''application.
+application.create.new.user.email.success.html=<h3>INFORMATION</h3>L''adresse mail <strong>{0}</strong> est validée pour ce compte.
+application.create.new.user.email.exists.html=<h3>INFORMATION</h3>Ce compte est déjà associé à l''adresse mail <strong>{0}</strong>.
+application.create.new.user.email.redirection.to.login=<h3>INFORMATION</h3>Avant de valider l''adresse mail <strong>{0}</strong>, veuillez vous identifier avec le compte asssocié.
 
 authentication.login.verifying.text=Connexion impossible, vérifiez votre identifiant et / ou mot de passe.
 

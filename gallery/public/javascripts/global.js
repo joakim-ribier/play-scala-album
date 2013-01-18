@@ -328,4 +328,8 @@ $(document).ready(function() {
 	  	}
 	  }
 	});
+	
+	$("#app-message").live("click", function() {
+		$(this).fadeOut();
+	});
 });
