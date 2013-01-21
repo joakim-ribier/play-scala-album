@@ -170,8 +170,21 @@ function deleteNotification(notificationId) {
 	});
 }
 
+function closeNotification(notificationId) {
+	var checked = $('#index-application-notification-header-close-check').is(':checked');
+	if (checked == false) {
+		$.post('/album/user/popup/notify/close',
+			{'notificationid-post': notificationId},
+			function(data) {
+				$('#index-application-notification-display').fadeOut();
+		});
+	} else {
+		$('#index-application-notification-display').fadeOut();
+	}
+}
+
 $(document).ready(function() {
-		
+	
 	$("#add-new-tag-input").keypress(function(event) {
 		if (event.which == 32) {
 	 		

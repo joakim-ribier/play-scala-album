@@ -9,7 +9,7 @@ import anorm._
 
 object UserDB {
 
-  private val _DB_TBL_USER: String = play.Configuration.root().getString("app.db.tbl.user")
+  val _DB_TBL_USER: String = play.Configuration.root().getString("app.db.tbl.user")
   private val simple = {
     get[Pk[Long]](_DB_TBL_USER + ".id") ~
     get[String](_DB_TBL_USER + ".login") ~

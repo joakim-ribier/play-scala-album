@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], photos: Seq[Photo], page: Int, byTags: String, count: Long)(implicit flash: play.api.mvc.Flash)
+@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], photos: Seq[Photo], page: Int, byTags: String, count: Long, notifications: Seq[NotificationMessage])(implicit flash: play.api.mvc.Flash)
 
 @random() = @{
 	val rnd = new scala.util.Random
@@ -31,9 +31,61 @@
 
 @compute(photos: Seq[Photo]) = @{ 15 - photos.length }
 
+@import org.joda.time.DateTime
+@isNowDateTime(startDate: DateTime, endDate: DateTime) = @{
+	startDate.isBeforeNow() && endDate.isAfterNow()
+}
+
+@isNotifyPopup(notifications: Seq[NotificationMessage]) = @{
+	var display = "none"
+	for(notification <- notifications) {
+		if(isNowDateTime(notification.notification.startDate, notification.notification.endDate)){
+			display = "display"
+		}
+	}
+	display
+}
+
 @main(title, feedback, user) {
 
 	<div id="index-application">
+			
+			<div id="index-application-notification-@isNotifyPopup(notifications)">
+				@for(notification <- notifications) {
+					<div id="index-application-notification-content">
+						<div id="index-application-notification-content-messages">
+							<div class="slides_container">
+									@if(isNowDateTime(notification.notification.startDate, notification.notification.endDate)){
+										@for(message <- notification.messages) {
+											<div id="index-application-notification-content-message">@Html(message.message)</div>	
+										}
+									}
+							</div>
+						</div>
+					</div>
+					
+					<div id="index-application-notification-header">
+						<div id="index-application-notification-header-title">@Html(Messages("page.index.notification.title.html")(Lang("fr")))</div>
+						<div id="index-application-notification-header-close">
+							<span onclick="closeNotification('@notification.notification.id');"style="font-style:normal;">@Messages("page.index.notification.title.close")(Lang("fr"))</span>
+							&nbsp;&nbsp;(&nbsp;<input type="checkbox" id="index-application-notification-header-close-check">@Messages("page.index.notification.title.checkbox")(Lang("fr"))&nbsp;)
+						</div>
+					</div>					
+
+					<script type="text/javascript">
+	    				$(function(){
+	                $('#index-application-notification-content-messages').slides({
+										play: 5000,
+										pause: 2500,
+										hoverPause: true,
+										autoHeight: true,
+										bigTarget: true
+								});
+	            });
+						</script>
+					}
+			</div>
+	
 			<div id="index-application-photos-menu">
 				<div id="index-application-photos-menu-content">
 					<div class="index-application-photos-menu-content-tool">

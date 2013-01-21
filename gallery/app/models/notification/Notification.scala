@@ -31,6 +31,19 @@ object Notification {
     return notificationMessages
   }
   
+  def listNotClosedByUser(username: String) : Seq[NotificationMessage] = {
+    val notifications = NotificationDB.findAll()
+    var notificationMessages = Seq[NotificationMessage]()
+    for (notification <- notifications) {
+      val closed = NotificationUserDB.findClosedBy(username, notification.id.get)
+      if (!(closed.isDefined && closed.get == true)) {
+      	val messages = MessageNotificationDB.findMessagesById(notification.id.get)
+      	notificationMessages +:= new NotificationMessage(notification, messages)
+      }
+    }
+    return notificationMessages
+  }
+  
   def add(startDate: String, endDate: String, messageIds: Seq[String]) : Boolean = {
     if (messageIds.size < 1) {
     	throw new IllegalArgumentException(Messages("app.global.error.invalid.field.form")(Lang("fr")))
@@ -60,5 +73,14 @@ object Notification {
   
   def remove(notificationId: Long) : Int = {
     return NotificationDB.delete(notificationId)
+  }
+  
+  def setClosed(username: String, notificationId: Long) : Boolean = {
+    val user = User.findUser(username)
+    if (user.isDefined) {
+      val id = NotificationUserDB.insert(user.get.id.get, notificationId, true)
+      return id.isInstanceOf[Long]
+    }
+    return false
   }
 }

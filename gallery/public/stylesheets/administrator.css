@@ -225,9 +225,10 @@
 	
 	border-style: dashed;
 	border-width: 1px;
-	border-color: #000000;
+	border-color: #FFFFFF;
 	
-	background-color: #F2F2F2;
+	background-color: #000000;
+	color: #FFFFFF;
 }
 
 .notification-list-float {

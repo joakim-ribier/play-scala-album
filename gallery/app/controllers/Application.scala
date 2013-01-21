@@ -58,9 +58,9 @@ object Application extends Controller with Secured {
   	} else {
   	  if (request.flash.get("app-message").isDefined) {
   	    val feedback = new Feedback(request.flash.get("app-message").get, FeedbackClass.ok)
-  	    Ok(views.html.index(_TITLE_HTML, feedback, userTemplate, Tag.list(), Photo.list(0, _LIMIT), 1, _TAG_ALL, countPage(Photo.total())))
+  	    Ok(views.html.index(_TITLE_HTML, feedback, userTemplate, Tag.list(), Photo.list(0, _LIMIT), 1, _TAG_ALL, countPage(Photo.total()), Notification.listNotClosedByUser(username)))
   	  } else {
-  	  	Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list(0, _LIMIT), 1, _TAG_ALL, countPage(Photo.total())))
+  	  	Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list(0, _LIMIT), 1, _TAG_ALL, countPage(Photo.total()), Notification.listNotClosedByUser(username)))
   	  }
   	}
   }
@@ -74,10 +74,10 @@ object Application extends Controller with Secured {
         
         val tagsSeq = tags.split(_TAG_SEPARATOR).toList
         if (tagsSeq.size == 1 && tagsSeq(0) == _TAG_ALL) {
-          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, _TAG_ALL, countPage(Photo.total())))
+          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, _TAG_ALL, countPage(Photo.total()), Notification.listNotClosedByUser(username)))
         } else {
           val photosId: Seq[Long] = Tag.list(tagsSeq)
-          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list(photosId, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(photosId.size)))
+          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list(photosId, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(photosId.size), Notification.listNotClosedByUser(username)))
         }
         
       } else {
@@ -180,5 +180,14 @@ object Application extends Controller with Secured {
   
   def getPhotoIn800x600Directory(photo: String) = withAuth { username => implicit request =>
     getFile(Configuration.getPhoto800x600Directory(), photo)(request)
+  }
+  
+  def userPopupNotifyClose = withUser { username => implicit request =>
+  	val notificationId = request.body.asFormUrlEncoded.get("notificationid-post")
+  	Logger.info("user closed notification popup { " + notificationId + " }")
+  	if (!notificationId.isEmpty) {
+  	  Notification.setClosed(username, notificationId(0).toLong)
+  	}
+  	Ok("return")
   }
 }

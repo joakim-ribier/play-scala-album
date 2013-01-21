@@ -18,6 +18,8 @@ GET   /album/photo/next/:id/tags/:tags 																		controllers.Application
 
 GET /album/user/new/address/mail/validation/:email/token/:token						controllers.Application.saveNewUserEmail(email: String, token: String)
 
+POST /album/user/popup/notify/close																				controllers.Application.userPopupNotifyClose
+
 
 # CONFIGURATION CONTROLLER
 
