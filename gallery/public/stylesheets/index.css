@@ -152,3 +152,85 @@
 	
 	clear: both;
 }
+
+#index-application-notification-display {
+	-webkit-box-shadow: 0px 4px 8px #000000;
+	-moz-box-shadow: 0px 4px 8px #000000;
+	box-shadow: 0px 4px 8px #000000;
+  
+  -webkit-transform: rotate(-5deg);
+	-moz-transform: rotate(-5deg);
+	
+  background-color: #FFFFFF;
+  margin: 100px 0 0 40px;
+  padding: 5px;
+  position: absolute;
+  width: 400px;
+  z-index: 90;
+}
+
+#index-application-notification-none {
+  display: none;
+}
+
+#index-application-notification-header {
+  background-color: #FFFFFF;
+  color: #000000;
+  padding: 5px;
+}
+
+#index-application-notification-content {
+  background-color: #000000;
+  color: #FFFFFF;
+  padding: 2px;
+}
+
+#index-application-notification-header-title {
+  background-color: #FFFFFF;
+  clear: both;
+  color: rgb(0, 175, 202);
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: center;
+}
+
+#index-application-notification-header-close {
+  font-style: italic;
+  text-align: center;
+}
+
+#index-application-notification-header-close span:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#index-application-notification-content-messages {
+  clear: both;
+  padding: 15px;
+}
+
+#index-application-notification-content-message {
+	text-align: justify;
+	width: 356px;
+}
+
+.pagination li {
+  float: left;
+  list-style-type: none;
+  margin: 0 2px;
+}
+
+.pagination li a {
+  background-color: #FFFFFF;
+  background-position: 0 0;
+  display: block;
+  height: 0;
+  overflow: hidden;
+  padding-top: 12px;
+  width: 12px;
+}
+
+.pagination li.current a {
+  background-color: rgb(250, 199, 19);
+}

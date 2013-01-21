@@ -229,6 +229,7 @@
 	
 	background-color: #000000;
 	color: #FFFFFF;
+	text-align: justify;
 }
 
 .notification-list-float {
@@ -307,6 +308,7 @@
 	border-color: #000000;
 	
 	background-color: #F2F2F2;
+	text-align: justify;
 }
 
 .notification-list-el-message-delete {
