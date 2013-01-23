@@ -58,32 +58,32 @@
 			</div>
 			
     	<div id="content">
-    		@if(flash.get("app.message").isDefined) {
-					<div id="app-message">
-						<span>@Html(flash.get("app.message").get)</span>
-	    		</div>
-	    		<script type="text/javascript">
-    			setTimeout(function() {
-						$('#app-message').fadeOut();
-					}, 6000);
-					setTimeout(function() {
-						$('#app-message').fadeIn();
-					}, 500);
-    		</script>				
-				}
-    		@if(feedback != null) {
-    			<div id="app-message">
-						<span>@Html(feedback.message)</span>
-	    		</div>
-	    		<script type="text/javascript">
-    			setTimeout(function() {
-						$('#app-message').fadeOut();
-					}, 6000);
-					setTimeout(function() {
-						$('#app-message').fadeIn();
-					}, 500);
-    		</script>
-    		}
+				<div id="app-message">
+    			@if(flash.get("app.message").isDefined) {
+						<span>@Html(flash.get("app.message").get) @Html(Messages("page.main.message.popup.fadeOut")(Lang("fr")))</span>
+		    		<script type="text/javascript">
+		    			setTimeout(function() {
+								$('#app-message').fadeOut();
+							}, 10000);
+							setTimeout(function() {
+								$('#app-message').fadeIn();
+							}, 500);
+		    		</script>
+					}
+					
+		    	@if(feedback != null) {
+						<span>@Html(feedback.message) @Html(Messages("page.main.message.popup.fadeOut")(Lang("fr")))</span>
+		    		<script type="text/javascript">
+		    			setTimeout(function() {
+								$('#app-message').fadeOut();
+							}, 10000);
+							setTimeout(function() {
+								$('#app-message').fadeIn();
+							}, 500);
+	    		</script>
+	    		}
+	    	</div>
+    		
       	@content
     	</div>
     	
@@ -126,8 +126,6 @@
     			<span>@Messages("page.main.update.site.create.of")(Lang("fr")) <a href="http://www.joakim-ribier.fr/" target="_blank"/>Joakim Ribier</a></span>
     			<span>@Messages("page.main.update.site.disponibility.of")(Lang("fr")) <a href="https://github.com/joakim-ribier/play2-scala-gallery/" target="_blank"/>GitHub</a></span>
     		</div>
-    		
-    		<div id="footer-title-ie">@Html(Messages("page.main.update.site.ie.redirection.html")(Lang("fr")))</div>
     	</div>
     	
     </body>

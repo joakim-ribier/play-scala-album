@@ -44,8 +44,8 @@ page.main.update.site.valid.email=adresse mail valide
 page.main.update.site.register=Je veux m''enregister ...
 page.main.update.site.create.of=Création de
 page.main.update.site.disponibility.of=disponible sur
-page.main.update.site.ie.redirection.html=Pour une expérience utilisateur optimale le navigateur Microsoft Internet Explorer n''est pas recommandé ! <br /> <br />redirection en cours dans 4 secondes ...
-
+page.main.update.site.ie.redirection.html=<h3>INFORMATION</h3>Pour une expérience utilisateur optimale le navigateur <strong>Microsoft Internet Explorer</strong> n''est pas recommandé ! <br /> <br /><i>redirection en cours dans 10 secondes ...</i>
+page.main.message.popup.fadeOut=<br/><br/><i>( fermeture automatique de la fenêtre dans 10 secondes ... )</i>
 page.admin.form.upload.field.count=Nombre de photo à uploader :
 page.admin.form.upload.field.size=Taille totale de photo :
 page.admin.form.upload.field.percent=Pourcentage d''upload ( redirection automatique ) :

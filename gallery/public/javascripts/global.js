@@ -270,10 +270,11 @@ $(document).ready(function() {
 	
 	$(function() {
 		if (navigator.appName == "Microsoft Internet Explorer") {
-			$('#footer-title-ie').fadeIn();
+			$('#app-message').fadeIn();
+			$('#app-message').html(getI18NValue('page.main.update.site.ie.redirection.html'));
 			setTimeout(function() {
 				window.location.replace("http://www.google.com/chrome");
-			}, 4000);
+			}, 10000);
 		}
 	});
 	
