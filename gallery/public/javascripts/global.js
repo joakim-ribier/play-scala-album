@@ -75,7 +75,7 @@ function changeDisableState(checkbox, elementToEnableOrDisable) {
 	}
 }
 
-function fadeInPhoto(id, filename, title, description, tags) {
+function fadeInPhoto(id, filename, title, description, tags, firstPhotoId, lastPhotoId) {
 	$('#display-photo-standard').fadeIn();
 	
 	var img = '<img src="/album/get/800x600/photo/' + filename + '" onclick="fadeOutPhoto();" id="display-photo-photo-800x600-id"/>';
@@ -84,25 +84,31 @@ function fadeInPhoto(id, filename, title, description, tags) {
 	$('#display-photo-standard-content-description').html(description);
 
 	var next = '<div id="display-photo-standard-content-header-next" onclick="nextPhoto(\'' + id + '\', \'' + tags + '\')"></div>';
-	var previous = '<div id="display-photo-standard-content-header-prev" onclick="previousPhoto(\'' + id + '\', \'' + tags + '\')"></div>'; 
+	var previous = '<div id="display-photo-standard-content-header-prev" onclick="previousPhoto(\'' + id + '\', \'' + tags + '\')"></div>';
+	if (id == firstPhotoId) {
+		next = '<div id="display-photo-standard-content-header-next-nothing"></div>';
+	}
+	if (id == lastPhotoId) {
+		previous = '<div id="display-photo-standard-content-header-prev-nothing"></div>';
+	}
  	$('#display-photo-standard-content-header').html(next + previous);
 }
 
 function previousPhoto(id, tags) {	
 	$.getJSON('/album/photo/previous/' + id + '/tags/' + tags,
     function(data) {
-			refreshDatas(data, tags);
+			refreshDatas(data, tags, 'previous');
 	});
 }
 
 function nextPhoto(id, tags) {
 	$.getJSON('/album/photo/next/' + id + '/tags/' + tags,
     function(data) {
-			refreshDatas(data, tags);
+			refreshDatas(data, tags, 'next');
 	});
 }
 
-function refreshDatas(data, tags) {
+function refreshDatas(data, tags, previousOrNext) {
 	switch (data['status']) {
 		case 'success':
 			var id = data['id'];
@@ -118,15 +124,22 @@ function refreshDatas(data, tags) {
 		
 			var next = '<div id="display-photo-standard-content-header-next" onclick="nextPhoto(\'' + id + '\', \'' + tags + '\')"></div>';
 			var previous = '<div id="display-photo-standard-content-header-prev" onclick="previousPhoto(\'' + id + '\', \'' + tags + '\')"></div>';
+			if (previousOrNext == 'next') {
+				if (data['is'] != 'true') {
+					next = '<div id="display-photo-standard-content-header-next-nothing"></div>';
+				}
+			} else {
+				if (data['is'] != 'true') {
+					previous = '<div id="display-photo-standard-content-header-prev-nothing"></div>';
+				}
+			}
 			$('#display-photo-standard-content-header').html(next + previous);		
 	
 			break;
 		case 'nothing' :
 		case 'failed' :
-			// nothing
-			break;
 		default :
-		 // // nothing
+			// nothing
 	}
 }
 

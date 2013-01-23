@@ -97,10 +97,18 @@
 			<div id="index-application-photos-menu">
 				<div id="index-application-photos-menu-content">
 					<div class="index-application-photos-menu-content-tool">
-						<a href="/album/page/@previousPage(page)/tags/@byTags" />@Messages("page.index.previous.page.label")(Lang("fr"))</a>
+						@if(page == 1){
+							<span>@Messages("page.index.previous.page.label")(Lang("fr"))</span>
+						} else {
+							<a href="/album/page/@previousPage(page)/tags/@byTags" />@Messages("page.index.previous.page.label")(Lang("fr"))</a>
+						}
 					</div>
 					<div class="index-application-photos-menu-content-tool">
-						<a href="/album/page/@nextPage(page)/tags/@byTags" />@Messages("page.index.next.page.label")(Lang("fr"))</a>
+						@if(page == count){
+							<span>@Messages("page.index.next.page.label")(Lang("fr"))</span>
+						} else {
+							<a href="/album/page/@nextPage(page)/tags/@byTags" />@Messages("page.index.next.page.label")(Lang("fr"))</a>
+						}
 					</div>
 					<div id="index-application-page-number">@Messages("page.index.number.page.label")(Lang("fr")) <span id="index-application-page-number-value">@page</span> / @count</div>
 				</div>
@@ -110,7 +118,7 @@
 							
 				<div id="index-application-photos">
 					@for(photo <- photos) {
-							<div id="index-application-photo" class="rotate-deg-minus@random" onclick="fadeInPhoto(@photo.id, '@photo.filename', '@stringFormat(photo.title)', '@optionStringFormat(photo.description)', '@byTags');">
+							<div id="index-application-photo" class="rotate-deg-minus@random" onclick="fadeInPhoto(@photo.id, '@photo.filename', '@stringFormat(photo.title)', '@optionStringFormat(photo.description)', '@byTags', '@photos.first.id', '@photos.last.id');">
 								
 								<div id="index-application-photo-img">
 									<img src="/album/get/thumbnail/photo/@photo.filename" />

@@ -206,6 +206,15 @@ input:focus, textarea:focus {
   border-top: 13px solid transparent;	
 }
 
+#display-photo-standard-content-header-prev-nothing {
+	margin: 5px;
+	float: left;
+	
+  border-left: 26px solid rgb(0, 175, 202);
+  border-bottom: 13px solid transparent;
+  border-top: 13px solid transparent;	
+}
+
 #display-photo-standard-content-header-prev:hover {
 	border-left: 26px solid  rgb(250, 199, 19);
   border-bottom: 13px solid transparent;
@@ -218,6 +227,15 @@ input:focus, textarea:focus {
 	float: left;
 	
   border-right: 26px solid #FFFFFF;
+  border-bottom: 13px solid transparent;
+  border-top: 13px solid transparent;
+}
+
+#display-photo-standard-content-header-next-nothing {
+	margin: 5px;
+	float: left;
+	
+  border-right: 26px solid rgb(0, 175, 202);
   border-bottom: 13px solid transparent;
   border-top: 13px solid transparent;
 }
@@ -249,7 +267,7 @@ input:focus, textarea:focus {
 	color: #FFFFFF;
 	font-size: 16px;
   text-align: justify;
-	padding: 2px;
+	padding: 10px;
 }
 
 #checkbox-label {

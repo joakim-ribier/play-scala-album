@@ -48,7 +48,11 @@ object Application extends Controller with Secured {
     if (modulo > 0) {
       countPage = countPage + 1
     }
-    countPage
+    
+    if (countPage == 0) {
+      countPage = 1
+    }
+    return countPage
   }
   
   def index = withAuth { username => implicit request =>
@@ -95,10 +99,12 @@ object Application extends Controller with Secured {
       val photoId = id.asInstanceOf[String].toInt
       val tagsSeq = tags.split(_TAG_SEPARATOR).toList
       if (tagsSeq.size == 1 && tagsSeq(0) == _TAG_ALL) {
-        toJSON(Photo.getPreviousPhoto(photoId))
+        val photo = Photo.getPreviousPhoto(photoId)
+        toJSON(photo, isPreviousPhoto(photo, List()))
       } else {
         val photosId: Seq[Long] = Tag.list(tagsSeq)
-        toJSON(Photo.getPreviousPhoto(photoId, photosId))
+        val photo = Photo.getPreviousPhoto(photoId, photosId)
+        toJSON(photo, isPreviousPhoto(photo, photosId))
       }
     } catch {
       case _ =>  Ok(Json.toJson(Map("status" -> "failed")))
@@ -110,17 +116,41 @@ object Application extends Controller with Secured {
       val photoId = id.asInstanceOf[String].toInt
       val tagsSeq = tags.split(_TAG_SEPARATOR).toList
       if (tagsSeq.size == 1 && tagsSeq(0) == _TAG_ALL) {
-        toJSON(Photo.getNextPhoto(photoId))
+        val photo = Photo.getNextPhoto(photoId)
+        toJSON(photo, isNextPhoto(photo, List()))
       } else {
         val photosId: Seq[Long] = Tag.list(tagsSeq)
-        toJSON(Photo.getNextPhoto(photoId, photosId))
+        val photo = Photo.getNextPhoto(photoId, photosId)
+        toJSON(photo, isNextPhoto(photo, photosId))
       }
     } catch {
       case _ =>  Ok(Json.toJson(Map("status" -> "failed")))
     }
   }
   
-  private def toJSON(photo: Photo) : Result = {
+  private def isNextPhoto(photo: Photo, photosId: Seq[Long]) : Boolean = {
+    if (photo != null) {
+      if (photosId.isEmpty) {
+        return Photo.getNextPhoto(photo.id.get) != null
+      } else {
+        return Photo.getNextPhoto(photo.id.get, photosId) != null
+      }
+    }
+    return false
+  }
+  
+  private def isPreviousPhoto(photo: Photo, photosId: Seq[Long]) : Boolean = {
+    if (photo != null) {
+      if (photosId.isEmpty) {
+        return Photo.getPreviousPhoto(photo.id.get) != null
+      } else {
+        return Photo.getPreviousPhoto(photo.id.get, photosId) != null
+      }
+    }
+    return false
+  }
+  
+  private def toJSON(photo: Photo, is: Boolean) : Result = {
     if (photo != null) {
       var desc = ""
       if (photo.description.isDefined) {
@@ -131,7 +161,8 @@ object Application extends Controller with Secured {
               "id" -> String.valueOf(photo.id),
               "filename" -> photo.filename,
               "title" -> photo.title,
-              "desc" -> desc)))
+              "desc" -> desc,
+              "is" -> String.valueOf(is))))
     } else {
       Ok(Json.toJson(Map("status" -> "nothing")))
     }
