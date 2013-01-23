@@ -93,14 +93,14 @@ object Authentication extends Controller {
   	Redirect(routes.Application.index).withSession(
             Security.username -> username,
             Configuration._SESSION_ID_KEY -> sessionId,
-            Configuration._SESSION_EMAIL_KEY -> email)
+            Configuration._SESSION_EMAIL_KEY -> email).flashing("connection" -> "success")
   }
   
   private def redirectToIndex(username: String, sessionId: String, email: String, message: String) = Action {
   	Redirect(routes.Application.index).withSession(
             Security.username -> username,
             Configuration._SESSION_ID_KEY -> sessionId,
-            Configuration._SESSION_EMAIL_KEY -> email).flashing("app-message" -> message)
+            Configuration._SESSION_EMAIL_KEY -> email).flashing("connection" -> "success", "app-message" -> message)
   }
   
   def redirectAuthenticate = Action {
