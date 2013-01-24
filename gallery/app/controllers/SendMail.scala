@@ -13,7 +13,7 @@ import play.api.i18n.Lang
 import play.api.mvc.Action
 import play.api.mvc.Result
 import play.api.mvc.Results
-import models.Photo
+import models.Media
 import org.joda.time.DateTime
 import models.UserEmail
 import java.util.Locale
@@ -51,7 +51,7 @@ object SendMail extends Controller with Secured {
 	    if (key != null && key.equals(_PRIVATE_KEY)) {
 	      
 	      val dateTime = DateTime.now().minusDays(_DAY_DURATION)
-	      val photos = Photo.list(dateTime)
+	      val photos = Media.list(dateTime)
 	      val emails = UserEmail.list()
 	      
 	      if (emails != null && emails.size > 0
@@ -75,7 +75,7 @@ object SendMail extends Controller with Secured {
     }
   }
   
-  private def sendNotifyNewPhotoMail(dateTime: DateTime, recipient: String, photos: Seq[Photo]) {
+  private def sendNotifyNewPhotoMail(dateTime: DateTime, recipient: String, photos: Seq[Media]) {
   	val photosSize = photos.size
   	
     val mail = use[MailerPlugin].email

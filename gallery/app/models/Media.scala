@@ -9,7 +9,7 @@ import play.api.Play.current
 import anorm.SqlParser._
 import anorm._
 import java.io.File
-import db.PhotoDB
+import db.MediaDB
 import play.api.Logger
 import db.OrderENUM
 import utils._
@@ -21,9 +21,9 @@ object Visibility extends Enumeration {
 import Visibility._
 
 
-case class Photo(id: Pk[Long] = NotAssigned, filename: String, title: String, description: Option[String], visibility: Visibility, created: DateTime)
+case class Media(id: Pk[Long] = NotAssigned, filename: String, title: String, description: Option[String], visibility: Visibility, created: DateTime)
 
-object Photo {
+object Media {
 
   def toVisibility(public: Boolean) : Visibility = {
     if (public) {
@@ -60,7 +60,7 @@ object Photo {
             
         FileUtils.move(file, Configuration.getPhotoStandardDirectory(), filename)
 
-        val id: Int = PhotoDB.insert(Photo(null, filename, title, description, toVisibility(isPublic), DateTime.now()))
+        val id: Int = MediaDB.insert(Media(null, filename, title, description, toVisibility(isPublic), DateTime.now()))
      	if (id.isInstanceOf[Int]) {
      	  Tag.addTagsToPhoto(id, tags)
      	  return true
@@ -70,44 +70,44 @@ object Photo {
     return false
   }
   
-  def list(offset: Long, limit: Int) : Seq[Photo] = {
-    return PhotoDB.findAll(offset, limit)
+  def list(offset: Long, limit: Int) : Seq[Media] = {
+    return MediaDB.findAll(offset, limit)
   }
   
-  def list(photos: Seq[Long], offset: Long, limit: Int) : Seq[Photo] = {
-	 return PhotoDB.findAll(photos, offset, limit)
+  def list(photos: Seq[Long], offset: Long, limit: Int) : Seq[Media] = {
+	 return MediaDB.findAll(photos, offset, limit)
   }
   
-  def list(photos: Seq[Long]) : Seq[Photo] = {
-    return PhotoDB.findAll(photos)
+  def list(photos: Seq[Long]) : Seq[Media] = {
+    return MediaDB.findAll(photos)
   }
    
-  def list(dateTime: DateTime) : Seq[Photo] = PhotoDB.findAllFrom(dateTime)
+  def list(dateTime: DateTime) : Seq[Media] = MediaDB.findAllFrom(dateTime)
     
-  def total() = PhotoDB.count()
+  def total() = MediaDB.count()
   
-  def getPreviousPhoto(photoId: Long) : Photo = {
-    val photos = PhotoDB.findAll()
+  def getPreviousPhoto(photoId: Long) : Media = {
+    val photos = MediaDB.findAll()
     return getNextElement(photoId, photos)
   }
   
-  def getNextPhoto(photoId: Long) : Photo = {
-    val photos = PhotoDB.findAll(OrderENUM.ASC)
+  def getNextPhoto(photoId: Long) : Media = {
+    val photos = MediaDB.findAll(OrderENUM.ASC)
     return getNextElement(photoId, photos)
   }
   
-  def getPreviousPhoto(photoId: Long, photoIds: Seq[Long]) : Photo = {
-    val photos = PhotoDB.findAll(photoIds)
+  def getPreviousPhoto(photoId: Long, photoIds: Seq[Long]) : Media = {
+    val photos = MediaDB.findAll(photoIds)
     return getNextElement(photoId, photos)
   }
   
-  def getNextPhoto(photoId: Long, photoIds: Seq[Long]) : Photo = {
-    val photos = PhotoDB.findAll(photoIds, OrderENUM.ASC)
+  def getNextPhoto(photoId: Long, photoIds: Seq[Long]) : Media = {
+    val photos = MediaDB.findAll(photoIds, OrderENUM.ASC)
     return getNextElement(photoId, photos)
   }
   
-  private def getNextElement(photoId: Long, photos: Seq[Photo]) : Photo = {
-    var find: Photo = null
+  private def getNextElement(photoId: Long, photos: Seq[Media]) : Media = {
+    var find: Media = null
   	val ite = photos.iterator
   	while(ite.hasNext) {
   		val photo = ite.next()

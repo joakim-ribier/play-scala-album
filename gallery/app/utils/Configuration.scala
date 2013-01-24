@@ -20,7 +20,7 @@ object Configuration {
   //:DATABASE KEY
   val _TABLE_USER_KEY = "app.db.tbl.user"
   val _TABLE_EMAIL_KEY = "app.db.tbl.email"
-  val _TABLE_PHOTO_KEY = "app.db.tbl.photo"
+  val _TABLE_MEDIA_KEY = "app.db.tbl.media"
   val _TABLE_TAG_KEY = "app.db.tbl.tag"
     
   val _TABLE_MESSAGE_KEY = "app.db.tbl.message"

@@ -9,7 +9,7 @@ import utils._
 
 object TagDB {
 
-  private val _DB_TBL_TAG: String = play.Configuration.root().getString("app.db.tbl.tag")
+  private val _DB_TBL_TAG: String = play.Configuration.root().getString(Configuration._TABLE_TAG_KEY)
   private val simple = {
     get[Pk[Long]](_DB_TBL_TAG + ".id") ~
     get[String](_DB_TBL_TAG + ".tag") map {
@@ -17,16 +17,16 @@ object TagDB {
     }
   }
 
-  def insert(photo: Long, tag: String) : Int = {
+  def insert(media: Long, tag: String) : Int = {
     return DB.withConnection { implicit connection =>
       SQL(
         """
-          INSERT INTO """ + _DB_TBL_TAG + """ (photo, tag) VALUES (
-            {photo}, {tag}
+          INSERT INTO """ + _DB_TBL_TAG + """ (media, tag) VALUES (
+            {media}, {tag}
           ) RETURNING id
         """
       ).on(
-        'photo -> photo,
+        'media -> media,
         'tag -> tag.toLowerCase()
       ).as(int("id").single)
     }
@@ -47,11 +47,11 @@ object TagDB {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
-          SELECT distinct photo FROM """ + _DB_TBL_TAG + """ 
+          SELECT distinct media FROM """ + _DB_TBL_TAG + """ 
           WHERE tag IN ( """ + DBUtils.formatSEQToString(tags) + """) 
         """
       )
-      sql().map(row => row[Long]("photo")).toList
+      sql().map(row => row[Long]("media")).toList
     }
   }
 }

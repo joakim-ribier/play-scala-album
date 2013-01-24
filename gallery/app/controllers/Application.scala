@@ -62,9 +62,9 @@ object Application extends Controller with Secured {
   	} else {
   	  if (request.flash.get("app-message").isDefined) {
   	    val feedback = new Feedback(request.flash.get("app-message").get, FeedbackClass.ok)
-  	    Ok(views.html.index(_TITLE_HTML, feedback, userTemplate, Tag.list(), Photo.list(0, _LIMIT), 1, _TAG_ALL, countPage(Photo.total()), Notification.listNotClosedByUser(username)))
+  	    Ok(views.html.index(_TITLE_HTML, feedback, userTemplate, Tag.list(), Media.list(0, _LIMIT), 1, _TAG_ALL, countPage(Media.total()), Notification.listNotClosedByUser(username)))
   	  } else {
-  	  	Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list(0, _LIMIT), 1, _TAG_ALL, countPage(Photo.total()), Notification.listNotClosedByUser(username)))
+  	  	Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Media.list(0, _LIMIT), 1, _TAG_ALL, countPage(Media.total()), Notification.listNotClosedByUser(username)))
   	  }
   	}
   }
@@ -78,10 +78,10 @@ object Application extends Controller with Secured {
         
         val tagsSeq = tags.split(_TAG_SEPARATOR).toList
         if (tagsSeq.size == 1 && tagsSeq(0) == _TAG_ALL) {
-          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, _TAG_ALL, countPage(Photo.total()), Notification.listNotClosedByUser(username)))
+          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Media.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, _TAG_ALL, countPage(Media.total()), Notification.listNotClosedByUser(username)))
         } else {
-          val photosId: Seq[Long] = Tag.list(tagsSeq)
-          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Photo.list(photosId, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(photosId.size), Notification.listNotClosedByUser(username)))
+          val mediaIds: Seq[Long] = Tag.list(tagsSeq)
+          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Media.list(mediaIds, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(mediaIds.size), Notification.listNotClosedByUser(username)))
         }
         
       } else {
@@ -96,15 +96,15 @@ object Application extends Controller with Secured {
   
   def getPreviousPhoto(id: String, tags: String) = withUser { username => implicit request =>
     try {
-      val photoId = id.asInstanceOf[String].toInt
+      val mediaId = id.asInstanceOf[String].toInt
       val tagsSeq = tags.split(_TAG_SEPARATOR).toList
       if (tagsSeq.size == 1 && tagsSeq(0) == _TAG_ALL) {
-        val photo = Photo.getPreviousPhoto(photoId)
-        toJSON(photo, isPreviousPhoto(photo, List()))
+        val media = Media.getPreviousPhoto(mediaId)
+        toJSON(media, isPreviousPhoto(media, List()))
       } else {
-        val photosId: Seq[Long] = Tag.list(tagsSeq)
-        val photo = Photo.getPreviousPhoto(photoId, photosId)
-        toJSON(photo, isPreviousPhoto(photo, photosId))
+        val mediaIds: Seq[Long] = Tag.list(tagsSeq)
+        val media = Media.getPreviousPhoto(mediaId, mediaIds)
+        toJSON(media, isPreviousPhoto(media, mediaIds))
       }
     } catch {
       case _ =>  Ok(Json.toJson(Map("status" -> "failed")))
@@ -113,54 +113,54 @@ object Application extends Controller with Secured {
   
   def getNextPhoto(id: String, tags: String) = withUser { username => implicit request =>
     try {
-      val photoId = id.asInstanceOf[String].toInt
+      val mediaId = id.asInstanceOf[String].toInt
       val tagsSeq = tags.split(_TAG_SEPARATOR).toList
       if (tagsSeq.size == 1 && tagsSeq(0) == _TAG_ALL) {
-        val photo = Photo.getNextPhoto(photoId)
-        toJSON(photo, isNextPhoto(photo, List()))
+        val media = Media.getNextPhoto(mediaId)
+        toJSON(media, isNextPhoto(media, List()))
       } else {
-        val photosId: Seq[Long] = Tag.list(tagsSeq)
-        val photo = Photo.getNextPhoto(photoId, photosId)
-        toJSON(photo, isNextPhoto(photo, photosId))
+        val mediaIds: Seq[Long] = Tag.list(tagsSeq)
+        val media = Media.getNextPhoto(mediaId, mediaIds)
+        toJSON(media, isNextPhoto(media, mediaIds))
       }
     } catch {
       case _ =>  Ok(Json.toJson(Map("status" -> "failed")))
     }
   }
   
-  private def isNextPhoto(photo: Photo, photosId: Seq[Long]) : Boolean = {
-    if (photo != null) {
-      if (photosId.isEmpty) {
-        return Photo.getNextPhoto(photo.id.get) != null
+  private def isNextPhoto(media: Media, mediaIds: Seq[Long]) : Boolean = {
+    if (media != null) {
+      if (mediaIds.isEmpty) {
+        return Media.getNextPhoto(media.id.get) != null
       } else {
-        return Photo.getNextPhoto(photo.id.get, photosId) != null
+        return Media.getNextPhoto(media.id.get, mediaIds) != null
       }
     }
     return false
   }
   
-  private def isPreviousPhoto(photo: Photo, photosId: Seq[Long]) : Boolean = {
-    if (photo != null) {
-      if (photosId.isEmpty) {
-        return Photo.getPreviousPhoto(photo.id.get) != null
+  private def isPreviousPhoto(media: Media, mediaIds: Seq[Long]) : Boolean = {
+    if (media != null) {
+      if (mediaIds.isEmpty) {
+        return Media.getPreviousPhoto(media.id.get) != null
       } else {
-        return Photo.getPreviousPhoto(photo.id.get, photosId) != null
+        return Media.getPreviousPhoto(media.id.get, mediaIds) != null
       }
     }
     return false
   }
   
-  private def toJSON(photo: Photo, is: Boolean) : Result = {
-    if (photo != null) {
+  private def toJSON(media: Media, is: Boolean) : Result = {
+    if (media != null) {
       var desc = ""
-      if (photo.description.isDefined) {
-        desc = photo.description.get
+      if (media.description.isDefined) {
+        desc = media.description.get
       }
       Ok(Json.toJson(
           Map("status" -> "success",
-              "id" -> String.valueOf(photo.id),
-              "filename" -> photo.filename,
-              "title" -> photo.title,
+              "id" -> String.valueOf(media.id),
+              "filename" -> media.filename,
+              "title" -> media.title,
               "desc" -> desc,
               "is" -> String.valueOf(is))))
     } else {
@@ -197,20 +197,20 @@ object Application extends Controller with Secured {
   	    new Feedback(Messages("application.create.new.user.email.redirection.to.login", email)(Lang("fr")), FeedbackClass.ok))).withNewSession
   }
   
-  def getPhotoInUploadThumbailDirectory(photo: String) = withAuth { username => implicit request =>
-    getFile(Configuration.getPhotoUploadThumbnailDirectory(), photo)(request)
+  def getPhotoInUploadThumbailDirectory(filename: String) = withAuth { username => implicit request =>
+    getFile(Configuration.getPhotoUploadThumbnailDirectory(), filename)(request)
   }
    
-  def getPhotoInStandardDirectory(photo: String) = withAuth { username => implicit request =>
-    getFile(Configuration.getPhotoStandardDirectory(), photo)(request)
+  def getPhotoInStandardDirectory(filename: String) = withAuth { username => implicit request =>
+    getFile(Configuration.getPhotoStandardDirectory(), filename)(request)
   }
   
-  def getPhotoInThumbailDirectory(photo: String) = Action { implicit request =>
-    getFile(Configuration.getPhotoThumbnailDirectory(), photo)(request)
+  def getPhotoInThumbailDirectory(filename: String) = Action { implicit request =>
+    getFile(Configuration.getPhotoThumbnailDirectory(), filename)(request)
   }
   
-  def getPhotoIn800x600Directory(photo: String) = withAuth { username => implicit request =>
-    getFile(Configuration.getPhoto800x600Directory(), photo)(request)
+  def getPhotoIn800x600Directory(filename: String) = withAuth { username => implicit request =>
+    getFile(Configuration.getPhoto800x600Directory(), filename)(request)
   }
   
   def userPopupNotifyClose = withUser { username => implicit request =>

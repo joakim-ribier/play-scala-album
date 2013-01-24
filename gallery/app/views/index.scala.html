@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], photos: Seq[Photo], page: Int, byTags: String, count: Long, notifications: Seq[NotificationMessage])(implicit flash: play.api.mvc.Flash)
+@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], medias: Seq[Media], page: Int, byTags: String, count: Long, notifications: Seq[NotificationMessage])(implicit flash: play.api.mvc.Flash)
 
 @random() = @{
 	val rnd = new scala.util.Random
@@ -29,7 +29,7 @@
 @previousPage(page: Int) = @{ page - 1 }
 @nextPage(page: Int) = @{ page + 1 }
 
-@compute(photos: Seq[Photo]) = @{ 15 - photos.length }
+@compute(medias: Seq[Media]) = @{ 15 - medias.length }
 
 @import org.joda.time.DateTime
 @isNowDateTime(startDate: DateTime, endDate: DateTime) = @{
@@ -117,17 +117,17 @@
 			<div id="index-application-content">
 							
 				<div id="index-application-photos">
-					@for(photo <- photos) {
-							<div id="index-application-photo" class="rotate-deg-minus@random" onclick="fadeInPhoto(@photo.id, '@photo.filename', '@stringFormat(photo.title)', '@optionStringFormat(photo.description)', '@byTags', '@photos.first.id', '@photos.last.id');">
+					@for(media <- medias) {
+							<div id="index-application-photo" class="rotate-deg-minus@random" onclick="fadeInPhoto(@media.id, '@media.filename', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.first.id', '@medias.last.id');">
 								
 								<div id="index-application-photo-img">
-									<img src="/album/get/thumbnail/photo/@photo.filename" />
+									<img src="/album/get/thumbnail/photo/@media.filename" />
 								</div>
-								<div id="index-application-photo-title">@titleFormat(photo.title)</div>
+								<div id="index-application-photo-title">@titleFormat(media.title)</div>
 							
 							</div>
 						}
-						@for(i <- 1 to compute(photos)) {
+						@for(i <- 1 to compute(medias)) {
 							<div id="index-application-photo" class="rotate-deg-minus@random" ">
 								<div id="index-application-photo-img">
 									<img src="@routes.Assets.at("images/nophotox200x150.png")" />

@@ -1,6 +1,6 @@
 package db
 
-import models.Photo
+import models.Media
 import play.api.db._
 import play.api.Play.current
 import anorm.SqlParser._
@@ -9,26 +9,26 @@ import java.util.Date
 import org.joda.time.DateTime
 import utils._
 
-object PhotoDB {
+object MediaDB {
 
-  private val _DB_TBL_PHOTO: String = play.Configuration.root().getString("app.db.tbl.photo")
+  private val _DB_TBL_MEDIA: String = play.Configuration.root().getString(Configuration._TABLE_MEDIA_KEY)
   private val simple = {
-    get[Pk[Long]](_DB_TBL_PHOTO + ".id") ~
-    get[String](_DB_TBL_PHOTO + ".filename") ~
-    get[String](_DB_TBL_PHOTO + ".title") ~
-    get[Option[String]](_DB_TBL_PHOTO + ".description") ~
-    get[Boolean](_DB_TBL_PHOTO + ".public") ~
-    get[Date](_DB_TBL_PHOTO + ".created") map {
+    get[Pk[Long]](_DB_TBL_MEDIA + ".id") ~
+    get[String](_DB_TBL_MEDIA + ".filename") ~
+    get[String](_DB_TBL_MEDIA + ".title") ~
+    get[Option[String]](_DB_TBL_MEDIA + ".description") ~
+    get[Boolean](_DB_TBL_MEDIA + ".public") ~
+    get[Date](_DB_TBL_MEDIA + ".created") map {
       case id~filename~title~description~public~created =>
-        Photo(id, filename, title, description, Photo.toVisibility(public), new DateTime(created))
+        Media(id, filename, title, description, Media.toVisibility(public), new DateTime(created))
     }
   }
   
-  def insert(photo: Photo) : Int = {
+  def insert(photo: Media) : Int = {
     return DB.withConnection { implicit connection =>
       SQL(
         """
-          insert into """ + _DB_TBL_PHOTO + """ (filename, title, description, public, created) values (
+          insert into """ + _DB_TBL_MEDIA + """ (filename, title, description, public, created) values (
             {filename}, {title}, {description}, {public}, {created}
           ) RETURNING id
         """
@@ -36,37 +36,37 @@ object PhotoDB {
         'filename -> photo.filename,
         'title -> photo.title,
         'description -> photo.description,
-        'public -> Photo.toBoolean(photo.visibility),
+        'public -> Media.toBoolean(photo.visibility),
         'created -> photo.created.toDate()
       ).as(int("id").single)
     }
   }
   
-  def findAll() : Seq[Photo] = {
+  def findAll() : Seq[Media] = {
     return findAll(OrderENUM.DESC)
   }
   
-  def findAll(order: OrderENUM.ORDER) : Seq[Photo] = {
+  def findAll(order: OrderENUM.ORDER) : Seq[Media] = {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
-          SELECT * FROM """ + _DB_TBL_PHOTO + """ ORDER BY created """ + order + """
+          SELECT * FROM """ + _DB_TBL_MEDIA + """ ORDER BY created """ + order + """
         """
       )
-      sql.as(PhotoDB.simple *)
+      sql.as(MediaDB.simple *)
     }
   }
   
-  def findAll(offset: Long, limit: Int) : Seq[Photo] = {
+  def findAll(offset: Long, limit: Int) : Seq[Media] = {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
-          SELECT * FROM """ + _DB_TBL_PHOTO + """ ORDER BY created DESC LIMIT {limit} OFFSET {offset}
+          SELECT * FROM """ + _DB_TBL_MEDIA + """ ORDER BY created DESC LIMIT {limit} OFFSET {offset}
         """
       ).on(
         'offset -> offset,
         'limit -> limit)
-      sql.as(PhotoDB.simple *)
+      sql.as(MediaDB.simple *)
     }
   }
   
@@ -74,54 +74,54 @@ object PhotoDB {
     return DB.withConnection { implicit connection =>
       SQL(
         """
-          SELECT count(*) as c FROM """ + _DB_TBL_PHOTO + """
+          SELECT count(*) as c FROM """ + _DB_TBL_MEDIA + """
         """
       ).apply().head[Long]("c")
     }
   }
   
-  def findAll(photos: Seq[Long], offset: Long, limit: Int) : Seq[Photo] = {
+  def findAll(photos: Seq[Long], offset: Long, limit: Int) : Seq[Media] = {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
-          SELECT * FROM """ + _DB_TBL_PHOTO + """ 
+          SELECT * FROM """ + _DB_TBL_MEDIA + """ 
           WHERE id IN ( """ + DBUtils.formatSEQLongToString(photos) + """) 
           ORDER BY created DESC LIMIT {limit} OFFSET {offset}
         """
       ).on(
         'offset -> offset,
         'limit -> limit)
-      sql.as(PhotoDB.simple *)
+      sql.as(MediaDB.simple *)
     }
   }
   
-  def findAll(photos: Seq[Long]) : Seq[Photo] = {
+  def findAll(photos: Seq[Long]) : Seq[Media] = {
     return findAll(photos, OrderENUM.DESC) 
   }
   
-  def findAll(photos: Seq[Long], order: OrderENUM.ORDER) : Seq[Photo] = {
+  def findAll(photos: Seq[Long], order: OrderENUM.ORDER) : Seq[Media] = {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
-          SELECT * FROM """ + _DB_TBL_PHOTO + """ 
+          SELECT * FROM """ + _DB_TBL_MEDIA + """ 
           WHERE id IN ( """ + DBUtils.formatSEQLongToString(photos) + """) 
           ORDER BY created """ + order + """
         """
       )
-      sql.as(PhotoDB.simple *)
+      sql.as(MediaDB.simple *)
     }
   }
   
-  def findAllFrom(datetime: DateTime) : Seq[Photo] = {
+  def findAllFrom(datetime: DateTime) : Seq[Media] = {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
-          SELECT * FROM """ + _DB_TBL_PHOTO + """
+          SELECT * FROM """ + _DB_TBL_MEDIA + """
           WHERE created > {datetime}
         """
       ).on(
         'datetime -> datetime.toDate())
-      sql.as(PhotoDB.simple *)
+      sql.as(MediaDB.simple *)
     }
   }
   

@@ -38,7 +38,7 @@ object Administrator extends Controller with Secured {
       "public" -> boolean,
       "tags" -> list(text)
     ) verifying (Messages("administrator.add.new.photo.verifying.text")(Lang("fr")), result => result match {
-      case (filename, title, description, public, tags) => Photo.create(filename, title, description, public, tags)
+      case (filename, title, description, public, tags) => Media.create(filename, title, description, public, tags)
     })
   )
 
