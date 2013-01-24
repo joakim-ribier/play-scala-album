@@ -19,18 +19,17 @@
 }
 
 .index-application-photos-menu-content-tool {
-	float: left;
-	padding: 10px;
-	cursor: pointer;
-	text-decoration: underline;
+    float: left;
+    padding: 10px;
 }
-
 .index-application-photos-menu-content-tool a {
-	color: #FFFFFF;
+    color: #FFFFFF;
 }
-
 .index-application-photos-menu-content-tool a:hover {
-	color: rgb(250, 199, 19);
+    color: #FAC713;
+}
+.index-application-photos-menu-content-tool span {
+    color: #00AFCA;
 }
 
 #index-application-page-number {
