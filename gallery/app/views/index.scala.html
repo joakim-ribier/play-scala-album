@@ -118,7 +118,7 @@
 							
 				<div id="index-application-photos">
 					@for(media <- medias) {
-							<div id="index-application-photo" class="rotate-deg-minus@random" onclick="fadeInPhoto(@media.id, '@media.filename', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.first.id', '@medias.last.id');">
+							<div id="index-application-photo" class="rotate-deg-minus@random" onclick="fadeInPhoto(@media.id, '@media.filename', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');">
 								
 								<div id="index-application-photo-img">
 									<img src="/album/get/thumbnail/photo/@media.filename" />
