@@ -12,6 +12,9 @@ import utils._
 object MediaDB {
 
   private val _DB_TBL_MEDIA: String = play.Configuration.root().getString(Configuration._TABLE_MEDIA_KEY)
+  
+  private val _MEDIA_PHOTO_TYPE = 1
+  
   private val simple = {
     get[Pk[Long]](_DB_TBL_MEDIA + ".id") ~
     get[String](_DB_TBL_MEDIA + ".filename") ~
@@ -28,8 +31,8 @@ object MediaDB {
     return DB.withConnection { implicit connection =>
       SQL(
         """
-          insert into """ + _DB_TBL_MEDIA + """ (filename, title, description, public, created) values (
-            {filename}, {title}, {description}, {public}, {created}
+          insert into """ + _DB_TBL_MEDIA + """ (filename, title, description, public, created, media_type) values (
+            {filename}, {title}, {description}, {public}, {created}, {type}
           ) RETURNING id
         """
       ).on(
@@ -37,7 +40,8 @@ object MediaDB {
         'title -> photo.title,
         'description -> photo.description,
         'public -> Media.toBoolean(photo.visibility),
-        'created -> photo.created.toDate()
+        'created -> photo.created.toDate(),
+        'type -> _MEDIA_PHOTO_TYPE
       ).as(int("id").single)
     }
   }
