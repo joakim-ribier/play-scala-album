@@ -60,7 +60,7 @@
 	z-index: 100;
 }
 
-#administrator-content-list-photo {
+.administrator-content-list-photo {
 	float:left;
 	
 	width: 200px;

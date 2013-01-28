@@ -75,11 +75,20 @@ function changeDisableState(checkbox, elementToEnableOrDisable) {
 	}
 }
 
-function fadeInPhoto(id, filename, title, description, tags, firstPhotoId, lastPhotoId) {
-	$('#display-photo-standard').fadeIn();
-	
-	var img = '<img src="/album/get/800x600/photo/' + filename + '" onclick="fadeOutPhoto();" id="display-photo-photo-800x600-id"/>';
-	$('#display-photo-standard-content-img').html(img);
+function updateTimeDisplay(e) {
+  alert('loadstart');
+}
+
+function fadeInPhoto(id, filename, mediaType, title, description, tags, firstPhotoId, lastPhotoId) {
+	if (mediaType == "photo") {
+		var photo = '<img src="/album/get/800x600/photo/' + filename + '" onclick="fadeOutPhoto(\'display-photo-standard\');"/>';
+		$('#display-photo-standard-content-img').html(photo);
+	} else {
+		var videoDefaultDescriptionLabel = getI18NValue('app.global.video.description.defaut');
+		var video = '<video width="800" height="600" controls="controls" src="/album/get/media/video/standard/' + filename + '">' + videoDefaultDescriptionLabel + '</video>';
+		$('#display-photo-standard-content-img').html(video);
+	}
+
 	$('#display-photo-standard-content-title').html(title);
 	$('#display-photo-standard-content-description').html(description);
 
@@ -91,7 +100,11 @@ function fadeInPhoto(id, filename, title, description, tags, firstPhotoId, lastP
 	if (id == lastPhotoId) {
 		previous = '<div id="display-photo-standard-content-header-prev-nothing"></div>';
 	}
- 	$('#display-photo-standard-content-header').html(next + previous);
+
+	var close = '<div id="display-photo-standard-content-header-close" onclick="fadeOutDisplayMediaStandard(\'display-photo-standard\');"></div>';
+ 	$('#display-photo-standard-content-header').html(next + previous + close);
+	
+	$('#display-photo-standard').fadeIn();
 }
 
 function previousPhoto(id, tags) {	
@@ -107,7 +120,7 @@ function nextPhoto(id, tags) {
 			refreshDatas(data, tags, 'next');
 	});
 }
-
+ 
 function refreshDatas(data, tags, previousOrNext) {
 	switch (data['status']) {
 		case 'success':
@@ -115,9 +128,24 @@ function refreshDatas(data, tags, previousOrNext) {
 			var filename = data['filename'];
 			var title = data['title'];
 			var description = data['desc'];
+			var mediaType = data['mediaType'];
 			
-			var url = '/album/get/800x600/photo/' + filename;
-			$('#display-photo-photo-800x600-id').attr("src", url);
+			if (mediaType == "photo") {
+			
+				var imgDiv = $('#display-photo-standard-content-img').find('img');
+				if (imgDiv[0] == null) {
+					var photo = '<img src="/album/get/800x600/photo/' + filename + '" onclick="fadeOutPhoto(\'display-photo-standard\');"/>';
+					$('#display-photo-standard-content-img').html(photo);
+				} else {
+					var url = '/album/get/800x600/photo/' + filename;
+        	$('#display-photo-standard-content-img > img').attr("src", url);
+				}
+
+			} else {
+				var videoDefaultDescriptionLabel = getI18NValue('app.global.video.description.defaut');
+				var video = '<video width="800" height="600" controls="controls" src="/album/get/media/video/standard/' + filename + '">' + videoDefaultDescriptionLabel + '</video>';
+				$('#display-photo-standard-content-img').html(video);
+			}
 	
 			$('#display-photo-standard-content-title').html(title);
 			$('#display-photo-standard-content-description').html(description);
@@ -133,8 +161,10 @@ function refreshDatas(data, tags, previousOrNext) {
 					previous = '<div id="display-photo-standard-content-header-prev-nothing"></div>';
 				}
 			}
-			$('#display-photo-standard-content-header').html(next + previous);		
-	
+			
+			var close = '<div id="display-photo-standard-content-header-close" onclick="fadeOutDisplayMediaStandard(\'display-photo-standard\');"></div>';
+			$('#display-photo-standard-content-header').html(next + previous + close);		
+
 			break;
 		case 'nothing' :
 		case 'failed' :
@@ -143,12 +173,28 @@ function refreshDatas(data, tags, previousOrNext) {
 	}
 }
 
-function fadeOutPhoto() {
-	$('#display-photo-standard').fadeOut();
+function fadeOutPhoto(div) {
+	$('#' + div).fadeOut();
+	var video = $('#display-photo-standard-content-img > video')[0];
+	if (video != null) {
+		$('#display-photo-standard-content-img > video')[0].pause();
+	}
+}
+
+function fadeOutDisplayMediaStandard(div) {
+	var video = $('#display-photo-standard-content-img > video')[0];
+	if (video != null) {
+		$('#display-photo-standard-content-img > video')[0].pause();
+	}
+	fadeOutPhoto(div);
 }
 
 function accesstoNewPhoto(name) {
 	window.location.replace("/album/admin/add/new/photo/" + name);
+}
+
+function redirectionToAddVideo(video) {
+	window.location.replace("/album/admin/media/redirect/add/video/" + video);
 }
 
 function deleteNotificationMessage(messageId) {

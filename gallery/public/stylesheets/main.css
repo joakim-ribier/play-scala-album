@@ -246,6 +246,20 @@ input:focus, textarea:focus {
   border-top: 13px solid transparent;
 }
 
+#display-photo-standard-content-header-close {
+	cursor: pointer;
+	float: left;
+	margin: 5px 0px 0px 1095px;
+	
+	width: 26px;
+	height: 26px;
+	background-color: #FFFFFF;
+}
+
+#display-photo-standard-content-header-close:hover {
+	background-color: rgb(250, 199, 19);
+}
+
 #display-photo-standard-content-img {
 	clear: both;
 	text-align: center;

@@ -160,6 +160,7 @@ object Application extends Controller with Secured {
           Map("status" -> "success",
               "id" -> String.valueOf(media.id),
               "filename" -> media.filename,
+              "mediaType" -> media.mediaType.label,
               "title" -> media.title,
               "desc" -> desc,
               "is" -> String.valueOf(is))))
@@ -220,5 +221,13 @@ object Application extends Controller with Secured {
   	  Notification.setClosed(username, notificationId(0).toLong)
   	}
   	Ok("return")
+  }
+  
+  def getVideoInStandardDirectory(file: String) = withAuth { username => implicit request =>
+    getFile(Configuration.getMediaVideoFolderStandardDirectory(), file)(request)
+  }
+  
+  def getVideoInUploadDirectory(file: String) = withAuth { username => implicit request =>
+    getFile(Configuration.getMediaVideoFolderUploadDirectory(), file)(request)
   }
 }

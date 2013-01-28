@@ -12,37 +12,37 @@ import utils._
 object MediaDB {
 
   private val _DB_TBL_MEDIA: String = play.Configuration.root().getString(Configuration._TABLE_MEDIA_KEY)
-  
-  private val _MEDIA_PHOTO_TYPE = 1
+  private val _DB_TBL_MEDIA_TYPE: String = play.Configuration.root().getString(Configuration._TABLE_MEDIA_TYPE_KEY)
   
   private val simple = {
     get[Pk[Long]](_DB_TBL_MEDIA + ".id") ~
     get[String](_DB_TBL_MEDIA + ".filename") ~
+    get[String](_DB_TBL_MEDIA_TYPE + ".media_type") ~
     get[String](_DB_TBL_MEDIA + ".title") ~
     get[Option[String]](_DB_TBL_MEDIA + ".description") ~
     get[Boolean](_DB_TBL_MEDIA + ".public") ~
     get[Date](_DB_TBL_MEDIA + ".created") map {
-      case id~filename~title~description~public~created =>
-        Media(id, filename, title, description, Media.toVisibility(public), new DateTime(created))
+      case id~filename~mediaType~title~description~public~created =>
+        Media(id, filename, Media.toMediaType(mediaType), title, description, Media.toVisibility(public), new DateTime(created))
     }
   }
   
-  def insert(photo: Media) : Int = {
+  def insert(media: Media) : Long = {
     return DB.withConnection { implicit connection =>
       SQL(
         """
-          insert into """ + _DB_TBL_MEDIA + """ (filename, title, description, public, created, media_type) values (
+          INSERT INTO """ + _DB_TBL_MEDIA + """ (filename, title, description, public, created, media_type) VALUES (
             {filename}, {title}, {description}, {public}, {created}, {type}
           ) RETURNING id
         """
       ).on(
-        'filename -> photo.filename,
-        'title -> photo.title,
-        'description -> photo.description,
-        'public -> Media.toBoolean(photo.visibility),
-        'created -> photo.created.toDate(),
-        'type -> _MEDIA_PHOTO_TYPE
-      ).as(int("id").single)
+        'filename -> media.filename,
+        'title -> media.title,
+        'description -> media.description,
+        'public -> Media.toBoolean(media.visibility),
+        'created -> media.created.toDate(),
+        'type -> Media.toLong(media.mediaType)
+      ).as(long("id").single)
     }
   }
   
@@ -54,7 +54,10 @@ object MediaDB {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
-          SELECT * FROM """ + _DB_TBL_MEDIA + """ ORDER BY created """ + order + """
+          SELECT * FROM """ + _DB_TBL_MEDIA + """
+          JOIN """ + _DB_TBL_MEDIA_TYPE + """
+          ON (""" + _DB_TBL_MEDIA + """.media_type = """ + _DB_TBL_MEDIA_TYPE + """.id)
+          ORDER BY created """ + order + """
         """
       )
       sql.as(MediaDB.simple *)
@@ -65,7 +68,10 @@ object MediaDB {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
-          SELECT * FROM """ + _DB_TBL_MEDIA + """ ORDER BY created DESC LIMIT {limit} OFFSET {offset}
+          SELECT * FROM """ + _DB_TBL_MEDIA + """
+          JOIN """ + _DB_TBL_MEDIA_TYPE + """
+          ON (""" + _DB_TBL_MEDIA + """.media_type = """ + _DB_TBL_MEDIA_TYPE + """.id)
+          ORDER BY created DESC LIMIT {limit} OFFSET {offset}
         """
       ).on(
         'offset -> offset,
@@ -79,6 +85,8 @@ object MediaDB {
       SQL(
         """
           SELECT count(*) as c FROM """ + _DB_TBL_MEDIA + """
+          JOIN """ + _DB_TBL_MEDIA_TYPE + """
+          ON (""" + _DB_TBL_MEDIA + """.media_type = """ + _DB_TBL_MEDIA_TYPE + """.id)
         """
       ).apply().head[Long]("c")
     }
@@ -88,7 +96,9 @@ object MediaDB {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
-          SELECT * FROM """ + _DB_TBL_MEDIA + """ 
+          SELECT * FROM """ + _DB_TBL_MEDIA + """
+          JOIN """ + _DB_TBL_MEDIA_TYPE + """
+          ON (""" + _DB_TBL_MEDIA + """.media_type = """ + _DB_TBL_MEDIA_TYPE + """.id)
           WHERE id IN ( """ + DBUtils.formatSEQLongToString(photos) + """) 
           ORDER BY created DESC LIMIT {limit} OFFSET {offset}
         """
@@ -107,7 +117,9 @@ object MediaDB {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
-          SELECT * FROM """ + _DB_TBL_MEDIA + """ 
+          SELECT * FROM """ + _DB_TBL_MEDIA + """
+          JOIN """ + _DB_TBL_MEDIA_TYPE + """
+          ON (""" + _DB_TBL_MEDIA + """.media_type = """ + _DB_TBL_MEDIA_TYPE + """.id)
           WHERE id IN ( """ + DBUtils.formatSEQLongToString(photos) + """) 
           ORDER BY created """ + order + """
         """
@@ -121,6 +133,8 @@ object MediaDB {
       val sql = SQL(
         """
           SELECT * FROM """ + _DB_TBL_MEDIA + """
+          JOIN """ + _DB_TBL_MEDIA_TYPE + """
+          ON (""" + _DB_TBL_MEDIA + """.media_type = """ + _DB_TBL_MEDIA_TYPE + """.id)
           WHERE created > {datetime}
         """
       ).on(
@@ -128,5 +142,4 @@ object MediaDB {
       sql.as(MediaDB.simple *)
     }
   }
-  
 }

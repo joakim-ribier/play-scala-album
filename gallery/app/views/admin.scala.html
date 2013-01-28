@@ -27,7 +27,7 @@
 						
 				    <p><input type="button" onclick="uploadFile()" value="@Messages("page.admin.form.upload.submit")(Lang("fr"))" /></p>
 				}
-				<div id="form-title">@Messages("page.admin.form.upload.title")(Lang("fr"))</div>
+				<div id="form-title">@Messages("page.admin.form.upload.title")(Lang("fr"))<br /><i>( @play.Play.application().configuration().getString("app.media.format.allowed") )</i></div>
 			</div>
 			
 			<div id="admin-photo-list" class="@("administrator-active-div".when(page != "adminListPhoto"))">

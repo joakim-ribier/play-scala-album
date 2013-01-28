@@ -16,10 +16,12 @@ GET   /album/page/:page/tags/:tags    																		controllers.Application.
 GET   /album/photo/previous/:id/tags/:tags 																controllers.Application.getPreviousPhoto(id: String, tags: String)
 GET   /album/photo/next/:id/tags/:tags 																		controllers.Application.getNextPhoto(id: String, tags: String)
 
-GET /album/user/new/address/mail/validation/:email/token/:token						controllers.Application.saveNewUserEmail(email: String, token: String)
+GET 	/album/user/new/address/mail/validation/:email/token/:token					controllers.Application.saveNewUserEmail(email: String, token: String)
 
-POST /album/user/popup/notify/close																				controllers.Application.userPopupNotifyClose
+POST 	/album/user/popup/notify/close																			controllers.Application.userPopupNotifyClose
 
+GET		/album/get/media/video/upload/:file																	controllers.Application.getVideoInUploadDirectory(file: String)
+GET		/album/get/media/video/standard/:file																controllers.Application.getVideoInStandardDirectory(file: String)
 
 # CONFIGURATION CONTROLLER
 
@@ -38,8 +40,10 @@ GET		/album/notify/new/photo/private/:key						controllers.SendMail.notifyNewPho
 GET		/album/admin							   									controllers.Administrator.index
 GET		/album/admin/list/photo												controllers.Administrator.listPhotoUploaded
 GET		/album/admin/add/new/photo/:name							controllers.Administrator.addNewPhoto(name: String)
+GET		/album/admin/media/redirect/add/video/:file		controllers.Administrator.redirectToAddVideo(file: String)
+
 POST 	/album/upload																	controllers.Administrator.upload
-POST 	/album/savePhoto															controllers.Administrator.savePhoto
+POST 	/album/saveMedia															controllers.Administrator.saveMedia
 GET		/album/admin/notification											controllers.Administrator.notification
 POST 	/album/admin/notification/message/save				controllers.Administrator.saveNewNotification
 POST 	/album/admin/notification/save								controllers.Administrator.saveNewNotificationAlarm

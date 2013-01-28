@@ -118,21 +118,40 @@
 							
 				<div id="index-application-photos">
 					@for(media <- medias) {
-							<div id="index-application-photo" class="rotate-deg-minus@random" onclick="fadeInPhoto(@media.id, '@media.filename', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');">
-								
-								<div id="index-application-photo-img">
-									<img src="/album/get/thumbnail/photo/@media.filename" />
+							
+							@if(media.mediaType.label == "photo"){
+								<div class="index-application-photo rotate-deg-minus@random" onclick="fadeInPhoto(@media.id, '@media.filename', '@media.mediaType.label', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');">
+							} else {
+								<div class="index-application-photo rotate-deg-minus@random">							
+							}
+
+								<div class="index-application-media-img">
+									@if(media.mediaType.label == "photo"){
+										<img src="/album/get/thumbnail/photo/@media.filename" />
+									} else {
+										<video width="200" height="150" controls="controls" src="/album/get/media/video/standard/@media.filename">@Messages("app.global.video.description.defaut")(Lang("fr"))</video>
+									}
 								</div>
-								<div id="index-application-photo-title">@titleFormat(media.title)</div>
+								
+								<div class="index-application-photo-title">
+									@if(media.mediaType.label == "photo"){
+										@titleFormat(media.title)
+									} else {
+										@titleFormat(media.title)&nbsp;(&nbsp;
+										<span onclick="fadeInPhoto(@media.id, '@media.filename', '@media.mediaType.label', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');">
+											@Messages("app.global.video.description.full.screen")(Lang("fr"))
+										</span>&nbsp;)
+									}
+								</div>	
 							
 							</div>
 						}
 						@for(i <- 1 to compute(medias)) {
-							<div id="index-application-photo" class="rotate-deg-minus@random" ">
-								<div id="index-application-photo-img">
+							<div class="index-application-photo rotate-deg-minus@random" ">
+								<div class="index-application-media-img">
 									<img src="@routes.Assets.at("images/nophotox200x150.png")" />
 								</div>
-								<div id="index-application-photo-title">@Messages("page.index.no.photo.label")(Lang("fr"))</div>
+								<div class="index-application-photo-title">@Messages("page.index.no.photo.label")(Lang("fr"))</div>
 							</div>
 						}
 					</div>

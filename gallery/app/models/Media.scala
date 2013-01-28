@@ -20,54 +20,80 @@ object Visibility extends Enumeration {
 }
 import Visibility._
 
+object MediaType extends Enumeration {
+  val PHOTO = new Value(1, "photo")
+  val VIDEO = new Value(2, "video")
+  class Value(id:Int, value: String) extends Val(id, value) {
+  	val dbId = id
+    val label = value
+  }
+}
+import MediaType._
 
-case class Media(id: Pk[Long] = NotAssigned, filename: String, title: String, description: Option[String], visibility: Visibility, created: DateTime)
+case class Media(id: Pk[Long] = NotAssigned, filename: String, mediaType: MediaType.Value, title: String, description: Option[String], visibility: Visibility, created: DateTime)
 
 object Media {
 
-  def toVisibility(public: Boolean) : Visibility = {
-    if (public) {
-      return Visibility.PUBLIC
-    } else {
-      return Visibility.PRIVATE
-    }
-  }
-  
-  def toBoolean(visibility: Visibility) : Boolean = {
-    visibility match {
-      case PUBLIC => true
-      case _ => false
-    }
-  }
-  
-  def create(filename: String, title: String, description: Option[String], isPublic : Boolean, tags: Seq[String]) : Boolean = {
-    if (filename != null && title != null && !title.isEmpty()) {
-      val file: File = new File(Configuration.getPhotoUploadStandardDirectory() + filename)
-      if (file.isFile()) {
-        
-        val thumbnail: File = new File(Configuration.getPhotoUploadThumbnailDirectory() + filename)
-        if (thumbnail.isFile()) {
-          FileUtils.move(thumbnail, Configuration.getPhotoThumbnailDirectory(), filename)
+	def create(filename: String, mediaType: MediaType.Value, title: String, description: Option[String], isPublic : Boolean, tags: Seq[String]) : Boolean = {
+    if (filename != null && title != null && !title.isEmpty() && mediaType != null) {
+      try {
+        if (mediaType == MediaType.PHOTO) {
+          createPhotoFile(filename)
         } else {
-          FileUtils.createThumbnails(
-            Configuration.getPhotoUploadStandardDirectory(),
-            Configuration.getPhotoThumbnailDirectory(), filename, 200, 150) 
+          createVideoFile(filename)
         }
-            
-       FileUtils.createThumbnails(
-            Configuration.getPhotoUploadStandardDirectory(),
-            Configuration.getPhoto800x600Directory(), filename, 800, 600)
-            
-        FileUtils.move(file, Configuration.getPhotoStandardDirectory(), filename)
-
-        val id: Int = MediaDB.insert(Media(null, filename, title, description, toVisibility(isPublic), DateTime.now()))
-     	if (id.isInstanceOf[Int]) {
-     	  Tag.addTagsToPhoto(id, tags)
-     	  return true
-     	}
-      } 
+        val id: Long = MediaDB.insert(Media(null, filename, mediaType, title, description, toVisibility(isPublic), DateTime.now()))
+     	  if (id.isInstanceOf[Long]) {
+     	    Tag.addTagsToPhoto(id, tags)
+     	    return true
+     	  }  
+      } catch {
+        case e => {
+          return false
+        }
+      }
     }
     return false
+  }
+  
+  private def createPhotoFile(filename: String) {
+    try {
+      val file: File = new File(Configuration.getPhotoUploadStandardDirectory() + filename)
+		  if (file.isFile()) {
+		    
+	      val thumbnail: File = new File(Configuration.getPhotoUploadThumbnailDirectory() + filename)
+	      if (thumbnail.isFile()) {
+	        FileUtils.move(thumbnail, Configuration.getPhotoThumbnailDirectory(), filename)
+	      } else {
+	        FileUtils.createThumbnails(
+	          Configuration.getPhotoUploadStandardDirectory(),
+	          Configuration.getPhotoThumbnailDirectory(), filename, 200, 150) 
+	      }
+	      
+	      FileUtils.createThumbnails(
+	          Configuration.getPhotoUploadStandardDirectory(),
+	          Configuration.getPhoto800x600Directory(), filename, 800, 600)
+	     
+	      FileUtils.move(file, Configuration.getPhotoStandardDirectory(), filename)
+		  }  
+    } catch {
+      case e => {
+        Logger.error(e.getMessage(), e)
+      }
+    }
+  }
+  
+  private def createVideoFile(filename: String) {
+    try {
+      val file: File = new File(Configuration.getMediaVideoFolderUploadDirectory() + filename)
+      if (file.isFile()) {
+       FileUtils.move(file, Configuration.getMediaVideoFolderStandardDirectory(), filename)
+      }
+    } catch {
+      case e => {
+        Logger.error(e.getMessage(), e)
+      }
+    }
   }
   
   def list(offset: Long, limit: Int) : Seq[Media] = {
@@ -116,5 +142,39 @@ object Media {
   		}
   	}
   	return null
+  }
+  
+  def toVisibility(public: Boolean) : Visibility = {
+    public match {
+      case true => Visibility.PUBLIC
+      case _ => Visibility.PRIVATE
+    }
+  }
+  
+  def toBoolean(visibility: Visibility) : Boolean = {
+    visibility match {
+      case Visibility.PUBLIC => true
+      case Visibility.PRIVATE => false
+      case _ => throw new IllegalArgumentException(
+          "visibility {" + visibility +  "} is not supported in the application")
+    }
+  }
+  
+  def toMediaType(mediaType: String) : MediaType.Value = {
+    mediaType match {
+      case "photo" => MediaType.PHOTO
+      case "video" => MediaType.VIDEO
+      case _ => throw new IllegalArgumentException(
+          "media type {" + mediaType +  "} is not supported in the application")
+    }
+  }
+  
+  def toLong(mediaType: MediaType.Value) : Int = {
+    mediaType match {
+      case MediaType.PHOTO => MediaType.PHOTO.dbId
+      case MediaType.VIDEO => MediaType.VIDEO.dbId
+      case _ => throw new IllegalArgumentException(
+          "media type {" + mediaType +  "} is not supported in the application")
+    }
   }
 }

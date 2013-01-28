@@ -96,7 +96,7 @@
 	color: #FFFFFF;
 }
 
-#index-application-photo {
+.index-application-photo {
 	float: left;
 
 	border-style: solid;
@@ -111,18 +111,26 @@
 	cursor: pointer;
 }
 
-#index-application-photo-img {
+.index-application-media-img {
 	width: 200px;
 	height: 150px;
 	text-align: center;
 	background-color: #000000;
 }
 
-#index-application-photo-title {
+.index-application-photo-title {
 	padding-top: 10px;
 	padding-bottom: 10px;
 	text-align: center;
 	background-color: #FFFFFF;
+}
+
+.index-application-photo-title span {
+}
+
+.index-application-photo-title span:hover {
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 #index-tag-search-title {

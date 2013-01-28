@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate, form: Form[(String, String, Option[String], Boolean, List[String])], tags: Seq[String])(implicit flash: play.api.mvc.Flash)
+@(title: String, feedback: Feedback, user: UserTemplate, form: Form[(String, String, String, Option[String], Boolean, List[String])], tags: Seq[String])(implicit flash: play.api.mvc.Flash)
 
 @tagToId(tag: String) = @{
 	tag.replace("tags", "").replace("_", "")
@@ -13,15 +13,21 @@
 				@if(form("filename").value.get == "nophoto") {
 					<img src="@routes.Assets.at("images/nophotox200x150.png")" />
 				} else {
-					<img src="/album/get/photo/upload/thumbnail/@form("filename").value.get" />
+					@if(form("type").value.get == "photo") {
+						<img src="/album/get/photo/upload/thumbnail/@form("filename").value.get" />
+					} else {
+						<video width="400" height="300" controls="controls" src="/album/get/media/video/upload/@form("filename").value.get">@Messages("app.global.video.description.defaut")(Lang("fr"))</video>					
+					}
 				}
 			} else {
 				<img src="@routes.Assets.at("images/nophotox200x150.png")" />
 			}
 			</div>
 					
-		@helper.form(routes.Administrator.savePhoto) {
-    	<input type="hidden" name="filename" value="@form("filename").value.get" id="filename" />
+		@helper.form(routes.Administrator.saveMedia) {
+    	<input type="hidden" name="filename" value="@form("filename").value.get"/>
+    	<input type="hidden" name="type" value="@form("type").value.get"/>
+    	
     	<div id="administrator-content-add-new-photo-form-input-tags-hidden">
     		@helper.repeat(form("tags"), min = 0) { tag =>
 					<input type="hidden" name="tags[@tagToId(tag.id)]" value="@tag.value">

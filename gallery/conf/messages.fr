@@ -7,6 +7,9 @@ app.global.error=Un problème est survenu, veuillez recommencer ou contacter l''
 app.global.error.missing.field.form=Veuillez s''il vous plaît remplir correctement le formulaire.
 app.global.error.invalid.field.form=Les données renseignées ne sont pas correctes.
 
+app.global.video.description.defaut=Vidéo ...
+app.global.video.description.full.screen=plein écran
+
 administrator.add.new.photo.verifying.text=Impossible de sauvegarder la photo, veuillez vérifier le formulaire et recommencer.
 
 application.add.new.admin.verifying.text=Configuration impossible, vérifiez votre identifiant et / ou mot de passe administrateur.
@@ -46,13 +49,13 @@ page.main.update.site.create.of=Création de
 page.main.update.site.disponibility.of=disponible sur
 page.main.update.site.ie.redirection.html=<h3>INFORMATION</h3>Pour une expérience utilisateur optimale le navigateur <strong>Microsoft Internet Explorer</strong> n''est pas recommandé ! <br /> <br /><i>redirection en cours dans 10 secondes ...</i>
 page.main.message.popup.fadeOut=<br/><br/><i>( fermeture automatique de la fenêtre dans 10 secondes ... )</i>
-page.admin.form.upload.field.count=Nombre de photo à uploader :
-page.admin.form.upload.field.size=Taille totale de photo :
+page.admin.form.upload.field.count=Nombre de médias à transférer :
+page.admin.form.upload.field.size=Taille totale de fichier :
 page.admin.form.upload.field.percent=Pourcentage d''upload ( redirection automatique ) :
 page.admin.form.upload.failed=Erreur d''upload, veuillez recommencer ou contacter l''administrateur de l''application.
-page.admin.form.upload.submit=Uploader une/des photo(s)
-page.admin.form.upload.title=Choisir des photos
-page.admin.show.photo.title=Afficher les photos déjà disponibles sur le serveur
+page.admin.form.upload.submit=Transférer les médias
+page.admin.form.upload.title=Choisir des médias à transférer
+page.admin.show.photo.title=Liste des médias déjà transférés sur le serveur
 page.admin.update.admin.password.title=Changer le mot de passe du compte administrateur
 page.admin.tag.already.exists.title=&Eacute;tiquettes déjà présentes dans l''album
 page.admin.notification.title=Gestion du système de notifications
@@ -68,12 +71,12 @@ page.adminNotification.delete.message.failed=Problème lors de la suppression du
 page.adminNotification.delete.failed=Problème lors de la suppression de la notification.
 page.admin.notification.list.title=Liste des notifications programmées :
 
-page.adminAddPhoto.form.field.title=donnez un titre à votre image
-page.adminAddPhoto.form.field.description=<h4>DESCRIPTION DE LA PHOTO</h4>Ceci est la description ... <strong>je suis en gras!</strong>
+page.adminAddPhoto.form.field.title=donnez un titre à votre média
+page.adminAddPhoto.form.field.description=<h4>DESCRIPTION DU MEDIA</h4>Ceci est la description ... <strong>je suis en gras!</strong>
 page.adminAddPhoto.form.field.tag=tapez votre étiquette + (barre d''espace)
 page.adminAddPhoto.form.field.public=rendre la photo public
-page.adminAddPhoto.form.field.submit=Sauvegarder la photo
-page.adminAddPhoto.form.title=Informations supplémentaires sur la photo
+page.adminAddPhoto.form.field.submit=Sauvegarder le média
+page.adminAddPhoto.form.title=Informations supplémentaires sur le média
 
 page.configuration.form.field.password=Mot de passe
 page.configuration.form.field.submit=Créer le compte administrateur

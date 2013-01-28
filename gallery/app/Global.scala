@@ -13,6 +13,7 @@ object Global extends GlobalSettings {
       Configuration._TABLE_USER_KEY,
       Configuration._TABLE_EMAIL_KEY,
       Configuration._TABLE_MEDIA_KEY,
+      Configuration._TABLE_MEDIA_TYPE_KEY,
       Configuration._TABLE_TAG_KEY,
       Configuration._TABLE_MESSAGE_KEY,
       Configuration._TABLE_MESSAGE_NOTIFICATION_KEY,
@@ -80,6 +81,10 @@ object Global extends GlobalSettings {
 	  createDirectoryIfNotExists(Configuration._APP_STANDARD_PHOTO)
     createDirectoryIfNotExists(Configuration._APP_THUMBNAIL_PHOTO)
     createDirectoryIfNotExists(Configuration._APP_800x600_PHOTO)
+    
+    createDirectoryIfNotExists(Configuration._APP_MEDIA_VIDEO_FOLDER)
+    createDirectoryIfNotExists(Configuration._APP_MEDIA_VIDEO_STANDARD_FOLDER)
+    createDirectoryIfNotExists(Configuration._APP_MEDIA_VIDEO_UPLOAD_FOLDER)
   }
   
   def createDirectoryIfNotExists(keyDirectory: String) {

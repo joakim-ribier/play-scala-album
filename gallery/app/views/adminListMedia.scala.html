@@ -1,0 +1,30 @@
+@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], photos: Seq[String], videos: Seq[String])(implicit flash: play.api.mvc.Flash)
+
+@random() = @{
+	val rnd = new scala.util.Random
+	val range = -3 to 3
+	range(rnd.nextInt(range length))
+}
+
+@compute(photos: Seq[String]) = @{ 12 - photos.length }
+
+@admin(title, feedback, user, tags, "adminListPhoto") {
+
+	<div id="administrator-content-main" class="administrator-content-main-border">
+		@for(video <- videos) {
+			<div class="administrator-content-list-photo rotate-deg-minus@random" onclick="redirectionToAddVideo('@video');">
+				<video width="200" height="150" src="/album/get/media/video/upload/@video">@Messages("app.global.video.description.defaut")(Lang("fr"))</video>
+			</div>
+		}
+		@for(photo <- photos) {
+			<div class="administrator-content-list-photo rotate-deg-minus@random">
+				<img src="/album/get/photo/upload/thumbnail/@photo" onclick="accesstoNewPhoto('@photo');" />
+			</div>
+		}
+		@for(i <- 1 to compute(photos)) {
+			<div class="administrator-content-list-photo rotate-deg-minus@random">
+				<img src="@routes.Assets.at("images/nophotox200x150.png")" />
+			</div>
+		}
+	</div>
+}
