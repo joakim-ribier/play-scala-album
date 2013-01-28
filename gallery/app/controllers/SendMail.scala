@@ -17,6 +17,7 @@ import models.Media
 import org.joda.time.DateTime
 import models.UserEmail
 import java.util.Locale
+import models.MediaType
 
 object SendMail extends Controller with Secured {
 
@@ -62,6 +63,7 @@ object SendMail extends Controller with Secured {
 	        }
 	      }
 	
+	      Logger.info("send notification new media to user")
 	      Results.Ok
 	    } else {
 	      Logger.error("Try to access at notifyNewPhoto service on SendMail controller with wrong private key [ " + key + " ]")
@@ -79,29 +81,44 @@ object SendMail extends Controller with Secured {
   	val photosSize = photos.size
   	
     val mail = use[MailerPlugin].email
-    
-    var labelCountPhotoHTML = Messages("sendmail.notify.new.photo.single.html")(Lang("fr"))
-    var labelCountPhotoTEXT = Messages("sendmail.notify.new.photo.single.text")(Lang("fr"))
-		if (photosSize > 1) {
-			labelCountPhotoHTML = Messages("sendmail.notify.new.photo.multiple.html", photosSize)(Lang("fr"))
-		  labelCountPhotoTEXT = Messages("sendmail.notify.new.photo.multiple.text", photosSize)(Lang("fr"))
-		}
-  	mail.setSubject(_TITLE_HTML + Messages("sendmail.notify.new.photo.subject", labelCountPhotoTEXT)(Lang("fr")))
-
   	mail.addRecipient(recipient)
   	mail.addFrom(Configuration.getStringValue(Configuration._MAIL_FROM))
 		
 		var htmlContent = ""
 		val host = Configuration.getHost()
 		
+		var photoCount = 0
+		var videoCount = 0
 		for (photo <- photos) {
-			var url = host + "/album/get/thumbnail/photo/" + photo.filename
-		  htmlContent = htmlContent + "<img src=\"" + url + "\" alt=\"" + photo.title + "\">&nbsp;&nbsp;"
+		  if (photo.mediaType == MediaType.PHOTO) {
+		    photoCount += 1
+		    var url = host + "/album/get/thumbnail/photo/" + photo.filename
+		    htmlContent = htmlContent + "<img src=\"" + url + "\" alt=\"" + photo.title + "\">&nbsp;&nbsp;"
+		  } else {
+		  	videoCount += 1
+		  }
 		}
 		  
+  	var labelCountPhotoHTML = Messages("sendmail.notify.new.photo.single.html", photoCount)(Lang("fr"))
+		var labelCountPhotoTEXT = Messages("sendmail.notify.new.photo.single.text", photoCount)(Lang("fr"))
+		if (photoCount > 1) {
+			labelCountPhotoHTML = Messages("sendmail.notify.new.photo.multiple.html", photoCount)(Lang("fr"))
+			labelCountPhotoTEXT = Messages("sendmail.notify.new.photo.multiple.text", photoCount)(Lang("fr"))
+		}
+  	
+  	var labelCountVideoHTML = Messages("sendmail.notify.new.video.single.html", videoCount)(Lang("fr"))
+		var labelCountVideoTEXT = Messages("sendmail.notify.new.video.single.text", videoCount)(Lang("fr"))
+		if (photoCount > 1) {
+			labelCountVideoHTML = Messages("sendmail.notify.new.video.multiple.html", videoCount)(Lang("fr"))
+			labelCountVideoTEXT = Messages("sendmail.notify.new.video.multiple.text", videoCount)(Lang("fr"))
+		}
+  	
+  	val andText = Messages("sendmail.notify.new.media.and")(Lang("fr"))
+  	mail.setSubject(_TITLE_HTML + Messages("sendmail.notify.new.photo.subject", labelCountPhotoTEXT + " " + andText + " " + labelCountVideoTEXT)(Lang("fr")))
+  	
 		mail.send(
-		    Messages("sendmail.notify.new.photo.text", Configuration.getHost(), dateToString(dateTime, "fr"), labelCountPhotoTEXT, "\n\r")(Lang("fr")),
-		    Messages("sendmail.notify.new.photo.html", Configuration.getHost(), dateToString(dateTime, "fr"), labelCountPhotoHTML, htmlContent)(Lang("fr")))
+		    Messages("sendmail.notify.new.photo.text", Configuration.getHost(), dateToString(dateTime, "fr"), labelCountPhotoTEXT + " " + andText + " " + labelCountVideoTEXT, "\n\r")(Lang("fr")),
+		    Messages("sendmail.notify.new.photo.html", Configuration.getHost(), dateToString(dateTime, "fr"), labelCountPhotoHTML + " " + andText + " " + labelCountVideoHTML, htmlContent)(Lang("fr")))
   }
 
   private def dateToString(dateTime: DateTime, lang: String) : String = {
