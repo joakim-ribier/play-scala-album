@@ -90,7 +90,10 @@ object Application extends Controller with Secured {
       }
       
     } catch {
-      case _ => Redirect(routes.Application.index)
+      case e => {
+       Logger.error(e.getMessage(), e) 
+       Redirect(routes.Application.index)
+      }
     }
   }
   
@@ -107,7 +110,10 @@ object Application extends Controller with Secured {
         toJSON(media, isPreviousPhoto(media, mediaIds))
       }
     } catch {
-      case _ =>  Ok(Json.toJson(Map("status" -> "failed")))
+      case e => {
+        Logger.error(e.getMessage(), e) 
+        Ok(Json.toJson(Map("status" -> "failed")))
+      }
     }
   }
   
@@ -124,7 +130,10 @@ object Application extends Controller with Secured {
         toJSON(media, isNextPhoto(media, mediaIds))
       }
     } catch {
-      case _ =>  Ok(Json.toJson(Map("status" -> "failed")))
+      case e => {
+        Logger.error(e.getMessage(), e) 
+        Ok(Json.toJson(Map("status" -> "failed")))
+      }
     }
   }
   

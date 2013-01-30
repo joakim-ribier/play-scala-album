@@ -20,14 +20,16 @@
   
   </appender>
  
-  <logger name="play" level="INFO" />
-  <logger name="application" level="INFO" />
-  <logger name="GalleryLogger" level="INFO" />
-   
-  <include file="/etc/gallery/logback.xml" />
+  <logger name="play" level="INFO">
+  	<appender-ref ref="gallery" />
+  </logger>
   
-	<root level="INFO">
-		<appender-ref ref="gallery" />
-	</root>
+  <logger name="application" level="INFO">
+ 		<appender-ref ref="gallery" />
+  </logger>
+   
+  <include file="/home/joakim/gallery/logback.xml" />
+  
+	<root level="INFO" />
 	
 </configuration>
