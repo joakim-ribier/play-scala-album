@@ -99,7 +99,7 @@ object MediaDB {
           SELECT * FROM """ + _DB_TBL_MEDIA + """
           JOIN """ + _DB_TBL_MEDIA_TYPE + """
           ON (""" + _DB_TBL_MEDIA + """.media_type = """ + _DB_TBL_MEDIA_TYPE + """.id)
-          WHERE id IN ( """ + DBUtils.formatSEQLongToString(photos) + """) 
+          WHERE """ + _DB_TBL_MEDIA + """.id IN ( """ + DBUtils.formatSEQLongToString(photos) + """) 
           ORDER BY created DESC LIMIT {limit} OFFSET {offset}
         """
       ).on(
@@ -120,7 +120,7 @@ object MediaDB {
           SELECT * FROM """ + _DB_TBL_MEDIA + """
           JOIN """ + _DB_TBL_MEDIA_TYPE + """
           ON (""" + _DB_TBL_MEDIA + """.media_type = """ + _DB_TBL_MEDIA_TYPE + """.id)
-          WHERE id IN ( """ + DBUtils.formatSEQLongToString(photos) + """) 
+          WHERE """ + _DB_TBL_MEDIA + """.id IN ( """ + DBUtils.formatSEQLongToString(photos) + """) 
           ORDER BY created """ + order + """
         """
       )
