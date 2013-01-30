@@ -28,7 +28,7 @@
  		<appender-ref ref="gallery" />
   </logger>
    
-  <include file="/home/joakim/gallery/logback.xml" />
+  <include file="/etc/gallery/logback.xml" />
   
 	<root level="INFO" />
 	
