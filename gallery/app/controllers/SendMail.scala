@@ -108,7 +108,7 @@ object SendMail extends Controller with Secured {
   	
   	var labelCountVideoHTML = Messages("sendmail.notify.new.video.single.html", videoCount)(Lang("fr"))
 		var labelCountVideoTEXT = Messages("sendmail.notify.new.video.single.text", videoCount)(Lang("fr"))
-		if (photoCount > 1) {
+		if (videoCount > 1) {
 			labelCountVideoHTML = Messages("sendmail.notify.new.video.multiple.html", videoCount)(Lang("fr"))
 			labelCountVideoTEXT = Messages("sendmail.notify.new.video.multiple.text", videoCount)(Lang("fr"))
 		}
