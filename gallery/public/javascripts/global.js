@@ -332,8 +332,8 @@ $(document).ready(function() {
 			$('#app-message').fadeIn();
 			$('#app-message').html(getI18NValue('page.main.update.site.ie.redirection.html'));
 			setTimeout(function() {
-				window.location.replace("http://www.google.com/chrome");
-			}, 10000);
+			  $('#app-message').fadeOut();
+			}, 15000);
 		}
 	});
 	
