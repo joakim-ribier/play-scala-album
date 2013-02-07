@@ -30,6 +30,6 @@
    
   <include file="/etc/gallery/logback.xml" />
   
-	<root level="INFO" />
+	<root level="ERROR" />
 	
 </configuration>

@@ -13,12 +13,14 @@ import db.MediaDB
 import play.api.Logger
 import db.OrderENUM
 import utils._
+import scalax.file.NotFileException
 
 object Visibility extends Enumeration {
   type Visibility = Value
   val PUBLIC, PRIVATE = Value
 }
 import Visibility._
+
 
 object MediaType extends Enumeration {
   val PHOTO = new Value(1, "photo")
@@ -29,6 +31,7 @@ object MediaType extends Enumeration {
   }
 }
 import MediaType._
+
 
 case class Media(id: Pk[Long] = NotAssigned, filename: String, mediaType: MediaType.Value, title: String, description: Option[String], visibility: Visibility, created: DateTime)
 
@@ -59,26 +62,28 @@ object Media {
   private def createPhotoFile(filename: String) {
     try {
       val file: File = new File(Configuration.getPhotoUploadStandardDirectory() + filename)
-		  if (file.isFile()) {
-		    
-	      val thumbnail: File = new File(Configuration.getPhotoUploadThumbnailDirectory() + filename)
-	      if (thumbnail.isFile()) {
-	        FileUtils.move(thumbnail, Configuration.getPhotoThumbnailDirectory(), filename)
-	      } else {
-	        FileUtils.createThumbnails(
-	          Configuration.getPhotoUploadStandardDirectory(),
-	          Configuration.getPhotoThumbnailDirectory(), filename, 200, 150) 
-	      }
-	      
-	      FileUtils.createThumbnails(
-	          Configuration.getPhotoUploadStandardDirectory(),
-	          Configuration.getPhoto800x600Directory(), filename, 800, 600)
-	     
-	      FileUtils.move(file, Configuration.getPhotoStandardDirectory(), filename)
+		  if (!file.isFile()) {
+		  	throw new NoSuchElementException("photo file " + filename)
 		  }  
+      
+      val thumbnail: File = new File(Configuration.getPhotoUploadThumbnailDirectory() + filename)
+      if (thumbnail.isFile()) {
+        FileUtils.move(thumbnail, Configuration.getPhotoThumbnailDirectory(), filename)
+      } else {
+        FileUtils.createThumbnails(
+          Configuration.getPhotoUploadStandardDirectory(),
+          Configuration.getPhotoThumbnailDirectory(), filename, 200, 150) 
+      }
+      
+      FileUtils.createThumbnails(
+          Configuration.getPhotoUploadStandardDirectory(),
+          Configuration.getPhoto800x600Directory(), filename, 800, 600)
+     
+      FileUtils.move(file, Configuration.getPhotoStandardDirectory(), filename)
     } catch {
       case e => {
         Logger.error(e.getMessage(), e)
+        throw e
       }
     }
   }
@@ -86,12 +91,14 @@ object Media {
   private def createVideoFile(filename: String) {
     try {
       val file: File = new File(Configuration.getMediaVideoFolderUploadDirectory() + filename)
-      if (file.isFile()) {
-       FileUtils.move(file, Configuration.getMediaVideoFolderStandardDirectory(), filename)
-      }
+      if (!file.isFile()) {
+		  	throw new NoSuchElementException("video file " + filename)
+		  }  
+      FileUtils.move(file, Configuration.getMediaVideoFolderStandardDirectory(), filename)
     } catch {
       case e => {
         Logger.error(e.getMessage(), e)
+        throw e
       }
     }
   }
