@@ -1,4 +1,4 @@
-package models
+package db
 
 import java.util.Date
 import org.joda.time.DateTime
@@ -6,6 +6,7 @@ import play.api.db._
 import play.api.Play.current
 import anorm.SqlParser._
 import anorm._
+import models.User
 
 object UserDB {
 

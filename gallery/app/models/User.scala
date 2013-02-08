@@ -5,6 +5,7 @@ import org.joda.time.DateTime
 import anorm._
 import play.api.Logger
 import utils._
+import db.UserDB
 
 case class UserTemplate(login: String, email: Option[String])
 case class User(id: Pk[Long] = NotAssigned, login: String, password: String, created: DateTime, userEmail: Option[UserEmail])

@@ -14,10 +14,12 @@ import utils.Configuration
 import play.api.i18n.Messages
 import play.api.i18n.Lang
 import utils.TokenUtils
+import org.slf4j.LoggerFactory
 
 object Authentication extends Controller {
-  	
-	private val _TITLE_HTML: String = Configuration.getHTMLTitle()
+  
+  private val Logger = LoggerFactory.getLogger("Authentication")
+  private val _TITLE_HTML: String = Configuration.getHTMLTitle()
   
   val form = Form (
     tuple (

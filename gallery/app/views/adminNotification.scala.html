@@ -1,11 +1,12 @@
-@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], messages: Seq[Message], notifications: Seq[NotificationMessage])(implicit flash: play.api.mvc.Flash)
+@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], messages: Seq[models.notification.Message], notifications: Seq[models.notification.NotificationMessage])(implicit flash: play.api.mvc.Flash)
+
 
 @import org.joda.time.DateTime
 @formatDate(date: DateTime) = @{
-	date.toString("yyyy-MM-dd")
+ 	date.toString("yyyy-MM-dd")
 }
 
-@alreadyExistsInNotification(message: Message, notifications: Seq[NotificationMessage]) = @{
+@alreadyExistsInNotification(message: models.notification.Message, notifications: Seq[models.notification.NotificationMessage]) = @{
 	var is = false
 	for (notification <- notifications) {
 		for (m <- notification.messages) {

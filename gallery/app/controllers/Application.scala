@@ -1,23 +1,32 @@
 package controllers
 
-import play.api.data.Forms._
-import play.api.data._
-import play.api.mvc._
-import play.api._
-import views._
-import models._
-import java.io.File
-import java.io.IOException
-import play.Play
+import models.Feedback
+import models.FeedbackClass
+import models.Media
+import models.Tag
+import models.User
+import models.UserTemplate
+import play.api.Logger
+import play.api.data.Form
+import play.api.data.Forms.text
+import play.api.data.Forms.tuple
+import play.api.i18n.Lang
+import play.api.i18n.Messages
 import play.api.libs.json.Json
+import play.api.libs.json.Json.toJsFieldJsValueWrapper
+import play.api.mvc.Action
+import play.api.mvc.Controller
+import play.api.mvc.Result
 import utils.Configuration
 import utils.FileUtils
-import utils.TokenUtils
-import play.api.i18n.Messages
-import play.api.i18n.Lang
+import views.html
+import models.notification.Notification
+import org.slf4j.LoggerFactory
 
 object Application extends Controller with Secured {
 
+  private val Logger = LoggerFactory.getLogger("Application")
+  
   private val _TITLE_HTML: String = Configuration.getHTMLTitle()
   private val _LIMIT = Configuration.getDisplayPhotoLimit()
   
@@ -112,7 +121,7 @@ object Application extends Controller with Secured {
     } catch {
       case e => {
         Logger.error(e.getMessage(), e) 
-        Ok(Json.toJson(Map("status" -> "failed")))
+        Ok(Json.obj("status" -> "failed"))
       }
     }
   }
@@ -132,7 +141,7 @@ object Application extends Controller with Secured {
     } catch {
       case e => {
         Logger.error(e.getMessage(), e) 
-        Ok(Json.toJson(Map("status" -> "failed")))
+        Ok(Json.obj("status" -> "failed"))
       }
     }
   }
@@ -165,16 +174,16 @@ object Application extends Controller with Secured {
       if (media.description.isDefined) {
         desc = media.description.get
       }
-      Ok(Json.toJson(
-          Map("status" -> "success",
+      Ok(Json.obj(
+          		"status" -> "success",
               "id" -> String.valueOf(media.id),
               "filename" -> media.filename,
               "mediaType" -> media.mediaType.label,
               "title" -> media.title,
               "desc" -> desc,
-              "is" -> String.valueOf(is))))
+              "is" -> String.valueOf(is)))
     } else {
-      Ok(Json.toJson(Map("status" -> "nothing")))
+      Ok(Json.obj("status" -> "nothing"))
     }
   }
   

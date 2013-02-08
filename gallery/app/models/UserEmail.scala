@@ -1,6 +1,7 @@
 package models
 
 import anorm._
+import db.UserEmailDB
 
 case class UserEmail(id: Pk[Long] = NotAssigned, email: String)
 

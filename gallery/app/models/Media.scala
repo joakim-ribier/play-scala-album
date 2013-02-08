@@ -51,9 +51,7 @@ object Media {
      	    return true
      	  }  
       } catch {
-        case e => {
-          return false
-        }
+        case e: Throwable => false
       }
     }
     return false
@@ -81,7 +79,7 @@ object Media {
      
       FileUtils.move(file, Configuration.getPhotoStandardDirectory(), filename)
     } catch {
-      case e => {
+      case e: Throwable => {
         Logger.error(e.getMessage(), e)
         throw e
       }
@@ -96,7 +94,7 @@ object Media {
 		  }  
       FileUtils.move(file, Configuration.getMediaVideoFolderStandardDirectory(), filename)
     } catch {
-      case e => {
+      case e: Throwable => {
         Logger.error(e.getMessage(), e)
         throw e
       }

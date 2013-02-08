@@ -1,10 +1,16 @@
-package models
+package models.notification
+
 import anorm.Pk
 import anorm.NotAssigned
 import org.joda.time.DateTime
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.i18n.Lang
+import models.User
+import db.notification.MessageDB
+import db.notification.NotificationDB
+import db.notification.MessageNotificationDB
+import db.notification.NotificationUserDB
 
 case class Message(id: Pk[Long] = NotAssigned, message: String, created: DateTime)
 case class Notification(id: Pk[Long] = NotAssigned, startDate: DateTime, endDate: DateTime)
@@ -62,7 +68,7 @@ object Notification {
     	
     	return false
     } catch {
-      case e => {
+      case e: Throwable => {
         Logger.error(e.getMessage(), e)
       	throw new IllegalArgumentException(Messages("app.global.error.invalid.field.form")(Lang("fr")))
       }

@@ -1,4 +1,4 @@
-package models
+package db.notification
 
 import play.api.db._
 import play.api.Play.current
@@ -8,6 +8,7 @@ import anorm.Row
 import utils._
 import java.util.Date
 import org.joda.time.DateTime
+import models.notification.Notification
 
 object NotificationDB {
 

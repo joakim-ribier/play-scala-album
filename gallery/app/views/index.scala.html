@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], medias: Seq[Media], page: Int, byTags: String, count: Long, notifications: Seq[NotificationMessage])(implicit flash: play.api.mvc.Flash)
+@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], medias: Seq[Media], page: Int, byTags: String, count: Long, notifications: Seq[models.notification.NotificationMessage])(implicit flash: play.api.mvc.Flash)
 
 @random() = @{
 	val rnd = new scala.util.Random
@@ -36,7 +36,7 @@
 	startDate.isBeforeNow() && endDate.isAfterNow()
 }
 
-@isNotifyPopup(notifications: Seq[NotificationMessage], connection: Option[String]) = @{
+@isNotifyPopup(notifications: Seq[models.notification.NotificationMessage], connection: Option[String]) = @{
 	var display = "none"
 	for(notification <- notifications) {
 		if(isNowDateTime(notification.notification.startDate, notification.notification.endDate)){

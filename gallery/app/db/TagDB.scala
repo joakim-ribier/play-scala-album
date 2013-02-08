@@ -1,4 +1,4 @@
-package models
+package db
 
 import play.api.db._
 import play.api.Play.current
@@ -6,6 +6,7 @@ import anorm.SqlParser._
 import anorm._
 import anorm.Row
 import utils._
+import models.Tag
 
 object TagDB {
 

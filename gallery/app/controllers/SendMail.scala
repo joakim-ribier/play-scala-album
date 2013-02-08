@@ -18,9 +18,12 @@ import org.joda.time.DateTime
 import models.UserEmail
 import java.util.Locale
 import models.MediaType
+import org.slf4j.LoggerFactory
 
 object SendMail extends Controller with Secured {
 
+  private val Logger = LoggerFactory.getLogger("SendMail")
+  
 	private val _TITLE_HTML = Configuration.getHTMLTitle()
   private val _PRIVATE_KEY = Configuration.getStringValue(Configuration._MAIL_AUTO_SEND_PRIVATE_KEY)
   private val _DAY_DURATION = Configuration.getIntValue(Configuration._MAIL_AUTO_SEND_DAY_DURATION)
@@ -34,15 +37,15 @@ object SendMail extends Controller with Secured {
 	      val generateURL = buildUrl(username, addressMail)
 	      sendMail(addressMail, generateURL)
 	  	
-				Ok(Json.toJson(Map("status" -> "success", "return" -> addressMail)))
+				Ok(Json.obj("status" -> "success", "return" -> addressMail))
 	  	} else {
 	  	  
-	  		Ok(Json.toJson(Map("status" -> "failed")))
+	  		Ok(Json.obj("status" -> "failed"))
 	  	}  
     } catch {
       case e => {
         Logger.error(e.getMessage(), e)
-        Ok(Json.toJson(Map("status" -> "failed"))) 
+        Ok(Json.obj("status" -> "failed")) 
       }
     }
   }
@@ -66,7 +69,7 @@ object SendMail extends Controller with Secured {
 	      Logger.info("send notification new media to user")
 	      Results.Ok
 	    } else {
-	      Logger.error("Try to access at notifyNewPhoto service on SendMail controller with wrong private key [ " + key + " ]")
+	      Logger.error("access at notifyNewPhoto service on SendMail controller with wrong private key [ " + key + " ]")
 	      Results.Unauthorized
 	    }  
     } catch {

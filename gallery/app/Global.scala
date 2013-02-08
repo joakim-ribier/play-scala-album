@@ -45,6 +45,7 @@ object Global extends GlobalSettings {
     } else {
     	MDCUtils.closeSession()
     }
+    Logger.info("onRouteRequest " + request.path)
     super.onRouteRequest(request)
   }
   

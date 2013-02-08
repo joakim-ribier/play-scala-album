@@ -24,11 +24,14 @@ import utils.Configuration
 import play.api.i18n.Messages
 import play.api.i18n.Lang
 import play.api.data.Mapping
-import models.Notification
 import play.api.libs.json.Json
+import models.notification.Notification
+import org.slf4j.LoggerFactory
 
 object Administrator extends Controller with Secured {
 
+  private val Logger = LoggerFactory.getLogger("Administrator")
+  
   private val _TITLE_HTML: String = Configuration.getHTMLTitle()
   private val addMediaForm = Form (
     tuple (
@@ -119,7 +122,7 @@ object Administrator extends Controller with Secured {
   }
   
   def saveNewNotification = withAdmin { username => implicit request =>
-    Logger.info("try to save new notification")
+    Logger.info("save new notification")
     val userTemplate = Authentication.userTemplate(username, request.session)
     createNewNotificationForm.bindFromRequest.fold(
       formWithErrors => Redirect(routes.Administrator.notification).flashing("notifcation-create-error" -> Messages("app.global.error")(Lang("fr"))),
@@ -136,7 +139,7 @@ object Administrator extends Controller with Secured {
   }
   
   def saveNewNotificationAlarm = withAdmin { username => implicit request =>
-    Logger.info("try to save new notification alarm")
+    Logger.info("save new notification alarm")
     val userTemplate = Authentication.userTemplate(username, request.session)
     createNewNotificationAlarmForm.bindFromRequest.fold(
       formWithErrors => Redirect(routes.Administrator.notification).flashing("notification-alarm-create-error" -> Messages("app.global.error.missing.field.form")(Lang("fr"))),
@@ -158,24 +161,24 @@ object Administrator extends Controller with Secured {
   }
   
   def deleteNotificationMessage = withAdmin { username => implicit request =>
-  	Logger.info("try to delete notification message")
+  	Logger.info("delete notification message")
     val value = request.body.asFormUrlEncoded.get("messageid-post")
     val result = Notification.removeMessage(value(0).toLong)
     if (result == 1) {
-    	Ok(Json.toJson(Map("status" -> "success")))
+    	Ok(Json.obj("status" -> "success"))
     } else {
-      Ok(Json.toJson(Map("status" -> "failed", "error-message" -> Messages("page.adminNotification.delete.message.failed")(Lang("fr")))))
+      Ok(Json.obj("status" -> "failed", "error-message" -> Messages("page.adminNotification.delete.message.failed")(Lang("fr"))))
     }
   }
   
   def deleteNotification = withAdmin { username => implicit request =>
-  	Logger.info("try to delete notification")
+  	Logger.info("delete notification")
     val value = request.body.asFormUrlEncoded.get("notificationid-post")
     val result = Notification.remove(value(0).toLong)
     if (result > 0) {
-    	Ok(Json.toJson(Map("status" -> "success")))
+    	Ok(Json.obj("status" -> "success"))
     } else {
-      Ok(Json.toJson(Map("status" -> "failed", "error-message" -> Messages("page.adminNotification.delete.failed")(Lang("fr")))))
+      Ok(Json.obj("status" -> "failed", "error-message" -> Messages("page.adminNotification.delete.failed")(Lang("fr"))))
     }
   }
 }

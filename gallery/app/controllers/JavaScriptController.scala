@@ -7,15 +7,17 @@ import play.api.i18n.Lang
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.nio.charset.Charset
+import org.slf4j.LoggerFactory
 
 object JavaScriptController extends Controller {
 
+  private val Logger = LoggerFactory.getLogger("JavaScriptController")
+  
   private val _DEFAULT_RETURN = ""
     
   def i18n(lang: String) = Action { request =>
     val file = formatMessagesLangFile(lang)
     if (file != null) {
-	    Logger.info("Loaded i18n " + file)
 	    var properties = _DEFAULT_RETURN
 	    try {
 	      val in: InputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(file)

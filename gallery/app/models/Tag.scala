@@ -1,6 +1,7 @@
 package models
 
 import anorm._
+import db.TagDB
 
 case class Tag(id: Pk[Long] = NotAssigned, tag: String)
 
