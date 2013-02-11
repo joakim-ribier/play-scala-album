@@ -37,7 +37,7 @@ object Administrator extends Controller with Secured {
     tuple (
       "filename" -> text,
       "type" -> text,
-      "title" -> text.verifying(Constraints.maxLength(25)),
+      "title" -> text.verifying(Constraints.maxLength(30)),
       "description" -> optional(text),
       "public" -> boolean,
       "tags" -> list(text)

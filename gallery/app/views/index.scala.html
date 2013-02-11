@@ -7,8 +7,8 @@
 }
 
 @titleFormat(title: String) = @{
-	if (title.length == 25) {
-		title + " ..."
+	if (title.length > 25) {
+		title.substring(0, 25) + " ..."
 	} else {
 		title
 	}
@@ -135,9 +135,9 @@
 								
 								<div class="index-application-photo-title">
 									@if(media.mediaType.label == "photo"){
-										@titleFormat(media.title)
+										@titleFormat(media.title)<br />&nbsp;
 									} else {
-										@titleFormat(media.title)&nbsp;(&nbsp;
+										@titleFormat(media.title)<br />&nbsp;(&nbsp;
 										<span onclick="fadeInPhoto(@media.id, '@media.filename', '@media.mediaType.label', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');">
 											@Messages("app.global.video.description.full.screen")(Lang("fr"))
 										</span>&nbsp;)
@@ -151,7 +151,7 @@
 								<div class="index-application-media-img">
 									<img src="@routes.Assets.at("images/nophotox200x150.png")" />
 								</div>
-								<div class="index-application-photo-title">@Messages("page.index.no.photo.label")(Lang("fr"))</div>
+								<div class="index-application-photo-title">@Messages("page.index.no.photo.label")(Lang("fr"))<br />&nbsp;</div>
 							</div>
 						}
 					</div>
