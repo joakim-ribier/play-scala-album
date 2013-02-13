@@ -242,7 +242,45 @@ function closeNotification(notificationId) {
 	}
 }
 
+function ifCheckIENavigator() {
+	if (navigator.appName == "Microsoft Internet Explorer") {
+		$('#app-message').fadeIn();
+		$('#app-message').html(getI18NValue('page.main.update.site.ie.redirection.html'));
+		setTimeout(function() {
+		  $('#app-message').fadeOut();
+		}, 15000);
+	}
+}
 $(document).ready(function() {
+	
+	$.post('/album/get/post/value/from/key',
+		{'configuration-key': 'app.default.lang'},
+		function(data) {
+			switch (data['status']) {
+				case 'success':
+					loadI18NFile('/album/i18n/lang/', data['value']);
+					ifCheckIENavigator();
+					break;
+				case 'nothing' :
+				case 'failed' :
+				default :
+					// no value for app.default.lang key
+			}
+	});
+		
+	$.post('/album/get/post/value/from/key',
+		{'configuration-key': 'app.google.analytics'},
+		function(data) {
+			switch (data['status']) {
+				case 'success':
+					$('head').append('<script type="text/javascript">' + data['value'] + '</script>');
+					break;
+				case 'nothing' :
+				case 'failed' :
+				default :
+					// no value for app.google.analytic key
+			}
+	});
 	
 	$("#add-new-tag-input").keypress(function(event) {
 		if (event.which == 32) {
@@ -325,16 +363,6 @@ $(document).ready(function() {
 		var numberPage = $('#index-application-page-number-value').html();
 		var url = '/album/page/' + numberPage + '/tags/' + search;
 		$('#index-tag-search-title-href').attr("href", url);
-	});
-	
-	$(function() {
-		if (navigator.appName == "Microsoft Internet Explorer") {
-			$('#app-message').fadeIn();
-			$('#app-message').html(getI18NValue('page.main.update.site.ie.redirection.html'));
-			setTimeout(function() {
-			  $('#app-message').fadeOut();
-			}, 15000);
-		}
 	});
 	
 	$("#admin-photo-list").live("click", function() {

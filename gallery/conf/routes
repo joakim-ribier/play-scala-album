@@ -27,6 +27,7 @@ GET		/album/get/media/video/standard/:file																controllers.Applicatio
 
 GET		/album/configuration													controllers.Application.configuration
 POST	/album/configuration													controllers.Application.createAdministrator
+POST	/album/get/post/value/from/key											controllers.Application.getStringPostValueFromKey
 
 
 # SEND MAIL CONTROLLER

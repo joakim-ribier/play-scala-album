@@ -248,4 +248,18 @@ object Application extends Controller with Secured {
   def getVideoInUploadDirectory(file: String) = withAuth { username => implicit request =>
     getFile(Configuration.getMediaVideoFolderUploadDirectory(), file)(request)
   }
+  
+  def getStringPostValueFromKey = Action { implicit request =>
+  	val keyTab = request.body.asFormUrlEncoded.get("configuration-key")
+  	if (!keyTab.isEmpty) {
+  	  val value = Configuration.getStringValue(keyTab(0).toString())
+  	  if (!value.isEmpty()) {
+  	  	Ok(Json.obj("status" -> "success", "value" -> value))
+  	  } else {
+  	    Ok(Json.obj("status" -> "nothing"))
+  	  }
+  	} else {
+  	  Ok(Json.obj("status" -> "nothing"))
+  	}
+  }
 }
