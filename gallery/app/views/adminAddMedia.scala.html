@@ -11,16 +11,16 @@
 			<div id="administrator-content-add-new-photo-img">
 			@if(form("filename").value) {
 				@if(form("filename").value.get == "nophoto") {
-					<img src="@routes.Assets.at("images/nophotox200x150.png")" />
+					<img src="@routes.Assets.at("images/nophotox200x150.png")" alt="photo" />
 				} else {
 					@if(form("type").value.get == "photo") {
-						<img src="/album/get/photo/upload/thumbnail/@form("filename").value.get" />
+						<img src="/album/get/photo/upload/thumbnail/@form("filename").value.get" alt="photo" />
 					} else {
 						<video width="400" height="300" controls="controls" src="/album/get/media/video/upload/@form("filename").value.get">@Messages("app.global.video.description.defaut")(Lang("fr"))</video>					
 					}
 				}
 			} else {
-				<img src="@routes.Assets.at("images/nophotox200x150.png")" />
+				<img src="@routes.Assets.at("images/nophotox200x150.png")" alt="photo" />
 			}
 			</div>
 					

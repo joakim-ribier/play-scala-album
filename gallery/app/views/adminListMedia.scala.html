@@ -18,12 +18,12 @@
 		}
 		@for(photo <- photos) {
 			<div class="administrator-content-list-photo rotate-deg-minus@random">
-				<img src="/album/get/photo/upload/thumbnail/@photo" onclick="accesstoNewPhoto('@photo');" />
+				<img src="/album/get/photo/upload/thumbnail/@photo" onclick="accesstoNewPhoto('@photo');" alt="photo" />
 			</div>
 		}
 		@for(i <- 1 to compute(photos)) {
 			<div class="administrator-content-list-photo rotate-deg-minus@random">
-				<img src="@routes.Assets.at("images/nophotox200x150.png")" />
+				<img src="@routes.Assets.at("images/nophotox200x150.png")" alt="photo" />
 			</div>
 		}
 	</div>

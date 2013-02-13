@@ -100,14 +100,14 @@
 						@if(page == 1){
 							<span>@Messages("page.index.previous.page.label")(Lang("fr"))</span>
 						} else {
-							<a href="/album/page/@previousPage(page)/tags/@byTags" />@Messages("page.index.previous.page.label")(Lang("fr"))</a>
+							<a href="/album/page/@previousPage(page)/tags/@byTags">@Messages("page.index.previous.page.label")(Lang("fr"))</a>
 						}
 					</div>
 					<div class="index-application-photos-menu-content-tool">
 						@if(page == count){
 							<span>@Messages("page.index.next.page.label")(Lang("fr"))</span>
 						} else {
-							<a href="/album/page/@nextPage(page)/tags/@byTags" />@Messages("page.index.next.page.label")(Lang("fr"))</a>
+							<a href="/album/page/@nextPage(page)/tags/@byTags">@Messages("page.index.next.page.label")(Lang("fr"))</a>
 						}
 					</div>
 					<div id="index-application-page-number">@Messages("page.index.number.page.label")(Lang("fr")) <span id="index-application-page-number-value">@page</span> / @count</div>
@@ -127,7 +127,7 @@
 
 								<div class="index-application-media-img">
 									@if(media.mediaType.label == "photo"){
-										<img src="/album/get/thumbnail/photo/@media.filename" />
+										<img src="/album/get/thumbnail/photo/@media.filename" alt="photo" />
 									} else {
 										<video width="200" height="150" controls="controls" src="/album/get/media/video/standard/@media.filename">@Messages("app.global.video.description.defaut")(Lang("fr"))</video>
 									}
@@ -149,7 +149,7 @@
 						@for(i <- 1 to compute(medias)) {
 							<div class="index-application-photo rotate-deg-minus@random" ">
 								<div class="index-application-media-img">
-									<img src="@routes.Assets.at("images/nophotox200x150.png")" />
+									<img src="@routes.Assets.at("images/nophotox200x150.png")" alt="photo" />
 								</div>
 								<div class="index-application-photo-title">@Messages("page.index.no.photo.label")(Lang("fr"))<br />&nbsp;</div>
 							</div>
@@ -162,7 +162,7 @@
 				@for(tag <- tags) {
 					<div class="index-tag-already-exists">@tag</div>
 				}
-				<div id="index-tag-search-title"><a id="index-tag-search-title-href" href="/album/page/@page/tags/all" />@Messages("page.index.search.by.tag.title")(Lang("fr"))</a></div>
+				<div id="index-tag-search-title"><a id="index-tag-search-title-href" href="/album/page/@page/tags/all">@Messages("page.index.search.by.tag.title")(Lang("fr"))</a></div>
 				<div id="index-tag-search-title-explication">@Messages("page.index.search.by.tag.explication")(Lang("fr"))</div>
 			</div>
 			
