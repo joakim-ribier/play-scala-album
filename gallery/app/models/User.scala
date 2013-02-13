@@ -27,6 +27,16 @@ object User {
     return false
   }
   
+  def createUser(login: String, password: String, email: String) : Boolean = {
+    if ((!email.isEmpty() && email != null) && createUser(login, password)) {
+      val user = findUser(login)
+      if (user.isDefined) {
+      	return setAddressMail(user.get, email)
+      }
+    }
+    return false
+  }
+  
   def createUser(login: String, password: String) : Boolean = {
     if (!checkNotNullOrNotEmpty(login, password) || UserDB.findByLogin(login).isDefined) {
     	return false;

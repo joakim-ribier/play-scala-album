@@ -36,9 +36,10 @@ object Application extends Controller with Secured {
   private val formNewAdmin = Form (
     tuple (
       "login" -> text,
-      "password" -> text
+      "password" -> text,
+      "email" -> text
     ) verifying (Messages("application.add.new.admin.verifying.text")(Lang("fr")), result => result match {
-      case (login, password) => User.createUser(login, password)
+      case (login, password, email) => User.createUser(login, password, email)
     })
   )
   
@@ -192,7 +193,7 @@ object Application extends Controller with Secured {
     if (u.isDefined) {
        Redirect(routes.Application.index)
     } else {
-      val filledForm = formNewAdmin.fill(Configuration.getAdminLogin(), null)
+      val filledForm = formNewAdmin.fill(Configuration.getAdminLogin(), null, null)
       Ok(views.html.configuration(filledForm, _TITLE_HTML))   
     }
   }

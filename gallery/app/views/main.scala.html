@@ -92,7 +92,7 @@
     		}
     		</div>
     		
-    		@if(user != null && user.login != play.Play.application().configuration().getString("app.connection.admin.login")) {
+    		@if(user != null) {
     			@if(!user.email.isDefined || user.email.get == "nothing") {
     				<div id="footer-information-email">
     					<input type="checkbox" id="footer-information-email-ckx">

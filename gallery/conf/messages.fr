@@ -83,7 +83,8 @@ page.adminAddPhoto.form.field.public=rendre la photo public
 page.adminAddPhoto.form.field.submit=Sauvegarder le média
 page.adminAddPhoto.form.title=Informations supplémentaires sur le média
 
-page.configuration.form.field.password=Mot de passe
+page.configuration.form.field.password=Mot de passe obligatoire
+page.configuration.form.field.email=Mail obligatoire
 page.configuration.form.field.submit=Créer le compte administrateur
 page.configuration.form.title=Configuration de l''application
 
