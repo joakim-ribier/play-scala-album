@@ -46,6 +46,9 @@ object Configuration {
   val _TABLE_NOTIFICATION_KEY = "app.db.tbl.notification"
   val _TABLE_NOTIFICATION_USER_KEY = "app.db.tbl.notificationuser"
     
+  val _TABLE_MEDIA_POST_KEY = "app.db.tbl.mediapost"
+  val _TABLE_MEDIA_POST_MESSAGE_KEY = "app.db.tbl.mediapostmessage"
+    
   def getStringValue(key: String) : String = {
     return Play.application().configuration().getString(key)
   }

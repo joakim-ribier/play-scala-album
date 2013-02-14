@@ -6,10 +6,13 @@ import play.api.mvc.RequestHeader
 import play.api.mvc.Handler
 import play.api.mvc.Security
 import utils._
+import org.slf4j.LoggerFactory
 
 object Global extends GlobalSettings {
 
-  val appTablesDB = List(
+  private val Logger = LoggerFactory.getLogger("GlobalSettings")
+  
+  private val appTablesDB = List(
       Configuration._TABLE_USER_KEY,
       Configuration._TABLE_EMAIL_KEY,
       Configuration._TABLE_MEDIA_KEY,
@@ -18,23 +21,29 @@ object Global extends GlobalSettings {
       Configuration._TABLE_MESSAGE_KEY,
       Configuration._TABLE_MESSAGE_NOTIFICATION_KEY,
       Configuration._TABLE_NOTIFICATION_KEY,
-      Configuration._TABLE_NOTIFICATION_USER_KEY)
+      Configuration._TABLE_NOTIFICATION_USER_KEY,
+      Configuration._TABLE_MEDIA_POST_KEY,
+      Configuration._TABLE_MEDIA_POST_MESSAGE_KEY)
   
   override def onStart(app: Application) {
-    Logger.info(getApplicationName() + " application has started")
-    
-    getValue("app.version")
-    getValue(Configuration._APP_TOKEN)
+    Logger.info("{} application has started",
+        play.Configuration.root().getString(Configuration._APP_TITLE))
+        
+    Logger.info("Version {}",
+        play.Configuration.root().getString("app.version"))
      
-    checkApplicationConnection()
+    Logger.info("### check file configuration")
+    logAndReturnValue(Configuration._APP_ADMIN_LOGIN)
+    logAndReturnValue(Configuration._APP_CONNECTION_DATE)
+    logAndReturnValue(Configuration._APP_HTML_TITLE)
+    logAndReturnValue("app.google.analytics")
+    
     checkDBConfiguration()
     checkFolderStorePhotos();
-    
-    getValue("app.google.analytics")
   }
   
   override def onStop(app: Application) {
-    Logger.info(getApplicationName() + " application shutdown...")
+    Logger.info("{} application shutdown...", getApplicationName())
   }
   
   override def onRouteRequest(request: RequestHeader): Option[Handler] = {
@@ -45,36 +54,29 @@ object Global extends GlobalSettings {
     } else {
     	MDCUtils.closeSession()
     }
-    Logger.info("onRouteRequest " + request.path)
     super.onRouteRequest(request)
   }
   
-  def checkApplicationConnection() {
-    getValue(Configuration._APP_CREATE_NEW_USER_CODE)
-    getValue(Configuration._APP_ADMIN_LOGIN)
-    getValue(Configuration._APP_CONNECTION_DATE)
-    getValue(Configuration._APP_HTML_TITLE)
-  }
-
-  def checkDBConfiguration() {
-    Logger.info("Check database configuration")
+  private def checkDBConfiguration() {
+    Logger.info("## check database tables")
     for (table <- appTablesDB) {
-      getValue(table)
+      logAndReturnValue(table)
     }
   }
   
-  def getApplicationName() = getValue(Configuration._APP_TITLE)
+  private def getApplicationName() = logAndReturnValue(Configuration._APP_TITLE)
   
-  def getValue(key: String) : String = {
+  private def logAndReturnValue(key: String) : String = {
     val value: String = play.Configuration.root().getString(key)
-    if (value != null) {
-      Logger.info("Value {" + value + "} for Key {" + key + "} found in configuration file")
-      return value
+    if (value == null) {
+    	throw new IllegalArgumentException("Value for Key {" + key + "} not found in configuration file"); 
     }
-    throw new IllegalArgumentException("Value for Key {" + key + "} not found in configuration file"); 
+    Logger.info(key + ":" + value)
+    return value
   }
   
-  def checkFolderStorePhotos() {
+  private def checkFolderStorePhotos() {
+    Logger.info("# check folders")
     createDirectoryIfNotExists(Configuration._APP_UPLOAD_PHOTO)
     createDirectoryIfNotExists(Configuration._APP_UPLOAD_STANDARD_PHOTO)
     createDirectoryIfNotExists(Configuration._APP_UPLOAD_THUMBNAIL_PHOTO)
@@ -88,12 +90,13 @@ object Global extends GlobalSettings {
     createDirectoryIfNotExists(Configuration._APP_MEDIA_VIDEO_UPLOAD_FOLDER)
   }
   
-  def createDirectoryIfNotExists(keyDirectory: String) {
-    val directory: String = getValue(keyDirectory)
+  private def createDirectoryIfNotExists(keyDirectory: String) {
+    val directory: String = logAndReturnValue(keyDirectory)
     if (!new File(directory).isDirectory()) {
-      val mkdir = new File(directory).mkdir();
-      if (mkdir) {
-        Logger.info("Directory {" + directory + "} created")
+      if(new File(directory).mkdir()) {
+        Logger.info("Directory {} created", directory)
+      } else {
+        Logger.error("Directory {} created", directory)
       }
     }
   }
