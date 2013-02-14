@@ -13,8 +13,8 @@ import utils.MDCUtils
 import utils.Configuration
 import play.api.i18n.Messages
 import play.api.i18n.Lang
-import utils.TokenUtils
 import org.slf4j.LoggerFactory
+import utils.EncoderUtils
 
 object Authentication extends Controller {
   
@@ -63,7 +63,7 @@ object Authentication extends Controller {
       	var message = "nothing"
 			  if (value._4.isDefined && value._5.isDefined) {
 			    if (email.get.equals("nothing")) {
-			    	val tokenTo = TokenUtils.validationAddressMail(username, value._4.get)
+			    	val tokenTo = EncoderUtils.generateTokenForEmailValidation(username, value._4.get)
 	    			if (tokenTo.equals(value._5.get)) {
 	    				val user = User.findUser(username)
   						if (user.isDefined && User.setAddressMail(user.get, value._4.get)) {

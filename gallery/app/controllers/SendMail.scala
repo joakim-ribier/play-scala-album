@@ -6,7 +6,6 @@ import play.api.Play.current
 import play.api.libs.json.Json
 import java.net.URLDecoder
 import utils.Configuration
-import utils.TokenUtils
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.i18n.Lang
@@ -19,6 +18,7 @@ import models.UserEmail
 import java.util.Locale
 import models.MediaType
 import org.slf4j.LoggerFactory
+import utils.EncoderUtils
 
 object SendMail extends Controller with Secured {
 
@@ -139,7 +139,7 @@ object SendMail extends Controller with Secured {
   
   private def buildUrl(username: String, addressMail: String) : String = {
     val validationURL = "/album/user/new/address/mail/validation/"
-    val token = TokenUtils.validationAddressMail(username, addressMail)
+    val token = EncoderUtils.generateTokenForEmailValidation(username, addressMail)
     return Configuration.getHost() + validationURL + addressMail + "/token/" + token
   }
   
