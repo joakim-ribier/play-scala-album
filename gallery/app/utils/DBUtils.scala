@@ -1,5 +1,15 @@
 package utils
 
+object OrderEnum extends Enumeration {
+  val ASC = new Value(1, "asc")
+  val DESC = new Value(2, "desc")
+  class Value(id:Int, value: String) extends Val(id, value) {
+  	val dbId = id
+    val label = value
+  }
+}
+import OrderEnum._
+
 object DBUtils {
 
   def formatSEQToString(list: Seq[Object]) : String = {

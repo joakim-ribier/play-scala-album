@@ -6,17 +6,26 @@ body {
 	font-size: 12px;
 }
 
+.clearboth {
+	clear: both;
+}
+
+.cursorpointer {
+	cursor: pointer;
+}
+
+.displaynone {
+	display: none;
+}
+
 button {  
 	padding: 5px;  
-  font-size: 15px;  
-    
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-
-  border: 1px solid rgb(0, 175, 202);
-  
-  cursor: pointer;
+  	font-size: 15px;  
+  	-webkit-border-radius: 5px;
+  	-moz-border-radius: 5px;
+  	border-radius: 5px;
+ 	border: 1px solid rgb(0, 175, 202);
+  	cursor: pointer;
 }
 
 input:focus {  
@@ -27,13 +36,11 @@ input:focus {
 
 input, textarea {  
 	padding: 5px;  
-  font-size: 15px;  
-    
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  
-  border: 1px solid rgb(0, 175, 202);  
+  	font-size: 15px;  
+  	-webkit-border-radius: 5px;
+  	-moz-border-radius: 5px;
+  	border-radius: 5px;
+  	border: 1px solid rgb(0, 175, 202);  
 }  
 
 input:focus, textarea:focus {  
@@ -158,7 +165,7 @@ input:focus, textarea:focus {
 }
 
 #content {
-	width: 1200px;
+	width: 1190px;
 	margin-left: auto;
 	margin-right: auto;
 	z-index: 0;

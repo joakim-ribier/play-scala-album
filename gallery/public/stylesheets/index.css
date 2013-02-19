@@ -35,8 +35,18 @@
 #index-application-page-number {
 	float: left;
 	padding: 10px;
-	cursor: pointer;
 	margin-left: 100px;
+}
+
+#index-application-page-comment-view {
+	float: left;
+	padding: 10px;
+	margin-left: 100px;
+}
+
+#index-application-page-refresh {
+	float: left;
+	padding: 10px;
 }
 
 #index-application-tag {
@@ -53,10 +63,10 @@
 
 	background-color: #FFFFFF;
 	-webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+  	-moz-border-radius: 5px;
+  	border-radius: 5px;
   
-  -webkit-box-shadow: 0px 0px 5px rgb(250, 199, 19);
+  	-webkit-box-shadow: 0px 0px 5px rgb(250, 199, 19);
 	-moz-box-shadow: 0px 0px 5px rgb(250, 199, 19);
 	box-shadow: 0px 0px 5px rgb(250, 199, 19);
 }
@@ -70,10 +80,10 @@
 	background-color: #FFFFFF;
 	
 	-webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+  	-moz-border-radius: 5px;
+  	border-radius: 5px;
   
-  -webkit-box-shadow: 0px 0px 5px rgb(0, 175, 202);
+  	-webkit-box-shadow: 0px 0px 5px rgb(0, 175, 202);
 	-moz-box-shadow: 0px 0px 5px rgb(0, 175, 202);
 	box-shadow: 0px 0px 5px rgb(0, 175, 202);
 }
@@ -105,10 +115,8 @@
 	
 	margin-top: 10px;
 	margin-bottom: 10px;
-	margin-left: 15px;
-	margin-right: 15px;
-
-	cursor: pointer;
+	margin-left: 14px;
+	margin-right: 14px;
 }
 
 .index-application-media-img {
@@ -116,16 +124,22 @@
 	height: 150px;
 	text-align: center;
 	background-color: #000000;
+	cursor: pointer;
 }
 
 .index-application-photo-title {
 	padding-top: 10px;
-	padding-bottom: 10px;
 	text-align: center;
 	background-color: #FFFFFF;
 }
 
-.index-application-photo-title span {
+.index-application-photo-title-view {
+	width: 100%;
+	text-align: right;
+}
+
+.index-application-photo-title-view img {
+	padding-right: 4px;
 }
 
 .index-application-photo-title span:hover {
@@ -240,4 +254,196 @@
 
 .pagination li.current a {
   background-color: rgb(250, 199, 19);
+}
+
+#index-application-content-comments {
+}
+
+#index-application-content-comments-left {
+	color: #FFFFFF;
+	width: 630px;
+	float: left;
+	margin-left: 10px;
+	margin-top: 20px;
+	margin-right: 20px;
+}
+
+#index-application-content-comments-right {
+	float: left;
+}
+
+#index-application-content-comments-right-media {
+	width: 510px;
+	background-color: #FFFFFF;
+	-webkit-box-shadow: 1px 1px 12px #000000;
+	-moz-box-shadow: 1px 1px 12px #000000;
+	box-shadow: 1px 1px 12px #000000;
+	margin-top: 25px;
+	-webkit-transform: rotate(-5deg);
+	-moz-transform: rotate(-5deg);
+	background-image : url('../images/kazakhstan_map.gif');
+	background-repeat: no-repeat; 
+}
+
+#index-application-content-comments-right-media-img {
+	margin-left: 310px;
+	-webkit-transform: rotate(+15deg);
+	-moz-transform: rotate(+15deg);
+	text-align: center;
+	margin-top: -90px;
+	
+	width: 200px;
+	height: 150px;
+}
+
+#index-application-content-comments-right-media-full-screen {
+	margin-top: -10px;
+}
+
+#index-application-content-comments-right-media-full-screen img {
+	-webkit-transform: rotate(-10deg);
+	-moz-transform: rotate(-10deg);
+}
+
+#index-application-content-comments-right-media-img-el {
+	background-color: #FFFFFF;
+	padding: 5px;
+	-webkit-box-shadow: 1px 1px 12px #000000;
+	-moz-box-shadow: 1px 1px 12px #000000;
+	box-shadow: 1px 1px 12px #000000;
+}
+
+#index-application-content-comments-right-media-description {
+	width: 450px;
+	padding: 30px;	
+	background-color: #000000;
+	color: #FFFFFF;
+	text-align: justify;
+	-webkit-box-shadow: 1px 1px 12px #000000;
+	-moz-box-shadow: 1px 1px 12px #000000;
+	box-shadow: 1px 1px 12px #000000;
+	
+	-webkit-transform: rotate(-5deg);
+	-moz-transform: rotate(-5deg);
+}
+
+#index-application-content-comments-right-media-title {
+	text-transform: uppercase;
+	font-size: 14px;
+	text-align: left;
+	-webkit-transform: rotate(+0deg);
+	-moz-transform: rotate(+0deg);
+	padding: 30px;
+}
+
+#index-application-content-comments-right-media-title span {
+	background-color: #FFFFFF;
+	padding: 10px;
+}
+
+#index-application-content-comments-left-nocomments {
+	text-align: center;
+	margin-top: 200px;
+	margin-bottom: 300px;
+	font-size: 16px;
+	font-weight: bold;
+	text-transform: uppercase;
+	-webkit-transform: rotate(-5deg);
+	-moz-transform: rotate(-5deg);
+}
+
+#index-application-media-number-on {
+	float: left;
+	margin-top: 10px;
+	margin-left: 110px;
+}
+
+#index-application-grid-small-view {
+	float: left;
+	padding: 10px;
+	margin-left: 110px;
+}
+
+#index-application-post-refresh {
+	float: left;
+	padding: 10px;
+}
+
+#index-application-content-comments-left-noemail {
+	text-align: justify;
+	-webkit-transform: rotate(-5deg);
+	-moz-transform: rotate(-5deg);
+	padding: 30px;
+}
+
+#index-application-content-comments-right-add-comment {
+	margin-top: 70px;
+	margin-bottom: 50px;
+	margin-left: 15px;
+	-webkit-box-shadow: 1px 1px 12px #000000;
+	-moz-box-shadow: 1px 1px 12px #000000;
+	box-shadow: 1px 1px 12px #000000;
+}
+
+#index-application-content-comments-left-comments {
+	background-color: #000000;
+	margin: 20px 0px 10px 0px;
+	-webkit-transform: rotate(-0deg);
+	-moz-transform: rotate(-0deg);
+}
+
+.index-application-content-comments-one-to-one {
+	color: #000000;
+	-webkit-transform: rotate(-0deg);
+	-moz-transform: rotate(-0deg);
+	margin-bottom: 10px;
+
+	border-style: dashed;
+	border-width: 0px 0px 1px 0px;
+	border-color: rgb(0, 175, 202); 
+}
+
+.index-application-content-comments-one-to-one-p {
+	background-color: #000000;
+	-webkit-box-shadow: 1px 1px 12px #000000;
+	-moz-box-shadow: 1px 1px 12px #000000;
+	box-shadow: 1px 1px 12px #000000;
+	-webkit-transform: rotate(-5deg);
+	-moz-transform: rotate(-5deg);
+	margin-top: -25px;
+}
+
+.index-application-content-comments-one-to-one-p p {
+	color: rgb(0, 175, 202);
+	font-weight: bold;
+	white-space: pre-line;
+	text-align: justify;
+	padding: 15px;
+}
+
+.index-application-content-comments-one-to-one-p textarea {
+	width: 98%;
+	background-color: transparent;
+	color: rgb(0, 175, 202);
+	font-weight: bold;
+}
+
+.index-application-content-comments-one-to-one-header-login {
+	padding: 0px 0px 1px 2px;
+	background-color: #FFFFFF;
+	margin-right: 5px;
+}
+
+.index-application-content-comments-one-to-one-header-login-span {
+	color: rgb(0, 175, 202);
+	font-weight: bold;
+	background-color: #FFFFFF;
+}
+
+.index-application-content-comments-one-to-one-footer {
+	text-align: right;
+	margin-top: -20px;
+	padding: 5px;
+	color: rgb(0, 175, 202);
+	font-weight: bold;
 }

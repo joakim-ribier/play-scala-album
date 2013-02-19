@@ -34,7 +34,7 @@ object Authentication extends Controller {
   )
   
   def login = Action { implicit request =>
-  	val u = User.findUser(Configuration.getAdminLogin())
+  	val u = User.findUser(Option.apply(Configuration.getAdminLogin()))
     if (u.isDefined) {
     	Ok(views.html.login(form, _TITLE_HTML, null))
     } else {
@@ -65,7 +65,7 @@ object Authentication extends Controller {
 			    if (email.get.equals("nothing")) {
 			    	val tokenTo = EncoderUtils.generateTokenForEmailValidation(username, value._4.get)
 	    			if (tokenTo.equals(value._5.get)) {
-	    				val user = User.findUser(username)
+	    				val user = User.findUser(Option.apply(username))
   						if (user.isDefined && User.setAddressMail(user.get, value._4.get)) {
   							email = value._4
   							message = Messages("application.create.new.user.email.success.html", email.get)(Lang("fr"))
@@ -124,5 +124,18 @@ object Authentication extends Controller {
   
   def userTemplate(username: String, session: Session) : UserTemplate = {
     return new UserTemplate(username, session.get(Configuration._SESSION_EMAIL_KEY))
+  }
+  
+  def buildFeedbackObjFromRequestOrKey(request: RequestHeader, messageKey: Option[String]) : Feedback = {
+    if (request.flash.get("app-message").isDefined) {
+  	  return new Feedback(request.flash.get("app-message").get, FeedbackClass.ok)
+    }
+    if (messageKey.isDefined) {
+      val message = Messages(messageKey.get)(Lang("fr"))
+      if (!message.equals(messageKey.get)) {
+      	return new Feedback(message, FeedbackClass.ok)
+      }
+    }
+    return null
   }
 }

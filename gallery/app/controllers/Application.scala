@@ -100,7 +100,7 @@ object Application extends Controller with Secured {
       }
       
     } catch {
-      case e => {
+      case e: Throwable => {
        Logger.error(e.getMessage(), e) 
        Redirect(routes.Application.index)
       }
@@ -120,7 +120,7 @@ object Application extends Controller with Secured {
         toJSON(media, isPreviousPhoto(media, mediaIds))
       }
     } catch {
-      case e => {
+      case e: Throwable => {
         Logger.error(e.getMessage(), e) 
         Ok(Json.obj("status" -> "failed"))
       }
@@ -140,7 +140,7 @@ object Application extends Controller with Secured {
         toJSON(media, isNextPhoto(media, mediaIds))
       }
     } catch {
-      case e => {
+      case e: Throwable => {
         Logger.error(e.getMessage(), e) 
         Ok(Json.obj("status" -> "failed"))
       }
@@ -189,7 +189,7 @@ object Application extends Controller with Secured {
   }
   
   def configuration = Action { implicit request =>
-    val u = User.findUser(Configuration.getAdminLogin())
+    val u = User.findUser(Option.apply(Configuration.getAdminLogin()))
     if (u.isDefined) {
        Redirect(routes.Application.index)
     } else {

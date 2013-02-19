@@ -251,6 +251,85 @@ function ifCheckIENavigator() {
 		}, 15000);
 	}
 }
+
+function deleteCommentWithConfirmationWindow(mediaId, page, byTags, commentId) {
+	var resultat = confirm(getI18NValue('js.global.delete.comment.answer')); 
+	if (resultat) {
+		$.post('/album/media/post/remove/comment',
+			{'commentid-post': commentId},
+			function(data) {
+				switch (data['status']) {
+					case 'success':
+					case 'nothing' :
+					case 'failed' :
+					default :
+						var url = '/album/get/media/' + mediaId + '/post/page/' + page + '/tags/' + byTags + '/message/key/' + data['key'];
+						window.location.replace(url);
+					
+				}
+		});
+	}
+}
+
+function updateComment(mediaId, page, byTags, commentId) {
+	var id = "#index-application-content-comments-one-to-one-textarea-" + commentId;
+	var value = $(id).val();
+	var commentTex = null;
+	if (value != null && value != '') {
+		var commentTex = value;
+	}
+	$.post('/album/media/post/update/comment',
+		{'commentid-post': commentId, 'commenttext-post': commentTex},
+		function(data) {
+			switch (data['status']) {
+				case 'success':
+				case 'nothing' :
+				case 'failed' :
+				default :
+					var url = '/album/get/media/' + mediaId + '/post/page/' + page + '/tags/' + byTags + '/message/key/' + data['key'];
+					window.location.replace(url);
+			}
+	});
+}
+
+function editComment(mediaId, page, byTags, commentId) {
+	var id = "#index-application-content-comments-one-to-one-p-" + commentId;
+	var commentTex = $(id + ' > p').html();
+	$('#index-application-content-comments-one-to-one-p-undo-' + commentId).html(commentTex);
+	var placeholder = getI18NValue('js.global.edit.textarea.placeholder');
+	var textarea = '<textarea id="index-application-content-comments-one-to-one-textarea-' + commentId + '" rows="5" placeholder="' + placeholder + '">' + commentTex + '</textarea>';
+	$(id + ' > p').html(textarea);
+	
+	var undoOnClick = "undoComment('" + mediaId + "', '" + page + "', '" + byTags + "', '" + commentId + "');";
+	$('#index-application-content-comment-undo-x20-' + commentId).attr("title", getI18NValue('js.global.edit.undo.img.title'));
+	$('#index-application-content-comment-undo-x20-' + commentId).attr("class", "index-application-content-comment-undo-x20 cursorpointer");
+	$('#index-application-content-comment-undo-x20-' + commentId).attr("src", "/assets/images/iconmonstr/undo-4-icon-white.x20.png");
+	$('#index-application-content-comment-undo-x20-' + commentId).attr("onclick", undoOnClick);
+	
+	var updateOnClick = "updateComment('" + mediaId + "', '" + page + "', '" + byTags + "', '" + commentId + "');";
+	$('#index-application-content-comment-update-x20-' + commentId).attr("title", getI18NValue('js.global.edit.save.img.title'));
+	$('#index-application-content-comment-update-x20-' + commentId).attr("class", "index-application-content-comment-update-ok-x20 cursorpointer");
+	$('#index-application-content-comment-update-x20-' + commentId).attr("src", "/assets/images/iconmonstr/check-mark-10-icon-white.x20.png");
+	$('#index-application-content-comment-update-x20-' + commentId).attr("onclick", updateOnClick);
+}
+
+function undoComment(mediaId, page, byTags, commentId) {
+	var commentText = $('#index-application-content-comments-one-to-one-p-undo-' + commentId).html();
+	var id = "#index-application-content-comments-one-to-one-p-" + commentId;
+	$(id + ' > p').html(commentText);
+	
+	$('#index-application-content-comment-undo-x20-' + commentId).removeAttr("title");
+	$('#index-application-content-comment-undo-x20-' + commentId).removeAttr("class");
+	$('#index-application-content-comment-undo-x20-' + commentId).attr("src", "/assets/images/iconmonstr/iconmonstr-undo-4-icon.x20.png");
+	$('#index-application-content-comment-undo-x20-' + commentId).removeAttr("onclick");
+	
+	var editOnClick = "editComment('" + mediaId + "', '" + page + "', '" + byTags + "', '" + commentId + "');";
+	$('#index-application-content-comment-update-x20-' + commentId).attr("title", getI18NValue('page.post.update.commment.img.title'));
+	$('#index-application-content-comment-update-x20-' + commentId).attr("class", "index-application-content-comment-update-x20 cursorpointer");
+	$('#index-application-content-comment-update-x20-' + commentId).attr("src", "/assets/images/iconmonstr/pencil-6-icon-white.x20.png");
+	$('#index-application-content-comment-update-x20-' + commentId).attr("onclick", editOnClick);
+}
+
 $(document).ready(function() {
 	
 	$.post('/album/get/post/value/from/key',
@@ -319,8 +398,8 @@ $(document).ready(function() {
 	$(".admin-tag-already-exists").live("click", function() {
 		var tagValue = $(this).html();
  		var contentInputTags = $("#administrator-content-add-new-photo-form-input-tags").html();
-   	contentInputTags = contentInputTags + '<div class="add-new-tag">' +  tagValue + '</div>';
-   	$('#administrator-content-add-new-photo-form-input-tags').html(contentInputTags);
+   		contentInputTags = contentInputTags + '<div class="add-new-tag">' +  tagValue + '</div>';
+   		$('#administrator-content-add-new-photo-form-input-tags').html(contentInputTags);
 		
 		var length = $('#administrator-content-add-new-photo-form-input-tags-hidden > *').length;
 		var contentInputHiddenTags = $('#administrator-content-add-new-photo-form-input-tags-hidden').html();
@@ -440,5 +519,85 @@ $(document).ready(function() {
 			html = getI18NValue('page.adminAddPhoto.form.field.description');
 		}
 		$("#administrator-content-add-new-photo-form-description-preview").html('<span>' + html + '</span>');	
+	});
+	
+	$(".index-application-photo-title-view-post").live("mouseover", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/iconmonstr-details-large-view-icon-R250G199B19.x20.png");
+	});
+	
+	$(".index-application-photo-title-view-post").live("mouseout", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/iconmonstr-details-large-view-icon.x20.png");
+	});
+	
+	$(".index-application-photo-title-view-full-screen").live("mouseover", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/iconmonstr-eye-3-icon-R250G199B19.x20.png");
+	});
+	
+	$(".index-application-photo-title-view-full-screen").live("mouseout", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/iconmonstr-eye-3-icon.x20.png");
+	});
+	
+	$(".index-application-photo-title-view-full-screen-x32").live("mouseover", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/iconmonstr-eye-3-icon-R250G199B19.x32.png");
+	});
+	
+	$(".index-application-photo-title-view-full-screen-x32").live("mouseout", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/iconmonstr-eye-3-icon.x32.png");
+	});
+	
+	$(".index-application-grid-small-view-img").live("mouseover", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/grid-small-view-icon-R250G199B19.x20.png");
+	});
+	
+	$(".index-application-grid-small-view-img").live("mouseout", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/grid-small-view-icon-white.x20.png");
+	});
+	
+	$(".index-application-content-comment-delete-x20").live("mouseover", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/x-mark-5-icon-RG250G199B19.x20.png");
+	});
+	
+	$(".index-application-content-comment-delete-x20").live("mouseout", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/x-mark-5-icon-white.x20.png");
+	});
+	
+	$(".index-application-content-comment-update-x20").live("mouseover", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/pencil-6-icon-R250G199B19.x20.png");
+	});
+	
+	$(".index-application-content-comment-update-x20").live("mouseout", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/pencil-6-icon-white.x20.png");
+	});
+	
+	$(".index-application-content-comment-update-ok-x20").live("mouseover", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/check-mark-10-icon-R250G199B19.20x.png");
+	});
+	
+	$(".index-application-content-comment-update-ok-x20").live("mouseout", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/check-mark-10-icon-white.x20.png");
+	});
+	
+	$(".index-application-content-comment-undo-x20").live("mouseover", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/undo-4-icon-r250g199B19.x20.png");
+	});
+	
+	$(".index-application-content-comment-undo-x20").live("mouseout", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/undo-4-icon-white.x20.png");
+	});
+	
+	$(".index-application-page-comment-view-img").live("mouseover", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/iconmonstr-details-large-view-icon-R250G199B19.x20.png");
+	});
+	
+	$(".index-application-page-comment-view-img").live("mouseout", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/details-large-view-icon-white.x20.png");
+	});
+	
+	$(".index-application-page-refresh-view").live("mouseover", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/refresh-5-icon-R250G199B19.x20.png");
+	});
+	
+	$(".index-application-page-refresh-view").live("mouseout", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/refresh-5-icon-white.x20.png");
 	});
 });

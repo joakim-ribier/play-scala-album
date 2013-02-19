@@ -29,7 +29,7 @@ object User {
   
   def createUser(login: String, password: String, email: String) : Boolean = {
     if ((!email.isEmpty() && email != null) && createUser(login, password)) {
-      val user = findUser(login)
+      val user = findUser(Option.apply(login))
       if (user.isDefined) {
       	return setAddressMail(user.get, email)
       }
@@ -53,7 +53,12 @@ object User {
     return true
   }
   
-  def findUser(login: String) = UserDB.findByLogin(login)
+  def findUser(login: Option[String]) : Option[User] = {
+    if (!login.isDefined) {
+      return Option.empty
+    }
+    return UserDB.findByLogin(login.get) 
+  }
   
   def isAdmin(login: String) : Boolean = {
     return login.equals(Configuration.getAdminLogin())

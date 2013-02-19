@@ -82,7 +82,7 @@ object Notification {
   }
   
   def setClosed(username: String, notificationId: Long) : Boolean = {
-    val user = User.findUser(username)
+    val user = User.findUser(Option.apply(username))
     if (user.isDefined) {
       val id = NotificationUserDB.insert(user.get.id.get, notificationId, true)
       return id.isInstanceOf[Long]

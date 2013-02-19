@@ -1,14 +1,16 @@
 js.global.send.user.email.failed=Impossible d''envoyer le courrier électronique, veuillez vérifier votre adresse mail puis recommencer.
 js.global.send.user.email.success.1=Le courrier électronique de validation a été envoyé à [ {0} ], veuillez vérifier votre boite de réception.
 js.global.send.user.email.success.2=<br />(si vous ne le recevez pas, vérifiez également votre dossier spam)
+js.global.delete.comment.answer=Voulez-vous vraiment supprimer ce commentaire ?
+js.global.edit.textarea.placeholder=modifiez le commentaire ici ...
+js.global.edit.undo.img.title=annuler la modification
+js.global.edit.save.img.title=enregistrer la modification
 
 app.global.error.label.title=ERREUR
 app.global.error=Un problème est survenu, veuillez recommencer ou contacter l''administrateur de l''application.
 app.global.error.missing.field.form=Veuillez s''il vous plaît remplir correctement le formulaire.
 app.global.error.invalid.field.form=Les données renseignées ne sont pas correctes.
-
-app.global.video.description.defaut=Vidéo ...
-app.global.video.description.full.screen=plein écran
+app.global.icon.refresh.title=rafraîchir
 
 administrator.add.new.photo.verifying.text=Impossible de sauvegarder la photo, veuillez vérifier le formulaire et recommencer.
 
@@ -21,22 +23,32 @@ application.create.new.user.email.redirection.to.login=<h3>INFORMATION</h3>Avant
 
 authentication.login.verifying.text=Connexion impossible, vérifiez votre identifiant et / ou mot de passe.
 
-sendmail.validation.email.subject= : Validation de l''adresse mail
-sendmail.validation.email.html=Ceci est un courrier électronique automatique envoyé par {0}.<br /><br />Vous avez demandé à ''<strong>Être informé des mises à jour du site</strong>'', vous recevez donc ce courrier électronique afin de valider votre adresse mail.<br /><br /><br />Pour valider votre adresse mail, veuillez cliquer sur le lien internet ci-dessous :<br /><a href="{1}">{1}<a>
-sendmail.validation.email.text=Ceci est un courrier électronique automatique envoyé par {0}.{2}{2}Vous avez demandé à ''Être informé des mises à jour du site'', vous recevez donc ce courrier électronique afin de valider votre adresse mail.{2}{2}{2}Pour valider votre adresse mail, veuillez cliquer sur le lien internet ci-dessous :{2}{1}
+sendmail.info.auto.html=Ceci est un courrier électronique automatique envoyé par {0}, merci de ne pas y répondre.<br /><br />Vous recevez ce courrier électronique car vous avez souhaité ''<strong>Être informé des mises à jour du site</strong>''.<br /><br /><br />
+sendmail.info.auto.text=Ceci est un courrier électronique automatique envoyé par {0}, merci de ne pas y répondre.{1}{1}Vous recevez ce courrier électronique car vous avez souhaité ''Être informé des mises à jour du site''.{1}{1}{1}
 
+sendmail.validation.email.html=Vous le recevez afin de valider votre adresse mail.<br /><br /><br />Pour valider votre adresse mail, veuillez cliquer sur le lien internet ci-dessous :<br /><a href="{0}">{0}<a>
+sendmail.validation.email.text=Vous le recevez afin de valider votre adresse mail.{1}{1}{1}Pour valider votre adresse mail, veuillez cliquer sur le lien internet ci-dessous :{1}{0}
+
+sendmail.notify.new.photo.html={1}, depuis le <strong>{0}</strong>  : <br /><i>(si les photos ne sont pas affichées, cliquez sur "Afficher les images" dans votre client de messagerie)</i><br /><br />{2}
+sendmail.notify.new.photo.text={1}, depuis le {0}.
+
+sendmail.comment.html=Il y a {0} sur le sujet ''<strong>{1}</strong>''.<br /><br />
+sendmail.comment.text=Il y a {0} sur le sujet ''{1}''.{2}{2}
+sendmail.comment.single=1 commentaire
+sendmail.comment.multi={0} commentaires
+
+sendmail.validation.email.subject= : Validation de l''adresse mail
 sendmail.notify.new.photo.subject= : Mise à jour ( {0} )
 sendmail.notify.new.photo.single.text={0} nouvelle photo
 sendmail.notify.new.photo.multiple.text={0} nouvelles photos
 sendmail.notify.new.photo.single.html=<strong>{0}</strong> nouvelle photo
 sendmail.notify.new.photo.multiple.html=<strong>{0}</strong> nouvelles photos
-sendmail.notify.new.photo.html=Ceci est un courrier électronique automatique envoyé par {0}.<br /><br />Vous recevez ce courrier électronique car vous avez souhaité être informé des mises à jour du site.<br /><br /><br />{2}, depuis le <strong>{1}</strong>  : <br /><i>(si les photos ne sont pas affichées, cliquez sur "Afficher les images" dans votre client de messagerie)</i><br /><br />{3}
-sendmail.notify.new.photo.text=Ceci est un courrier électronique automatique envoyé par {0}.{3}{3}Vous recevez ce courrier électronique car vous avez souhaité être informé des mises à jour du site.{3}{3}{3}{2}, depuis le {1}.
 sendmail.notify.new.video.single.text={0} nouvelle vidéo
 sendmail.notify.new.video.multiple.text={0} nouvelles vidéos
 sendmail.notify.new.video.single.html=<strong>{0}</strong> nouvelle vidéo
 sendmail.notify.new.video.multiple.html=<strong>{0}</strong> nouvelles vidéos
 sendmail.notify.new.media.and=et
+sendmail.comment.subject=Commentaire sur "{0}"
 
 page.login.form.field.login=Identifiant
 page.login.form.field.password=Mot de passe
@@ -97,3 +109,23 @@ page.index.search.by.tag.explication=( sélectionnez les étiquettes puis clique
 page.index.notification.title.html=FEN&Ecirc;TRE DE NOTIFICATION
 page.index.notification.title.close=fermer la fenêtre
 page.index.notification.title.checkbox=ouvrir la prochaine fois
+page.index.media.full.screen=plein écran
+page.index.media.post=écrire un commentaire
+page.index.media.comment.view=passer en mode commentaire
+
+page.post.comments.mode.thumbnail=passer en mode vignette
+page.post.new.comment.failed.html=<h3>ERREUR</h3>Il est impossible de <strong>poster</strong> ce commentaire, veuillez recommencer ou contacter l''administrateur de l''application.
+page.post.delete.commment.img.title=supprimer ce commentaire
+page.post.update.commment.img.title=modifier ce commentaire
+page.post.no.email.info=Pour recevoir une notification par courrier électronique à chaque nouveau commentaire, veuillez cocher "Être informé des mises à jour du site" et rentrer votre adresse de messagerie.
+page.post.first.person.add.new.comment=Soyez la première personne à écrire un commentaire !
+page.post.user.your.comment.login=vous même
+page.post.no.description.info=il n'y a pas de description pour cette photo ...
+page.post.add.new.comment.textarea=postez votre commentaire ici ...
+page.post.delete.comment.failed.html=<h3>ERREUR</h3>Il est <strong>impossible de supprimer</strong> ce commentaire, veuillez recommencer ou contacter l''administrateur de l''application.
+page.post.delete.comment.success.html=<h3>INFORMATION</h3>Le commentaire a bien été supprimé.
+page.post.update.comment.failed.html=<h3>ERREUR</h3>Il est <strong>impossible de modifier</strong> ce commentaire, veuillez recommencer ou contacter l''administrateur de l''application.
+page.post.update.comment.success.html=<h3>INFORMATION</h3>Le commentaire a bien été modifié.
+page.post.icon.avatar=avatar
+page.post.previous.media=précédente
+page.post.next.media=suivante

@@ -32,6 +32,7 @@ object Configuration {
   val _MAIL_FROM = "app.send.mail.from"
 	val _MAIL_AUTO_SEND_PRIVATE_KEY = "app.send.mail.auto.private.key"
 	val _MAIL_AUTO_SEND_DAY_DURATION = "app.send.mail.auto.day.duration"
+	val _MAIL_AUTO_SEND_COMMENTS_MINUTES_DURATION = "app.send.mail.auto.comment.minutes.duration"
   
   val _SESSION_EMAIL_KEY = "user_email"
   val _SESSION_ID_KEY = "sessionId"

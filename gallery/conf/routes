@@ -2,26 +2,39 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET		/								   														controllers.Authentication.redirect
+GET		/								   												controllers.Authentication.redirect
 GET		/album								   											controllers.Application.index
 
 # APPLICATION CONTROLLER
 
 GET		/album/get/photo/upload/thumbnail/:photo														controllers.Application.getPhotoInUploadThumbailDirectory(photo: String)
-GET		/album/get/photo/:photo																							controllers.Application.getPhotoInStandardDirectory(photo: String)
-GET		/album/get/thumbnail/photo/:photo																		controllers.Application.getPhotoInThumbailDirectory(photo: String)
-GET		/album/get/800x600/photo/:photo																			controllers.Application.getPhotoIn800x600Directory(photo: String)
-GET   /album/page/:page/tags/:tags    																		controllers.Application.page(page: String, tags: String)
+GET		/album/get/photo/:photo																			controllers.Application.getPhotoInStandardDirectory(photo: String)
+GET		/album/get/thumbnail/photo/:photo																controllers.Application.getPhotoInThumbailDirectory(photo: String)
+GET		/album/get/800x600/photo/:photo																	controllers.Application.getPhotoIn800x600Directory(photo: String)
+GET		/album/page/:page/tags/:tags    																controllers.Application.page(page: String, tags: String)
 
-GET   /album/photo/previous/:id/tags/:tags 																controllers.Application.getPreviousPhoto(id: String, tags: String)
-GET   /album/photo/next/:id/tags/:tags 																		controllers.Application.getNextPhoto(id: String, tags: String)
+GET		/album/photo/previous/:id/tags/:tags 															controllers.Application.getPreviousPhoto(id: String, tags: String)
+GET		/album/photo/next/:id/tags/:tags 																controllers.Application.getNextPhoto(id: String, tags: String)
 
-GET 	/album/user/new/address/mail/validation/:email/token/:token					controllers.Application.saveNewUserEmail(email: String, token: String)
+GET 	/album/user/new/address/mail/validation/:email/token/:token										controllers.Application.saveNewUserEmail(email: String, token: String)
 
-POST 	/album/user/popup/notify/close																			controllers.Application.userPopupNotifyClose
+POST 	/album/user/popup/notify/close																	controllers.Application.userPopupNotifyClose
 
-GET		/album/get/media/video/upload/:file																	controllers.Application.getVideoInUploadDirectory(file: String)
-GET		/album/get/media/video/standard/:file																controllers.Application.getVideoInStandardDirectory(file: String)
+GET		/album/get/media/video/upload/:file																controllers.Application.getVideoInUploadDirectory(file: String)
+GET		/album/get/media/video/standard/:file															controllers.Application.getVideoInStandardDirectory(file: String)
+
+
+# POST CONTROLLER
+
+GET		/album/get/media/:id/post/page/:page/tags/:tags							controllers.PostController.index(id: String, page: String, tags: String)
+GET		/album/get/media/:id/post/page/:page/tags/:tags/message/key/:key		controllers.PostController.indexWithMessageKey(id: String, page: String, tags: String, key: String)
+POST	/album/media/post/add/comment											controllers.PostController.addNewComment
+POST 	/album/media/post/remove/comment										controllers.PostController.removeComment
+POST 	/album/media/post/update/comment										controllers.PostController.updateComment
+
+GET		/album/get/previous/media/:mediaId/post/page/:page/tags/:tags			controllers.PostController.previous(mediaId: String, page: String, tags: String)
+GET		/album/get/next/media/:mediaId/post/page/:page/tags/:tags				controllers.PostController.next(mediaId: String, page: String, tags: String)
+
 
 # CONFIGURATION CONTROLLER
 
@@ -32,29 +45,30 @@ POST	/album/get/post/value/from/key											controllers.Application.getStringP
 
 # SEND MAIL CONTROLLER
 
-POST	/album/user/new/address/mail										controllers.SendMail.newEmail
+POST	/album/user/new/address/mail								controllers.SendMail.newEmail
 GET		/album/notify/new/photo/private/:key						controllers.SendMail.notifyNewPhoto(key: String)
+GET		/album/send/mail/comments/private/:key						controllers.SendMail.comments(key: String)
 
 
 # ADMINSTRATOR CONTROLLER
 
-GET		/album/admin							   									controllers.Administrator.index
-GET		/album/admin/list/photo												controllers.Administrator.listPhotoUploaded
-GET		/album/admin/add/new/photo/:name							controllers.Administrator.addNewPhoto(name: String)
+GET		/album/admin							   		controllers.Administrator.index
+GET		/album/admin/list/photo							controllers.Administrator.listPhotoUploaded
+GET		/album/admin/add/new/photo/:name				controllers.Administrator.addNewPhoto(name: String)
 GET		/album/admin/media/redirect/add/video/:file		controllers.Administrator.redirectToAddVideo(file: String)
 
-POST 	/album/upload																	controllers.Administrator.upload
-POST 	/album/saveMedia															controllers.Administrator.saveMedia
-GET		/album/admin/notification											controllers.Administrator.notification
-POST 	/album/admin/notification/message/save				controllers.Administrator.saveNewNotification
-POST 	/album/admin/notification/save								controllers.Administrator.saveNewNotificationAlarm
-POST 	/album/admin/notification/message/delete			controllers.Administrator.deleteNotificationMessage
-POST 	/album/admin/notification/delete							controllers.Administrator.deleteNotification
+POST 	/album/upload									controllers.Administrator.upload
+POST 	/album/saveMedia								controllers.Administrator.saveMedia
+GET		/album/admin/notification						controllers.Administrator.notification
+POST 	/album/admin/notification/message/save			controllers.Administrator.saveNewNotification
+POST 	/album/admin/notification/save					controllers.Administrator.saveNewNotificationAlarm
+POST 	/album/admin/notification/message/delete		controllers.Administrator.deleteNotificationMessage
+POST 	/album/admin/notification/delete				controllers.Administrator.deleteNotification
 
 # AUTHENTICATION CONTROLLER
 
-GET		/album/login																	controllers.Authentication.login
-GET		/album/logout																	controllers.Authentication.logout
+GET		/album/login															controllers.Authentication.login
+GET		/album/logout															controllers.Authentication.logout
 POST	/album/authenticate														controllers.Authentication.authenticate
 GET		/album/authenticate														controllers.Authentication.redirectAuthenticate
 

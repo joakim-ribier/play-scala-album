@@ -55,6 +55,15 @@
 	display
 }
 
+@returnCommentViewUrl(medias: Seq[Media], page: Int, byTags: String) = @{
+  if (!medias.isEmpty) {
+  	val mediaId = medias.head.id
+  	"/album/get/media/" + mediaId + "/post/page/" + page + "/tags/" + byTags	
+  } else {
+	"/album"
+  }
+}
+
 @main(title, feedback, user) {
 
 	<div id="index-application">
@@ -111,6 +120,16 @@
 						}
 					</div>
 					<div id="index-application-page-number">@Messages("page.index.number.page.label")(Lang("fr")) <span id="index-application-page-number-value">@page</span> / @count</div>
+					<div id="index-application-page-comment-view">
+						<a href="@returnCommentViewUrl(medias, page, byTags)">
+							<img class="index-application-page-comment-view-img cursorpointer" src="@routes.Assets.at("images/iconmonstr/details-large-view-icon-white.x20.png")" title="@Messages("page.index.media.comment.view")(Lang("fr"))" alt="media" />
+						</a>
+					</div>
+					<div id="index-application-page-refresh">
+						<a href="/album">
+							<img class="index-application-page-refresh-view cursorpointer" src="@routes.Assets.at("images/iconmonstr/refresh-5-icon-white.x20.png")" title="@Messages("app.global.icon.refresh.title")(Lang("fr"))" alt="media" />
+						</a>
+					</div>
 				</div>
 			</div>
 			
@@ -119,29 +138,23 @@
 				<div id="index-application-photos">
 					@for(media <- medias) {
 							
-							@if(media.mediaType.label == "photo"){
-								<div class="index-application-photo rotate-deg-minus@random" onclick="fadeInPhoto(@media.id, '@media.filename', '@media.mediaType.label', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');">
-							} else {
-								<div class="index-application-photo rotate-deg-minus@random">							
-							}
-
+							<div class="index-application-photo rotate-deg-minus@random">							
 								<div class="index-application-media-img">
 									@if(media.mediaType.label == "photo"){
-										<img src="/album/get/thumbnail/photo/@media.filename" alt="photo" />
+										<img src="/album/get/thumbnail/photo/@media.filename" alt="media" onclick="fadeInPhoto(@media.id, '@media.filename', '@media.mediaType.label', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');" />
 									} else {
-										<video width="200" height="150" controls="controls" src="/album/get/media/video/standard/@media.filename">@Messages("app.global.video.description.defaut")(Lang("fr"))</video>
+										<video width="200" height="150" controls="controls" src="/album/get/media/video/standard/@media.filename" />
 									}
 								</div>
 								
 								<div class="index-application-photo-title">
-									@if(media.mediaType.label == "photo"){
-										@titleFormat(media.title)<br />&nbsp;
-									} else {
-										@titleFormat(media.title)<br />&nbsp;(&nbsp;
-										<span onclick="fadeInPhoto(@media.id, '@media.filename', '@media.mediaType.label', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');">
-											@Messages("app.global.video.description.full.screen")(Lang("fr"))
-										</span>&nbsp;)
-									}
+									@titleFormat(media.title)
+									<div class="index-application-photo-title-view cursorpointer">
+										<img class="index-application-photo-title-view-full-screen" src="@routes.Assets.at("images/iconmonstr/iconmonstr-eye-3-icon.x20.png")" title="@Messages("page.index.media.full.screen")(Lang("fr"))" alt="media" onclick="fadeInPhoto(@media.id, '@media.filename', '@media.mediaType.label', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');" />
+										<a href="/album/get/media/@media.id/post/page/@page/tags/@byTags">
+											<img class="index-application-photo-title-view-post" src="@routes.Assets.at("images/iconmonstr/iconmonstr-details-large-view-icon.x20.png")" title="@Messages("page.index.media.post")(Lang("fr"))" alt="media" />
+										</a>	
+									</div>
 								</div>	
 							
 							</div>
@@ -149,9 +162,14 @@
 						@for(i <- 1 to compute(medias)) {
 							<div class="index-application-photo rotate-deg-minus@random" ">
 								<div class="index-application-media-img">
-									<img src="@routes.Assets.at("images/nophotox200x150.png")" alt="photo" />
+									<img src="@routes.Assets.at("images/nophotox200x150.png")" alt="media" />
 								</div>
-								<div class="index-application-photo-title">@Messages("page.index.no.photo.label")(Lang("fr"))<br />&nbsp;</div>
+								<div class="index-application-photo-title">
+									@Messages("page.index.no.photo.label")(Lang("fr"))
+									<div class="index-application-photo-title-view">
+										<img src="@routes.Assets.at("images/iconmonstr/details-large-view-icon-white.x20.png")" alt="media" />
+									</div>
+								</div>
 							</div>
 						}
 					</div>

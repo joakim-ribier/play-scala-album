@@ -16,7 +16,7 @@
 					@if(form("type").value.get == "photo") {
 						<img src="/album/get/photo/upload/thumbnail/@form("filename").value.get" alt="photo" />
 					} else {
-						<video width="400" height="300" controls="controls" src="/album/get/media/video/upload/@form("filename").value.get">@Messages("app.global.video.description.defaut")(Lang("fr"))</video>					
+						<video width="400" height="300" controls="controls" src="/album/get/media/video/upload/@form("filename").value.get" />					
 					}
 				}
 			} else {

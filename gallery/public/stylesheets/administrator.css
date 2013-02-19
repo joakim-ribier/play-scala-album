@@ -29,7 +29,7 @@
 	background-image : url('../images/kazakhstan_map.gif');
 	background-repeat: no-repeat; 
 	
-	padding: 5px;
+	padding: 4px;
 	margin-top: 10px;
 	
 	border-style: solid;
@@ -68,7 +68,7 @@
 	
 	text-align: center;
 	background-color: #000000;
-	margin: 14px;
+	margin: 13px;
 
 	border-style: solid;
 	border-width: 2px;
@@ -114,7 +114,7 @@
 }
 
 #administrator-content-main {
-	width: 700px;
+	width: 690px;
 
 	float:left;
 	

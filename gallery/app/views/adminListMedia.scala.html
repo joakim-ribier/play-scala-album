@@ -13,7 +13,7 @@
 	<div id="administrator-content-main" class="administrator-content-main-border">
 		@for(video <- videos) {
 			<div class="administrator-content-list-photo rotate-deg-minus@random" onclick="redirectionToAddVideo('@video');">
-				<video width="200" height="150" src="/album/get/media/video/upload/@video">@Messages("app.global.video.description.defaut")(Lang("fr"))</video>
+				<video width="200" height="150" src="/album/get/media/video/upload/@video" />
 			</div>
 		}
 		@for(photo <- photos) {

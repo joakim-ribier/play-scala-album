@@ -11,7 +11,6 @@ import anorm._
 import java.io.File
 import db.MediaDB
 import play.api.Logger
-import db.OrderENUM
 import utils._
 import scalax.file.NotFileException
 
@@ -101,6 +100,14 @@ object Media {
     }
   }
   
+  def get(mediaId: Long) : Media = {
+    val media = MediaDB.findById(mediaId)
+    if (!media.isDefined) {
+      throw new NoSuchElementException("media " + mediaId)  
+    }
+    return media.get
+  }
+  
   def list(offset: Long, limit: Int) : Seq[Media] = {
     return MediaDB.findAll(offset, limit)
   }
@@ -123,7 +130,7 @@ object Media {
   }
   
   def getNextPhoto(photoId: Long) : Media = {
-    val photos = MediaDB.findAll(OrderENUM.ASC)
+    val photos = MediaDB.findAll(OrderEnum.ASC)
     return getNextElement(photoId, photos)
   }
   
@@ -133,8 +140,24 @@ object Media {
   }
   
   def getNextPhoto(photoId: Long, photoIds: Seq[Long]) : Media = {
-    val photos = MediaDB.findAll(photoIds, OrderENUM.ASC)
+    val photos = MediaDB.findAll(photoIds, OrderEnum.ASC)
     return getNextElement(photoId, photos)
+  }
+  
+  def computePos(mediaId: Option[Long]) : Long = {
+    if (!mediaId.isDefined) {
+      throw new IllegalArgumentException("params {mediaId} is required")
+    }
+    
+    val medias = MediaDB.findAll(OrderEnum.DESC)
+    var pos = 0
+    for(media <- medias) {
+      pos = pos + 1
+      if (media.id.get == mediaId.get) {
+        return pos
+      }
+    }
+    return pos
   }
   
   private def getNextElement(photoId: Long, photos: Seq[Media]) : Media = {

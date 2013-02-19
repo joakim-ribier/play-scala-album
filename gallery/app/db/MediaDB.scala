@@ -46,11 +46,25 @@ object MediaDB {
     }
   }
   
-  def findAll() : Seq[Media] = {
-    return findAll(OrderENUM.DESC)
+  def findById(id: Long) : Option[Media] = {
+    return DB.withConnection { implicit connection =>
+      val sql = SQL(
+        """
+          SELECT * FROM """ + _DB_TBL_MEDIA + """
+          JOIN """ + _DB_TBL_MEDIA_TYPE + """
+          ON (""" + _DB_TBL_MEDIA + """.media_type = """ + _DB_TBL_MEDIA_TYPE + """.id)
+          WHERE """ + _DB_TBL_MEDIA + """.id = {mediaId}
+        """
+      ).on('mediaId -> id)
+      sql.as(MediaDB.simple.singleOpt)
+    }
   }
   
-  def findAll(order: OrderENUM.ORDER) : Seq[Media] = {
+  def findAll() : Seq[Media] = {
+    return findAll(OrderEnum.DESC)
+  }
+  
+  def findAll(order: OrderEnum.Value) : Seq[Media] = {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
@@ -85,8 +99,6 @@ object MediaDB {
       SQL(
         """
           SELECT count(*) as c FROM """ + _DB_TBL_MEDIA + """
-          JOIN """ + _DB_TBL_MEDIA_TYPE + """
-          ON (""" + _DB_TBL_MEDIA + """.media_type = """ + _DB_TBL_MEDIA_TYPE + """.id)
         """
       ).apply().head[Long]("c")
     }
@@ -110,10 +122,10 @@ object MediaDB {
   }
   
   def findAll(photos: Seq[Long]) : Seq[Media] = {
-    return findAll(photos, OrderENUM.DESC) 
+    return findAll(photos, OrderEnum.DESC) 
   }
   
-  def findAll(photos: Seq[Long], order: OrderENUM.ORDER) : Seq[Media] = {
+  def findAll(photos: Seq[Long], order: OrderEnum.Value) : Seq[Media] = {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """
