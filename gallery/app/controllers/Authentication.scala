@@ -18,7 +18,7 @@ import utils.EncoderUtils
 
 object Authentication extends Controller {
   
-  private val Logger = LoggerFactory.getLogger("Authentication")
+  val Logger = LoggerFactory.getLogger("Authentication")
   private val _TITLE_HTML: String = Configuration.getHTMLTitle()
   
   val form = Form (
@@ -27,16 +27,23 @@ object Authentication extends Controller {
       "password" -> text,
       "code-access" -> optional(text),
       "email" -> optional(text),
-      "token" -> optional(text)
+      "token" -> optional(text),
+      "redirect-url" -> optional(text)
     ) verifying (Messages("authentication.login.verifying.text")(Lang("fr")), result => result match {
-      case (login, password, codeAccess, email, token) => User.authenticate(login, password, codeAccess)
+      case (login, password, codeAccess, email, token, redirectUrl) => User.authenticate(login, password, codeAccess)
     })
   )
   
   def login = Action { implicit request =>
   	val u = User.findUser(Option.apply(Configuration.getAdminLogin()))
     if (u.isDefined) {
-    	Ok(views.html.login(form, _TITLE_HTML, null))
+    	if (request.flash.get("redirect-url").isDefined) {
+    	  val fill = form.fill("nothing", "nothing", Option.empty, Option.empty, Option.empty, Option.apply(request.flash.get("redirect-url").get))
+  	    val feedback = new Feedback(Messages("app.global.message.url.redirection.html")(Lang("fr")), FeedbackClass.ok)
+  	    Ok(views.html.login(fill, _TITLE_HTML, feedback))
+    	} else {
+    	  Ok(views.html.login(form, _TITLE_HTML, null))
+    	}
     } else {
     	Redirect(routes.Application.configuration)
     }
@@ -53,56 +60,79 @@ object Authentication extends Controller {
       // We got a valid User value
       value => {
         
-      	val username = value._1
-  			val sessionId = generateSessionId(username)
-  			var email = UserEmail.getFromLogin(username)
-  			if (!email.isDefined) {
-  			  email = Option.apply("nothing")
-  			}
+      	val formUsername = value._1
+      	val formEmail = value._4
+      	val formToken = value._5
+      	val formRedirectUrl = value._6
   			
-      	var message = "nothing"
-			  if (value._4.isDefined && value._5.isDefined) {
-			    if (email.get.equals("nothing")) {
-			    	val tokenTo = EncoderUtils.generateTokenForEmailValidation(username, value._4.get)
-	    			if (tokenTo.equals(value._5.get)) {
-	    				val user = User.findUser(Option.apply(username))
-  						if (user.isDefined && User.setAddressMail(user.get, value._4.get)) {
-  							email = value._4
-  							message = Messages("application.create.new.user.email.success.html", email.get)(Lang("fr"))
-  						} else {
-  						  message = Messages("application.create.new.user.email.failed.html", value._4.get)(Lang("fr"))
-  						}
-	    			} else {
-	    			  message = Messages("application.create.new.user.email.failed.html", value._4.get)(Lang("fr"))
-	    			}  
-			    } else {
-			      message = Messages("application.create.new.user.email.exists.html", email.get)(Lang("fr"))
-			    }
-  			}
-      	
-      	MDCUtils.getOrOpenSession(username, sessionId)
-      	Logger.info("You've been logged in")
-      	if (message.equals("nothing")) {
-      	  redirectToIndex(username, sessionId, email.get)(request)
+      	val sessionId = generateSessionId(formUsername)
+        
+      	if (formRedirectUrl.isDefined) {
+          Logger.info("redirection '{}' after authentication successful", formRedirectUrl.get)
+          Redirect(formRedirectUrl.get).withSession(
+            Security.username -> formUsername,
+            Configuration._SESSION_ID_KEY -> sessionId,
+            Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(formUsername)).flashing("connection" -> "success")
+
       	} else {
-      	  redirectToIndex(username, sessionId, email.get, message)(request)
-      	}
+        	
+      	  val returnMessage = setAddressMailIfValid(formUsername, formEmail, formToken)
+    			MDCUtils.getOrOpenSession(formUsername, sessionId)
+    			Logger.info("You've been logged in")
+    			if (returnMessage.isDefined) {
+    				redirectToIndex(formUsername, sessionId, returnMessage.get)(request)
+    			} else {
+    				redirectToIndex(formUsername, sessionId)(request)
+    			}
+        }
+
       }
     )
   }
   
-  private def redirectToIndex(username: String, sessionId: String, email: String) = Action {
-  	Redirect(routes.Application.index).withSession(
+  private def setAddressMailIfValid(username: String, formEmail: Option[String], formToken: Option[String]) : Option[String] = {
+    if (!formEmail.isDefined || !formToken.isDefined) {
+	    return Option.empty 
+	  }
+	    
+    val userEmail = UserEmail.getFromLogin(username)
+    if (userEmail.isDefined) {
+      return Option.apply(Messages("application.create.new.user.email.exists.html", userEmail.get)(Lang("fr")))
+    }
+    
+    val tokenTo = EncoderUtils.generateTokenForEmailValidation(username, formEmail.get)
+		if (tokenTo.equals(formToken.get)) {
+			val user = User.findUser(Option.apply(username))
+			if (user.isDefined && User.setAddressMail(user.get, formEmail.get)) {
+				return Option.apply(Messages("application.create.new.user.email.success.html", formEmail.get)(Lang("fr")))
+			} else {
+			  return Option.apply(Messages("application.create.new.user.email.failed.html", formEmail.get)(Lang("fr")))
+			}
+		} else {
+		  return Option.apply(Messages("application.create.new.user.email.failed.html", formEmail.get)(Lang("fr")))
+		}
+  }
+
+  private def redirectToIndex(username: String, sessionId: String) = Action {
+    Redirect(routes.Application.index).withSession(
             Security.username -> username,
             Configuration._SESSION_ID_KEY -> sessionId,
-            Configuration._SESSION_EMAIL_KEY -> email).flashing("connection" -> "success")
+            Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)).flashing("connection" -> "success")
   }
   
-  private def redirectToIndex(username: String, sessionId: String, email: String, message: String) = Action {
+  private def redirectToIndex(username: String, sessionId: String, message: String) = Action {
   	Redirect(routes.Application.index).withSession(
             Security.username -> username,
             Configuration._SESSION_ID_KEY -> sessionId,
-            Configuration._SESSION_EMAIL_KEY -> email).flashing("connection" -> "success", "app-message" -> message)
+            Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)).flashing("connection" -> "success", "app-message" -> message)
+  }
+  
+  private def formatUserEmailToString(username: String) : String = {
+    val email = UserEmail.getFromLogin(username)
+  	if (!email.isDefined) {
+  	  return "nothing"
+  	}
+    return email.get
   }
   
   def redirectAuthenticate = Action {
@@ -112,9 +142,13 @@ object Authentication extends Controller {
   def logout = Action { request =>
     Logger.info("You've been logged out")
     MDCUtils.closeSession()
-    Redirect(routes.Authentication.login).withNewSession
+    if (request.flash.get("redirect-url").isDefined) {
+    	Redirect(routes.Authentication.login).withNewSession.flashing("redirect-url" -> request.flash.get("redirect-url").get)
+    } else {
+    	Redirect(routes.Authentication.login).withNewSession
+    }
   }
-
+  
   private def generateSessionId(username: String) : String = {
   	val date: Calendar = Calendar.getInstance();
 		val dateformatter: SimpleDateFormat  = new SimpleDateFormat("yyyy.MM.dd_hh:mm:ss")

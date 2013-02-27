@@ -8,11 +8,20 @@ import play.api.mvc.RequestHeader
 import play.api.mvc.Result
 import play.api.mvc.Results
 import play.api.mvc.Security
+import org.slf4j.LoggerFactory
+import play.api.Logger
 
 trait Secured {
+  
   def username(request: RequestHeader) = request.session.get(Security.username)
 
-  def onUnauthorized(request: RequestHeader) = Results.Redirect(routes.Authentication.logout)
+  def onUnauthorized(request: RequestHeader) = {
+    if (!request.path.equals("/album")) {
+      Results.Redirect(routes.Authentication.logout).flashing("redirect-url" -> request.path)
+    } else {
+      Results.Redirect(routes.Authentication.logout)
+    }
+  }
   
   def userUnauthorized(request: RequestHeader) = Results.Redirect(routes.Authentication.logout)
   

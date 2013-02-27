@@ -211,7 +211,7 @@ object Application extends Controller with Secured {
   }
 
   def saveNewUserEmail(email: String, token: String) = Action { implicit request =>
-    val form = Authentication.form.fill("nothing", "nothing", Option.empty, Option.apply(email), Option.apply(token))
+    val form = Authentication.form.fill("nothing", "nothing", Option.empty, Option.apply(email), Option.apply(token), Option.empty)
   	Ok(views.html.login(
   	    form, _TITLE_HTML,
   	    new Feedback(Messages("application.create.new.user.email.redirection.to.login", email)(Lang("fr")), FeedbackClass.ok))).withNewSession

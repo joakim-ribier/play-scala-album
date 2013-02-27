@@ -12,6 +12,8 @@ app.global.error.missing.field.form=Veuillez s''il vous plaît remplir correctem
 app.global.error.invalid.field.form=Les données renseignées ne sont pas correctes.
 app.global.icon.refresh.title=rafraîchir
 
+app.global.message.url.redirection.html=<h3>INFORMATION</h3>Сonnectez-vous pour être automatiquement redirigé.
+
 administrator.add.new.photo.verifying.text=Impossible de sauvegarder la photo, veuillez vérifier le formulaire et recommencer.
 
 application.add.new.admin.verifying.text=Configuration impossible, vérifiez votre identifiant et / ou mot de passe administrateur.
