@@ -124,10 +124,14 @@ object SendMail extends Controller with Secured {
   }
   
   private def sendComments(comments: Seq[Comments], media: Media, bccSeq: Seq[String], to: String)(log: String) {
-  	var text = ""
-    var html = ""
+    val link = Configuration.getHost() + "/album/get/media/" + media.id + "/post/page/1/tags/all"
+    val linkText = Messages("sendmail.access.post.comments.link.text", link)(Lang("fr"))
+    val linkHtml = Messages("sendmail.access.post.comments.link.html", link)(Lang("fr"))
+
+    var text = linkText + "\n\r\n\r"
+    var html = linkHtml + "<br /><br />"
+    
     for (comment <- comments) {
-      
       val startText = "---------------------\n\rDe " + comment.user
       val commentText = "\n\r\n\r" + comment.message + "\n\r\n\r"
       val endText = comment.created.toString("yyyy-MM-dd HH:mm:SS") + "\n\r---------------------\n\r\n\r"

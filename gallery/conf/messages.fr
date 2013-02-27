@@ -28,7 +28,7 @@ authentication.login.verifying.text=Connexion impossible, vérifiez votre identi
 sendmail.info.auto.html=Ceci est un courrier électronique automatique envoyé par {0}, merci de ne pas y répondre.<br /><br />Vous recevez ce courrier électronique car vous avez souhaité ''<strong>Être informé des mises à jour du site</strong>''.<br /><br /><br />
 sendmail.info.auto.text=Ceci est un courrier électronique automatique envoyé par {0}, merci de ne pas y répondre.{1}{1}Vous recevez ce courrier électronique car vous avez souhaité ''Être informé des mises à jour du site''.{1}{1}{1}
 
-sendmail.validation.email.html=Vous le recevez afin de valider votre adresse mail.<br /><br /><br />Pour valider votre adresse mail, veuillez cliquer sur le lien internet ci-dessous :<br /><a href="{0}">{0}<a>
+sendmail.validation.email.html=Vous le recevez afin de valider votre adresse mail.<br /><br /><br />Pour valider votre adresse mail, veuillez cliquer sur le lien internet ci-dessous :<br /><a href="{0}">{0}</a>
 sendmail.validation.email.text=Vous le recevez afin de valider votre adresse mail.{1}{1}{1}Pour valider votre adresse mail, veuillez cliquer sur le lien internet ci-dessous :{1}{0}
 
 sendmail.notify.new.photo.html={1}, depuis le <strong>{0}</strong>  : <br /><i>(si les photos ne sont pas affichées, cliquez sur "Afficher les images" dans votre client de messagerie)</i><br /><br />{2}
@@ -51,6 +51,8 @@ sendmail.notify.new.video.single.html=<strong>{0}</strong> nouvelle vidéo
 sendmail.notify.new.video.multiple.html=<strong>{0}</strong> nouvelles vidéos
 sendmail.notify.new.media.and=et
 sendmail.comment.subject=Commentaire sur "{0}"
+sendmail.access.post.comments.link.html=( accès direct aux commentaires par <a href="{0}"><strong>ici</strong></a> )
+sendmail.access.post.comments.link.text=( accès direct aux commentaires en copiant-collant le lien suivant dans votre navigateur : {0} )
 
 page.login.form.field.login=Identifiant
 page.login.form.field.password=Mot de passe
