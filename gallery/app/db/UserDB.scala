@@ -37,7 +37,7 @@ object UserDB {
   
   def findByLogin(login: String): Option[User] = {
     return DB.withConnection { implicit connection =>
-      SQL("select * from " + _DB_TBL_USER + " where login = {login}").on(
+      SQL("select * from " + _DB_TBL_USER + " where login ILIKE {login}").on(
           'login-> login).as(UserDB.simple.singleOpt)
     }
   }
