@@ -8,7 +8,7 @@ import anorm.SqlParser._
 import anorm._
 import models.post.PostId
 import models.post.CommentId
-import models.post.Comments
+import models.post.Comment
 import models.User
 import java.util.Date
 import models.post.CommentId
@@ -39,7 +39,7 @@ object PostDB {
     get[Date](_DB_TBL_MEDIA_MESSAGE + ".created") ~
     get[String](_DB_TBL_USER + ".login") ~
     get[Long](_DB_TBL_MEDIA_MESSAGE + ".album_media_post") map {
-      case id~message~created~login~postId => Comments(CommentId(id.get), message, new DateTime(created), login, PostId(postId))
+      case id~message~created~login~postId => Comment(CommentId(id.get), message, new DateTime(created), login, PostId(postId))
     }
   }
   
@@ -87,7 +87,7 @@ object PostDB {
     }
   }
   
-  def findAllBy(mediaId: Long, order: OrderEnum.Value) : Seq[Comments] = {
+  def findAllBy(mediaId: Long, order: OrderEnum.Value) : Seq[Comment] = {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
         """

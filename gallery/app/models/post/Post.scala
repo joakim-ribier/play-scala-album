@@ -11,7 +11,7 @@ import utils.OrderEnum
 
 case class PostId(id: Long)
 case class CommentId(id: Long)
-case class Comments(id: CommentId, message: String, created: DateTime, user: String, postId: PostId)
+case class Comment(id: CommentId, message: String, created: DateTime, user: String, postId: PostId)
 
 object Post {
 
@@ -52,14 +52,14 @@ object Post {
     return PostDB.insertMessage(postId.get, user.get, comment.get, DateTime.now())
   }
   
-  def list(mediaId: Option[Long]) : Seq[Comments] = {
+  def list(mediaId: Option[Long]) : Seq[Comment] = {
     if (!mediaId.isDefined) {
       return Seq.empty
     }
     return PostDB.findAllBy(mediaId.get, OrderEnum.ASC)
   }
   
-  def descList(mediaId: Option[Long]) : Seq[Comments] = {
+  def descList(mediaId: Option[Long]) : Seq[Comment] = {
     if (!mediaId.isDefined) {
       return Seq.empty
     }

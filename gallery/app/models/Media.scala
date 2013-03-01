@@ -13,6 +13,7 @@ import db.MediaDB
 import play.api.Logger
 import utils._
 import scalax.file.NotFileException
+import models.post.Comment
 
 object Visibility extends Enumeration {
   type Visibility = Value

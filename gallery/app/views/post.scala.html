@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate, media: Media, page: String, byTags: String, form: Form[(String, Long, String, String, String)], comments: Seq[models.post.Comments], pos: Long, total: Long)(implicit flash: play.api.mvc.Flash)
+@(title: String, feedback: Feedback, user: UserTemplate, media: Media, page: String, byTags: String, form: Form[(String, Long, String, String, String)], comments: Seq[models.post.Comment], pos: Long, total: Long)(implicit flash: play.api.mvc.Flash)
 
 @stringFormat(value: String) = @{
  value.replace("'", "\\'")
@@ -25,7 +25,7 @@
  	date.toString("yyyy-MM-dd HH:mm:SS")
 }
 
-@hasSameLogin(user: UserTemplate, comment: models.post.Comments) = @{
+@hasSameLogin(user: UserTemplate, comment: models.post.Comment) = @{
 	user.login.equals(comment.user)
 }
 

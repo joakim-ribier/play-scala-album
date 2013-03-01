@@ -20,7 +20,7 @@ import models.MediaType
 import org.slf4j.LoggerFactory
 import utils.EncoderUtils
 import models.post.Post
-import models.post.Comments
+import models.post.Comment
 
 object SendMail extends Controller with Secured {
 
@@ -123,7 +123,7 @@ object SendMail extends Controller with Secured {
     }
   }
   
-  private def sendComments(comments: Seq[Comments], media: Media, bccSeq: Seq[String], to: String)(log: String) {
+  private def sendComments(comments: Seq[Comment], media: Media, bccSeq: Seq[String], to: String)(log: String) {
     val link = Configuration.getHost() + "/album/get/media/" + media.id + "/post/page/1/tags/all"
     val linkText = Messages("sendmail.access.post.comments.link.text", link)(Lang("fr"))
     val linkHtml = Messages("sendmail.access.post.comments.link.html", link)(Lang("fr"))
