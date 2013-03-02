@@ -141,7 +141,16 @@
 
 .index-application-photo-title-view-span {
 	float: left;
-	margin-left: 5px;
+	background-image : url('../images/iconmonstr/iconmonstr-speech-bubble-9-icon.x30y20.png');
+	width: 30px;
+	height: 20px;
+	text-align: center;
+}
+
+.index-application-photo-title-view-span span {
+	color: #FFFFFF;
+	font-weight: bold;
+	font-size: 9px;
 }
 
 .index-application-photo-title-view-img img {

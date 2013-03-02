@@ -159,9 +159,11 @@
 								<div class="index-application-photo-title">
 									@titleFormat(media.title)
 									<div class="index-application-photo-title-view">
-										<div class="index-application-photo-title-view-span">
-											<span>@getMediaCommentsNumber(numberCommentsByMedia, media.id.get)</span>
-										</div>
+									    @if(numberCommentsByMedia.get(media.id.get).get > 0){
+											<div class="index-application-photo-title-view-span">
+												<span>@getMediaCommentsNumber(numberCommentsByMedia, media.id.get)</span>
+											</div>
+									    }
 										<div class="index-application-photo-title-view-img">
 											<img class="index-application-photo-title-view-full-screen cursorpointer" src="@routes.Assets.at("images/iconmonstr/iconmonstr-eye-3-icon.x20.png")" title="@Messages("page.index.media.full.screen")(Lang("fr"))" alt="media" onclick="fadeInPhoto(@media.id, '@media.filename', '@media.mediaType.label', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');" />
 											<a href="/album/get/media/@media.id/post/page/@page/tags/@byTags">
