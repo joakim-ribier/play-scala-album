@@ -150,4 +150,18 @@ object PostDB {
       sql().map(row => row[String]("email")).toList
     }
   }
+  
+  def count(mediaId: Long) : Long = {
+    return DB.withConnection { implicit connection =>
+      val sql = SQL(
+        """
+          SELECT count(*) as c FROM """ + _DB_TBL_MEDIA_MESSAGE + """
+          JOIN """ + _DB_TBL_MEDIA_POST + """
+          ON (""" + _DB_TBL_MEDIA_MESSAGE + """.album_media_post = """ + _DB_TBL_MEDIA_POST + """.id)
+          WHERE """ + _DB_TBL_MEDIA_POST + """.album_media = {mediaId}
+        """
+      ).on('mediaId -> mediaId)
+      sql.apply().head[Long]("c")
+    }
+  }
 }

@@ -136,15 +136,16 @@
 .index-application-photo-title-view {
 	width: 100%;
 	text-align: right;
+	margin-top: 2px;
 }
 
-.index-application-photo-title-view img {
-	padding-right: 4px;
+.index-application-photo-title-view-span {
+	float: left;
+	margin-left: 5px;
 }
 
-.index-application-photo-title span:hover {
-	cursor: pointer;
-	text-decoration: underline;
+.index-application-photo-title-view-img img {
+	padding-right: 5px;
 }
 
 #index-tag-search-title {

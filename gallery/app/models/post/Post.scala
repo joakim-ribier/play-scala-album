@@ -8,6 +8,7 @@ import org.joda.time.DateTime
 import play.api.Logger
 import org.slf4j.LoggerFactory
 import utils.OrderEnum
+import models.Media
 
 case class PostId(id: Long)
 case class CommentId(id: Long)
@@ -98,5 +99,14 @@ object Post {
       return Seq.empty
     }
     return PostDB.findEmailsBy(mediaId.get)
+  }
+  
+  def count(medias: Seq[Media]) : Map[Long, Long] = {
+    var countByMedia: Map[Long, Long] = Map()
+    for (media <- medias) {
+      val mediaId: Long = media.id.get
+      countByMedia += (mediaId -> PostDB.count(mediaId))
+    }
+    return countByMedia
   }
 }

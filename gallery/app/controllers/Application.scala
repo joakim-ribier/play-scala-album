@@ -22,6 +22,7 @@ import utils.FileUtils
 import views.html
 import models.notification.Notification
 import org.slf4j.LoggerFactory
+import models.post.Post
 
 object Application extends Controller with Secured {
 
@@ -70,11 +71,13 @@ object Application extends Controller with Secured {
   	if (User.isAdmin(username)) {
   		Redirect(routes.Administrator.index)
   	} else {
+  	  val medias = Media.list(0, _LIMIT)
+  	  val numberCommentsByMedia = Post.count(medias)
   	  if (request.flash.get("app-message").isDefined) {
   	    val feedback = new Feedback(request.flash.get("app-message").get, FeedbackClass.ok)
-  	    Ok(views.html.index(_TITLE_HTML, feedback, userTemplate, Tag.list(), Media.list(0, _LIMIT), 1, _TAG_ALL, countPage(Media.total()), Notification.listNotClosedByUser(username)))
+  	    Ok(views.html.index(_TITLE_HTML, feedback, userTemplate, Tag.list(), medias, numberCommentsByMedia, 1, _TAG_ALL, countPage(Media.total()), Notification.listNotClosedByUser(username)))
   	  } else {
-  	  	Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Media.list(0, _LIMIT), 1, _TAG_ALL, countPage(Media.total()), Notification.listNotClosedByUser(username)))
+  	  	Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), medias, numberCommentsByMedia, 1, _TAG_ALL, countPage(Media.total()), Notification.listNotClosedByUser(username)))
   	  }
   	}
   }
@@ -88,10 +91,14 @@ object Application extends Controller with Secured {
         
         val tagsSeq = tags.split(_TAG_SEPARATOR).toList
         if (tagsSeq.size == 1 && tagsSeq(0) == _TAG_ALL) {
-          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Media.list((pageToInt-1)*_LIMIT, _LIMIT), pageToInt, _TAG_ALL, countPage(Media.total()), Notification.listNotClosedByUser(username)))
+          val medias = Media.list((pageToInt-1)*_LIMIT, _LIMIT)
+          val numberCommentsByMedia = Post.count(medias)
+          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), medias, numberCommentsByMedia, pageToInt, _TAG_ALL, countPage(Media.total()), Notification.listNotClosedByUser(username)))
         } else {
           val mediaIds: Seq[Long] = Tag.list(tagsSeq)
-          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), Media.list(mediaIds, ((pageToInt-1)*_LIMIT), _LIMIT), pageToInt, tags, countPage(mediaIds.size), Notification.listNotClosedByUser(username)))
+          val medias = Media.list(mediaIds, ((pageToInt-1)*_LIMIT), _LIMIT)
+          val numberCommentsByMedia = Post.count(medias)
+          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), medias, numberCommentsByMedia, pageToInt, tags, countPage(mediaIds.size), Notification.listNotClosedByUser(username)))
         }
         
       } else {

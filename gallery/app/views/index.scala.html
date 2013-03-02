@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], medias: Seq[Media], page: Int, byTags: String, count: Long, notifications: Seq[models.notification.NotificationMessage])(implicit flash: play.api.mvc.Flash)
+@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], medias: Seq[Media], numberCommentsByMedia: Map[Long, Long], page: Int, byTags: String, count: Long, notifications: Seq[models.notification.NotificationMessage])(implicit flash: play.api.mvc.Flash)
 
 @random() = @{
 	val rnd = new scala.util.Random
@@ -61,6 +61,15 @@
   	"/album/get/media/" + mediaId + "/post/page/" + page + "/tags/" + byTags	
   } else {
 	"/album"
+  }
+}
+
+@getMediaCommentsNumber(numberCommentsByMedia: Map[Long, Long], mediaId: Long) = @{
+  val number = numberCommentsByMedia.get(mediaId)
+  if (number.get > 0) {
+    number.get
+  } else {
+    ""
   }
 }
 
@@ -149,11 +158,16 @@
 								
 								<div class="index-application-photo-title">
 									@titleFormat(media.title)
-									<div class="index-application-photo-title-view cursorpointer">
-										<img class="index-application-photo-title-view-full-screen" src="@routes.Assets.at("images/iconmonstr/iconmonstr-eye-3-icon.x20.png")" title="@Messages("page.index.media.full.screen")(Lang("fr"))" alt="media" onclick="fadeInPhoto(@media.id, '@media.filename', '@media.mediaType.label', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');" />
-										<a href="/album/get/media/@media.id/post/page/@page/tags/@byTags">
-											<img class="index-application-photo-title-view-post" src="@routes.Assets.at("images/iconmonstr/iconmonstr-details-large-view-icon.x20.png")" title="@Messages("page.index.media.post")(Lang("fr"))" alt="media" />
-										</a>	
+									<div class="index-application-photo-title-view">
+										<div class="index-application-photo-title-view-span">
+											<span>@getMediaCommentsNumber(numberCommentsByMedia, media.id.get)</span>
+										</div>
+										<div class="index-application-photo-title-view-img">
+											<img class="index-application-photo-title-view-full-screen cursorpointer" src="@routes.Assets.at("images/iconmonstr/iconmonstr-eye-3-icon.x20.png")" title="@Messages("page.index.media.full.screen")(Lang("fr"))" alt="media" onclick="fadeInPhoto(@media.id, '@media.filename', '@media.mediaType.label', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');" />
+											<a href="/album/get/media/@media.id/post/page/@page/tags/@byTags">
+												<img class="index-application-photo-title-view-post cursorpointer" src="@routes.Assets.at("images/iconmonstr/iconmonstr-details-large-view-icon.x20.png")" title="@Messages("page.index.media.post")(Lang("fr"))" alt="media" />
+											</a>
+										</div>	
 									</div>
 								</div>	
 							
