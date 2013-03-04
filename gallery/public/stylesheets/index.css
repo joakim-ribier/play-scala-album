@@ -147,6 +147,10 @@
 	text-align: center;
 }
 
+.index-application-photo-title-view-span:hover {
+	background-image : url('../images/iconmonstr/speech-bubble-9-icon.R250G199B19.x30y20.png');
+}
+
 .index-application-photo-title-view-span span {
 	color: #FFFFFF;
 	font-weight: bold;

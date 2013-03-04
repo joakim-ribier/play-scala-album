@@ -142,7 +142,7 @@
 									@titleFormat(media.title)
 									<div class="index-application-photo-title-view">
 									    @if(numberCommentsByMedia.get(media.id.get).get > 0){
-											<div class="index-application-photo-title-view-span">
+											<div class="index-application-photo-title-view-span cursorpointer" onclick="redirectTo('/album/get/media/@media.id/post/page/@page/tags/@byTags');" >
 												<span>@getMediaCommentsNumber(numberCommentsByMedia, media.id.get)</span>
 											</div>
 									    }

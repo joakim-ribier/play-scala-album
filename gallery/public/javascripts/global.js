@@ -330,6 +330,10 @@ function undoComment(mediaId, page, byTags, commentId) {
 	$('#index-application-content-comment-update-x20-' + commentId).attr("onclick", editOnClick);
 }
 
+function redirectTo(url) {
+	window.location.replace(url);
+}
+
 $(document).ready(function() {
 	
 	$.post('/album/get/post/value/from/key',
