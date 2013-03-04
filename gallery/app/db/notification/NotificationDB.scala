@@ -13,6 +13,7 @@ import models.notification.Notification
 object NotificationDB {
 
   private val _DB_TBL_NOTIFICATION: String = Configuration.getStringValue(Configuration._TABLE_NOTIFICATION_KEY)
+  
   private val simple = {
     get[Pk[Long]](_DB_TBL_NOTIFICATION + ".id") ~
     get[Date](_DB_TBL_NOTIFICATION + ".start_datetime_display")~
@@ -62,6 +63,9 @@ object NotificationDB {
   
   def delete(notificationId: Long) : Int = {
     return DB.withTransaction { implicit connection =>
+      SQL("DELETE FROM " + NotificationUserDB._DB_TBL_NOTIFICATION_USER + " WHERE notification = {notificationId}"
+    	    ).on('notificationId -> notificationId).executeUpdate()
+    	    
       SQL("DELETE FROM " + MessageNotificationDB._DB_TBL_MESSAGE_NOTIFICATION + " WHERE notification = {notificationId}"
     	    ).on('notificationId -> notificationId).executeUpdate()
       

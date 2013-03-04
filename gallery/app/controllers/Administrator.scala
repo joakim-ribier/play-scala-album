@@ -161,8 +161,8 @@ object Administrator extends Controller with Secured {
   }
   
   def deleteNotificationMessage = withAdmin { username => implicit request =>
-  	Logger.info("delete notification message")
     val value = request.body.asFormUrlEncoded.get("messageid-post")
+    Logger.info("delete notification message {}", value)
     val result = Notification.removeMessage(value(0).toLong)
     if (result == 1) {
     	Ok(Json.obj("status" -> "success"))
@@ -172,8 +172,8 @@ object Administrator extends Controller with Secured {
   }
   
   def deleteNotification = withAdmin { username => implicit request =>
-  	Logger.info("delete notification")
     val value = request.body.asFormUrlEncoded.get("notificationid-post")
+    Logger.info("delete notification {}", value)
     val result = Notification.remove(value(0).toLong)
     if (result > 0) {
     	Ok(Json.obj("status" -> "success"))
