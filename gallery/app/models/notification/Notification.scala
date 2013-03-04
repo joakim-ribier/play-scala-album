@@ -37,17 +37,16 @@ object Notification {
     return notificationMessages
   }
   
-  def listNotClosedByUser(username: String) : Seq[NotificationMessage] = {
-    val notifications = NotificationDB.findAll()
-    var notificationMessages = Seq[NotificationMessage]()
+  def getActiveOrNotDefined(username: String) : Option[NotificationMessage] = {
+    val notifications = NotificationDB.findAllBetween(DateTime.now())
     for (notification <- notifications) {
       val closed = NotificationUserDB.findClosedBy(username, notification.id.get)
-      if (!(closed.isDefined && closed.get == true)) {
-      	val messages = MessageNotificationDB.findMessagesById(notification.id.get)
-      	notificationMessages +:= new NotificationMessage(notification, messages)
-      }
+			if (!(closed.isDefined && closed.get == true)) {
+			  val messages = MessageNotificationDB.findMessagesById(notification.id.get)
+				return Option.apply(new NotificationMessage(notification, messages))
+			}
     }
-    return notificationMessages
+    return Option.empty
   }
   
   def add(startDate: String, endDate: String, messageIds: Seq[String]) : Boolean = {

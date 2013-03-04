@@ -47,6 +47,19 @@ object NotificationDB {
     }
   }
   
+  def findAllBetween(dateTime: DateTime) : Seq[Notification] = {
+    return DB.withConnection { implicit connection =>
+      val sql = SQL(
+        """
+          SELECT * FROM """ + _DB_TBL_NOTIFICATION + """
+          WHERE start_datetime_display <= {dateTime} AND end_datetime_display >= {dateTime}
+          ORDER BY id desc
+        """
+      ).on('dateTime -> dateTime.toDate())
+      sql.as(NotificationDB.simple *)
+    }
+  }
+  
   def delete(notificationId: Long) : Int = {
     return DB.withTransaction { implicit connection =>
       SQL("DELETE FROM " + MessageNotificationDB._DB_TBL_MESSAGE_NOTIFICATION + " WHERE notification = {notificationId}"

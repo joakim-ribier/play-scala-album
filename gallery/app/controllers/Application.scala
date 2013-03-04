@@ -75,9 +75,9 @@ object Application extends Controller with Secured {
   	  val numberCommentsByMedia = Post.count(medias)
   	  if (request.flash.get("app-message").isDefined) {
   	    val feedback = new Feedback(request.flash.get("app-message").get, FeedbackClass.ok)
-  	    Ok(views.html.index(_TITLE_HTML, feedback, userTemplate, Tag.list(), medias, numberCommentsByMedia, 1, _TAG_ALL, countPage(Media.total()), Notification.listNotClosedByUser(username)))
+  	    Ok(views.html.index(_TITLE_HTML, feedback, userTemplate, Tag.list(), medias, numberCommentsByMedia, 1, _TAG_ALL, countPage(Media.total()), Notification.getActiveOrNotDefined(username)))
   	  } else {
-  	  	Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), medias, numberCommentsByMedia, 1, _TAG_ALL, countPage(Media.total()), Notification.listNotClosedByUser(username)))
+  	  	Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), medias, numberCommentsByMedia, 1, _TAG_ALL, countPage(Media.total()), Notification.getActiveOrNotDefined(username)))
   	  }
   	}
   }
@@ -93,12 +93,12 @@ object Application extends Controller with Secured {
         if (tagsSeq.size == 1 && tagsSeq(0) == _TAG_ALL) {
           val medias = Media.list((pageToInt-1)*_LIMIT, _LIMIT)
           val numberCommentsByMedia = Post.count(medias)
-          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), medias, numberCommentsByMedia, pageToInt, _TAG_ALL, countPage(Media.total()), Notification.listNotClosedByUser(username)))
+          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), medias, numberCommentsByMedia, pageToInt, _TAG_ALL, countPage(Media.total()), Notification.getActiveOrNotDefined(username)))
         } else {
           val mediaIds: Seq[Long] = Tag.list(tagsSeq)
           val medias = Media.list(mediaIds, ((pageToInt-1)*_LIMIT), _LIMIT)
           val numberCommentsByMedia = Post.count(medias)
-          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), medias, numberCommentsByMedia, pageToInt, tags, countPage(mediaIds.size), Notification.listNotClosedByUser(username)))
+          Ok(views.html.index(_TITLE_HTML, null, userTemplate, Tag.list(), medias, numberCommentsByMedia, pageToInt, tags, countPage(mediaIds.size), Notification.getActiveOrNotDefined(username)))
         }
         
       } else {

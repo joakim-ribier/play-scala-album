@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], medias: Seq[Media], numberCommentsByMedia: Map[Long, Long], page: Int, byTags: String, count: Long, notifications: Seq[models.notification.NotificationMessage])(implicit flash: play.api.mvc.Flash)
+@(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], medias: Seq[Media], numberCommentsByMedia: Map[Long, Long], page: Int, byTags: String, count: Long, activeOrNotDefined: Option[models.notification.NotificationMessage])(implicit flash: play.api.mvc.Flash)
 
 @random() = @{
 	val rnd = new scala.util.Random
@@ -31,27 +31,11 @@
 
 @compute(medias: Seq[Media]) = @{ 15 - medias.length }
 
-@import org.joda.time.DateTime
-@isNowDateTime(startDate: DateTime, endDate: DateTime) = @{
-	startDate.isBeforeNow() && endDate.isAfterNow()
-}
-
-@isNotifyPopup(notifications: Seq[models.notification.NotificationMessage], connection: Option[String]) = @{
+@isNotifyPopup(activeOrNotDefined: Option[models.notification.NotificationMessage], connection: Option[String]) = @{
 	var display = "none"
-	for(notification <- notifications) {
-		if(isNowDateTime(notification.notification.startDate, notification.notification.endDate)){
-			display = "display"
-		}
+	if (activeOrNotDefined.isDefined && connection.isDefined && connection.get == "success") {
+	  display = "display"
 	}
-	
-	if (connection.isDefined) {
-		if (connection.get != "success") {
-			display = "none"
-		}
-	} else {
-		display = "none"
-	}
-	
 	display
 }
 
@@ -77,16 +61,14 @@
 
 	<div id="index-application">
 			
-			<div id="index-application-notification-@isNotifyPopup(notifications, flash.get("connection"))">
-				@for(notification <- notifications) {
+			<div id="index-application-notification-@isNotifyPopup(activeOrNotDefined, flash.get("connection"))">
+				@if(activeOrNotDefined.isDefined) {
 					<div id="index-application-notification-content">
 						<div id="index-application-notification-content-messages">
 							<div class="slides_container">
-									@if(isNowDateTime(notification.notification.startDate, notification.notification.endDate)){
-										@for(message <- notification.messages) {
-											<div id="index-application-notification-content-message">@Html(message.message)</div>	
-										}
-									}
+								@for(message <- activeOrNotDefined.get.messages) {
+									<div id="index-application-notification-content-message">@Html(message.message)</div>	
+								}
 							</div>
 						</div>
 					</div>
@@ -94,7 +76,7 @@
 					<div id="index-application-notification-header">
 						<div id="index-application-notification-header-title">@Html(Messages("page.index.notification.title.html")(Lang("fr")))</div>
 						<div id="index-application-notification-header-close">
-							<span onclick="closeNotification('@notification.notification.id');"style="font-style:normal;">@Messages("page.index.notification.title.close")(Lang("fr"))</span>
+							<span onclick="closeNotification('@activeOrNotDefined.get.notification.id');"style="font-style:normal;">@Messages("page.index.notification.title.close")(Lang("fr"))</span>
 							&nbsp;&nbsp;(&nbsp;<input type="checkbox" id="index-application-notification-header-close-check" checked>@Messages("page.index.notification.title.checkbox")(Lang("fr"))&nbsp;)
 						</div>
 					</div>					
