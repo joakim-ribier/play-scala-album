@@ -181,4 +181,44 @@ object Administrator extends Controller with Secured {
       Ok(Json.obj("status" -> "failed", "error-message" -> Messages("page.adminNotification.delete.failed")(Lang("fr"))))
     }
   }
+  
+  def deletePhotoToUploadDirectory = withAdmin { username => implicit request =>
+    val value = request.body.asFormUrlEncoded.get("filename-post")
+    Logger.info("delete photo {} to upload server directory", value)
+    try {
+      if (FileUtils.delete(value(0), Configuration.getPhotoUploadThumbnailDirectory)) {
+      	if (FileUtils.delete(value(0), Configuration.getPhotoUploadStandardDirectory)) {
+      		Ok(Json.obj("status" -> "success"))
+      	} else {
+      		Ok(Json.obj("status" -> "failed", "error-message" -> addFadOutMessageToEnd(Messages("administrator.delete.to.upload.directory.photo.failed", value(0))(Lang("fr")))))
+      	}  
+      } else {
+        Ok(Json.obj("status" -> "failed", "error-message" -> addFadOutMessageToEnd(Messages("administrator.delete.to.upload.directory.photo.failed", value(0))(Lang("fr")))))
+      }
+    } catch {
+      case e: Throwable => {
+        Logger.error(e.getMessage(), e) 
+        Ok(Json.obj("status" -> "failed", "error-message" -> addFadOutMessageToEnd(Messages("administrator.delete.to.upload.directory.photo.failed", value(0))(Lang("fr")))))
+      }      
+    }
+  }
+  
+   def deleteVideoToUploadDirectory = withAdmin { username => implicit request =>
+    val value = request.body.asFormUrlEncoded.get("filename-post")
+    Logger.info("delete video {} to upload server directory", value)
+    try {
+      if (FileUtils.delete(value(0), Configuration.getMediaVideoFolderUploadDirectory)) {
+        Ok(Json.obj("status" -> "success"))
+      } else {
+      	Ok(Json.obj("status" -> "failed", "error-message" -> addFadOutMessageToEnd(Messages("administrator.delete.to.upload.directory.video.failed", value(0))(Lang("fr")))))
+      }  
+    } catch {
+      case e: Throwable => {
+        Logger.error(e.getMessage(), e) 
+        Ok(Json.obj("status" -> "failed", "error-message" -> addFadOutMessageToEnd(Messages("administrator.delete.to.upload.directory.video.failed", value(0))(Lang("fr")))))
+      }      
+    }
+  }
+   
+  private def addFadOutMessageToEnd(message: String) = message + Messages("page.main.message.popup.fadeOut")(Lang("fr"))
 }

@@ -104,6 +104,52 @@ function deleteNotification(notificationId) {
 	});
 }
 
+function deletePhotoToUploadDirectory(filename) {
+	var resultat = confirm(getI18NValue('js.global.delete.photo')); 
+	if (resultat) {
+		$.post('/album/admin/delete/photo/to/upload/directory',
+			{'filename-post': filename},
+			function(data) {
+				switch (data['status']) {
+						case 'success':
+							window.location.replace("/album/admin/list/photo");
+							break;
+						case 'nothing' :
+						case 'failed' :
+						default :
+							$("#app-message").html(data['error-message']);
+							$('#app-message').fadeIn();
+							setTimeout(function() {
+			  					$('#app-message').fadeOut();
+							}, 10000);
+				}
+		});
+	}
+}
+
+function deleteVideoToUploadDirectory(filename) {
+	var resultat = confirm(getI18NValue('js.global.delete.video')); 
+	if (resultat) {
+		$.post('/album/admin/delete/video/to/upload/directory',
+			{'filename-post': filename},
+			function(data) {
+				switch (data['status']) {
+						case 'success':
+							window.location.replace("/album/admin/list/photo");
+							break;
+						case 'nothing' :
+						case 'failed' :
+						default :
+							$("#app-message").html(data['error-message']);
+							$('#app-message').fadeIn();
+							setTimeout(function() {
+			  					$('#app-message').fadeOut();
+							}, 10000);
+				}
+		});
+	}
+}
+
 $(document).ready(function() {
 	
 	$("#add-new-tag-input").keypress(function(event) {

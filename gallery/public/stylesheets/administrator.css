@@ -5,6 +5,7 @@
 
 #administrator-form-menu {
 	float: left;
+	margin-right: 5px;
 }
 
 #admin-upload-form {
@@ -63,18 +64,20 @@
 .administrator-content-list-photo {
 	float:left;
 	
-	width: 200px;
-	height: 150px;
-	
 	text-align: center;
 	background-color: #000000;
-	margin: 13px;
 
 	border-style: solid;
 	border-width: 2px;
 	border-color: #FFFFFF;
 	
+	margin: 10px 10px 0px 10px;
 	cursor: pointer;
+}
+
+.administrator-content-list-media-panel {
+	text-align: right;
+	background-color: #000000;
 }
 
 #admin-update-account {
@@ -114,7 +117,7 @@
 }
 
 #administrator-content-main {
-	width: 690px;
+	width: 685px;
 
 	float:left;
 	
@@ -319,4 +322,10 @@
 
 .notification-list-el-message-delete:hover {
 	text-decoration: underline;
+}
+
+.administrator-box-shadow {
+	box-shadow: 0px 4px 8px #000000;
+	-moz-box-shadow: 0px 4px 8px #000000;
+	-webkit-box-shadow: 0px 4px 8px #000000;	
 }

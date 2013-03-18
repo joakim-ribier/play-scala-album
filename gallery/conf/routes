@@ -65,6 +65,9 @@ POST 	/album/admin/notification/save					controllers.Administrator.saveNewNotifi
 POST 	/album/admin/notification/message/delete		controllers.Administrator.deleteNotificationMessage
 POST 	/album/admin/notification/delete				controllers.Administrator.deleteNotification
 
+POST	/album/admin/delete/photo/to/upload/directory				controllers.Administrator.deletePhotoToUploadDirectory
+POST	/album/admin/delete/video/to/upload/directory				controllers.Administrator.deleteVideoToUploadDirectory
+
 # AUTHENTICATION CONTROLLER
 
 GET		/album/login															controllers.Authentication.login

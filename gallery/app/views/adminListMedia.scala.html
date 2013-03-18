@@ -1,29 +1,38 @@
 @(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], photos: Seq[String], videos: Seq[String])(implicit flash: play.api.mvc.Flash)
 
-@random() = @{
-	val rnd = new scala.util.Random
-	val range = -3 to 3
-	range(rnd.nextInt(range length))
+@compute(totalEl: Int) = @{
+  if (totalEl > 12) {
+    0
+  } else {
+    12 - totalEl
+  }
 }
-
-@compute(photos: Seq[String]) = @{ 12 - photos.length }
 
 @admin(title, feedback, user, tags, "adminListPhoto") {
 
 	<div id="administrator-content-main" class="administrator-content-main-border">
 		@for(video <- videos) {
-			<div class="administrator-content-list-photo rotate-deg-minus@random" onclick="redirectionToAddVideo('@video');">
-				<video width="200" height="150" src="/album/get/media/video/upload/@video" />
+			<div class="administrator-content-list-photo">
+				<video width="200" height="150" src="/album/get/media/video/upload/@video" onclick="redirectionToAddVideo('@video');"></video>
+				<div class="administrator-content-list-media-panel">
+					<img onclick="deleteVideoToUploadDirectory('@video');"  class="index-application-content-comment-delete-x20 cursorpointer" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.adminListMedia.delete.media.img.title", video)(Lang("fr"))" alt="media" />
+				</div>
 			</div>
 		}
 		@for(photo <- photos) {
-			<div class="administrator-content-list-photo rotate-deg-minus@random">
-				<img src="/album/get/photo/upload/thumbnail/@photo" onclick="accesstoNewPhoto('@photo');" alt="photo" />
+			<div class="administrator-content-list-photo">
+				<img src="/album/get/photo/upload/thumbnail/@photo" width="200" height="150" onclick="accesstoNewPhoto('@photo');" alt="photo" />
+				<div class="administrator-content-list-media-panel">
+					<img onclick="deletePhotoToUploadDirectory('@photo');" class="index-application-content-comment-delete-x20 cursorpointer" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.adminListMedia.delete.media.img.title", photo)(Lang("fr"))" alt="media" />
+				</div>
 			</div>
 		}
-		@for(i <- 1 to compute(photos)) {
-			<div class="administrator-content-list-photo rotate-deg-minus@random">
+		@for(i <- 1 to compute(photos.length + videos.length)) {
+			<div class="administrator-content-list-photo">
 				<img src="@routes.Assets.at("images/nophotox200x150.png")" alt="photo" />
+				<div class="administrator-content-list-media-panel">
+					<img src="@routes.Assets.at("images/iconmonstr/iconmonstr-x-mark-5-icon.x20.png")" />
+				</div>
 			</div>
 		}
 	</div>

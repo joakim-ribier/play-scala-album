@@ -28,7 +28,7 @@ object FileUtils {
   }
   
   def createThumbnails(dirFrom: String, dirTo: String, filename: String, widthMax: Int, heightMax: Int) {
-	var height = heightMax
+	  var height = heightMax
     var width = widthMax
     
     val bImage: BufferedImage = ImageIO.read(new File(dirFrom + filename));
@@ -62,16 +62,16 @@ object FileUtils {
   }
   
   def getFileType(filename: String) : String = {
-	if (filename == null) {
-	  throw new IllegalArgumentException("filename of getFileType is null")
-	}
+	  if (filename == null) {
+	    throw new IllegalArgumentException("filename of getFileType is null")
+	  }
 
     val tab = filename.split("\\.").toList
-	if (!tab.isEmpty) {
-	  return tab.last
-	} else {
-	  throw new IllegalArgumentException("filename {" + filename + "} has no type")
-	}
+	  if (!tab.isEmpty) {
+	    return tab.last
+	  } else {
+	    throw new IllegalArgumentException("filename {" + filename + "} has no type")
+	  }
   }
   
   def listFilename(directory: String) : List[String] = {
@@ -83,5 +83,13 @@ object FileUtils {
       }
     }
     return files
+  }
+  
+  def delete(filename: String, dirFrom: String) : Boolean = {
+    val file = new File(dirFrom + filename)
+    if (!file.isFile()) {
+      throw new IllegalArgumentException("File {" + dirFrom + filename + "} is not valid")
+    }
+    return file.delete()
   }
 }
