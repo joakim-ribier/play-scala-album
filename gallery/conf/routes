@@ -52,21 +52,24 @@ GET		/album/send/mail/comments/private/:key						controllers.SendMail.comments(k
 
 # ADMINSTRATOR CONTROLLER
 
-GET		/album/admin							   		controllers.Administrator.index
-GET		/album/admin/list/photo							controllers.Administrator.listPhotoUploaded
-GET		/album/admin/add/new/photo/:name				controllers.Administrator.addNewPhoto(name: String)
-GET		/album/admin/media/redirect/add/video/:file		controllers.Administrator.redirectToAddVideo(file: String)
+GET		/album/admin							   			controllers.Administrator.index
+GET		/album/admin/list/photo								controllers.Administrator.listPhotoUploaded
+GET		/album/admin/add/new/photo/:name					controllers.Administrator.addNewPhoto(name: String)
+GET		/album/admin/media/redirect/add/video/:file			controllers.Administrator.redirectToAddVideo(file: String)
+GET		/album/admin/notification							controllers.Administrator.notification
+GET		/album/admin/display/all/media						controllers.Administrator.displayAllMedia
+GET		/album/admin/display/all/media/message/key/:key			controllers.Administrator.displayAllMediaWithMessage(key: String)
 
 POST 	/album/upload									controllers.Administrator.upload
 POST 	/album/saveMedia								controllers.Administrator.saveMedia
-GET		/album/admin/notification						controllers.Administrator.notification
 POST 	/album/admin/notification/message/save			controllers.Administrator.saveNewNotification
 POST 	/album/admin/notification/save					controllers.Administrator.saveNewNotificationAlarm
 POST 	/album/admin/notification/message/delete		controllers.Administrator.deleteNotificationMessage
 POST 	/album/admin/notification/delete				controllers.Administrator.deleteNotification
+POST	/album/admin/delete/photo/to/upload/directory	controllers.Administrator.deletePhotoToUploadDirectory
+POST	/album/admin/delete/video/to/upload/directory	controllers.Administrator.deleteVideoToUploadDirectory
+POST	/album/admin/delete/media/to/album				controllers.Administrator.deleteMediaToAlbum
 
-POST	/album/admin/delete/photo/to/upload/directory				controllers.Administrator.deletePhotoToUploadDirectory
-POST	/album/admin/delete/video/to/upload/directory				controllers.Administrator.deleteVideoToUploadDirectory
 
 # AUTHENTICATION CONTROLLER
 

@@ -134,7 +134,7 @@
 									@if(media.mediaType.label == "photo"){
 										<img src="/album/get/thumbnail/photo/@media.filename" alt="media" onclick="fadeInPhoto(@media.id, '@media.filename', '@media.mediaType.label', '@stringFormat(media.title)', '@optionStringFormat(media.description)', '@byTags', '@medias.head.id', '@medias.last.id');" />
 									} else {
-										<video width="200" height="150" controls="controls" src="/album/get/media/video/standard/@media.filename" />
+										<video width="200" height="150" controls="controls" src="/album/get/media/video/standard/@media.filename"></video>
 									}
 								</div>
 								

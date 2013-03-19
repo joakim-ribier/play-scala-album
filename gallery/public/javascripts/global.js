@@ -90,19 +90,19 @@ $(document).ready(function() {
 		 $(this).attr("src", "/assets/images/iconmonstr/grid-small-view-icon-white.x20.png");
 	});
 	
-	$(".index-application-content-comment-delete-x20").live("mouseover", function() {
+	$(".icon-mark").live("mouseover", function() {
 		 $(this).attr("src", "/assets/images/iconmonstr/x-mark-5-icon-RG250G199B19.x20.png");
 	});
 	
-	$(".index-application-content-comment-delete-x20").live("mouseout", function() {
+	$(".icon-mark").live("mouseout", function() {
 		 $(this).attr("src", "/assets/images/iconmonstr/x-mark-5-icon-white.x20.png");
 	});
 	
-	$(".index-application-content-comment-update-x20").live("mouseover", function() {
+	$(".icon-pencil").live("mouseover", function() {
 		 $(this).attr("src", "/assets/images/iconmonstr/pencil-6-icon-R250G199B19.x20.png");
 	});
 	
-	$(".index-application-content-comment-update-x20").live("mouseout", function() {
+	$(".icon-pencil").live("mouseout", function() {
 		 $(this).attr("src", "/assets/images/iconmonstr/pencil-6-icon-white.x20.png");
 	});
 	

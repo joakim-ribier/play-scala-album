@@ -30,11 +30,15 @@
 				<div id="form-title">@Messages("page.admin.form.upload.title")(Lang("fr"))<br /><i>( @play.Play.application().configuration().getString("app.media.format.allowed") )</i></div>
 			</div>
 			
-			<div id="admin-photo-list" class="administrator-box-shadow">
+			<div id="admin-photo-list" class="administrator-box-shadow @("administrator-current-page".when(page != "adminListPhoto"))">
 				<div id="form-title">@Messages("page.admin.show.photo.title")(Lang("fr"))</div>
 			</div>
 			
-			<div id="admin-notification" class="administrator-box-shadow">
+			<div id="admin-album-medias" class="administrator-box-shadow @("administrator-current-page".when(page != "adminAlbumMedias"))">
+				<div id="form-title">@Messages("page.admin.show.album.media.title")(Lang("fr"))</div>
+			</div>
+			
+			<div id="admin-notification" class="administrator-box-shadow @("administrator-current-page".when(page != "adminNotification"))">
 				
 				<div id="admin-notification-title"  class="admin-form-title">
 					<div id="form-title">@Messages("page.admin.notification.title")(Lang("fr"))</div>
@@ -62,7 +66,7 @@
 				</div>
 			</div>
 
-			<div id="admin-application-tag" class="administrator-box-shadow">
+			<div id="admin-application-tag" class="administrator-box-shadow @("administrator-current-page".when(page != "adminAddPhoto"))">
 				@for(tag <- tags) {
 					<div class="admin-tag-already-exists">@tag</div>
 				}

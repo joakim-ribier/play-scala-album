@@ -27,6 +27,8 @@ import play.api.data.Mapping
 import play.api.libs.json.Json
 import models.notification.Notification
 import org.slf4j.LoggerFactory
+import utils.OrderEnum
+import models.post.Post
 
 object Administrator extends Controller with Secured {
 
@@ -190,15 +192,15 @@ object Administrator extends Controller with Secured {
       	if (FileUtils.delete(value(0), Configuration.getPhotoUploadStandardDirectory)) {
       		Ok(Json.obj("status" -> "success"))
       	} else {
-      		Ok(Json.obj("status" -> "failed", "error-message" -> addFadOutMessageToEnd(Messages("administrator.delete.to.upload.directory.photo.failed", value(0))(Lang("fr")))))
+      		Ok(Json.obj("status" -> "failed", "error-message" -> fadOutLabel(Messages("administrator.delete.to.upload.directory.photo.failed", value(0))(Lang("fr")))))
       	}  
       } else {
-        Ok(Json.obj("status" -> "failed", "error-message" -> addFadOutMessageToEnd(Messages("administrator.delete.to.upload.directory.photo.failed", value(0))(Lang("fr")))))
+        Ok(Json.obj("status" -> "failed", "error-message" -> fadOutLabel(Messages("administrator.delete.to.upload.directory.photo.failed", value(0))(Lang("fr")))))
       }
     } catch {
       case e: Throwable => {
         Logger.error(e.getMessage(), e) 
-        Ok(Json.obj("status" -> "failed", "error-message" -> addFadOutMessageToEnd(Messages("administrator.delete.to.upload.directory.photo.failed", value(0))(Lang("fr")))))
+        Ok(Json.obj("status" -> "failed", "error-message" -> fadOutLabel(Messages("administrator.delete.to.upload.directory.photo.failed", value(0))(Lang("fr")))))
       }      
     }
   }
@@ -210,15 +212,59 @@ object Administrator extends Controller with Secured {
       if (FileUtils.delete(value(0), Configuration.getMediaVideoFolderUploadDirectory)) {
         Ok(Json.obj("status" -> "success"))
       } else {
-      	Ok(Json.obj("status" -> "failed", "error-message" -> addFadOutMessageToEnd(Messages("administrator.delete.to.upload.directory.video.failed", value(0))(Lang("fr")))))
+      	Ok(Json.obj("status" -> "failed", "error-message" -> fadOutLabel(Messages("administrator.delete.to.upload.directory.video.failed", value(0))(Lang("fr")))))
       }  
     } catch {
       case e: Throwable => {
         Logger.error(e.getMessage(), e) 
-        Ok(Json.obj("status" -> "failed", "error-message" -> addFadOutMessageToEnd(Messages("administrator.delete.to.upload.directory.video.failed", value(0))(Lang("fr")))))
+        Ok(Json.obj("status" -> "failed", "error-message" -> fadOutLabel(Messages("administrator.delete.to.upload.directory.video.failed", value(0))(Lang("fr")))))
       }      
     }
   }
-   
-  private def addFadOutMessageToEnd(message: String) = message + Messages("page.main.message.popup.fadeOut")(Lang("fr"))
+  
+  def displayAllMedia = withAdmin { username => implicit request =>
+    redirectToDisplayAllMedia(Option.empty, username)(request)
+  }
+  
+  def displayAllMediaWithMessage(key: String) = withAdmin { username => implicit request =>
+  	redirectToDisplayAllMedia(Option.apply(key), username)(request)
+  }
+  
+  private def redirectToDisplayAllMedia(messageKey: Option[String], username: String) = Action { implicit request =>
+    val userTemplate = Authentication.userTemplate(username, request.session)
+    val medias = Media.list(OrderEnum.DESC)
+    Ok(views.html.adminAlbumMedias(_TITLE_HTML,
+        Authentication.buildFeedbackObjFromRequestOrKey(request, messageKey), userTemplate, Tag.list(), medias))
+  }
+  
+  def deleteMediaToAlbum = withAdmin { username => implicit request =>
+    val value = request.body.asFormUrlEncoded.get("mediaid-post")
+    Logger.info("delete media {} to album", value)
+    try {
+      val media = Media.get(value(0).toLong)
+      val posts = Post.list(Option.apply(media.id.get))
+      if (posts.size > 0) {
+        Ok(Json.obj("status" -> "failed",
+            "error-message" -> fadOutLabel(Messages("administrator.delete.media.with.comment.html", media.title)(Lang("fr")))))
+      } else {
+      	Media.remove(Option.apply(media.id.get))
+        if (media.mediaType == MediaType.PHOTO) {
+        	FileUtils.delete(media.filename, Configuration.getPhotoThumbnailDirectory)
+        	FileUtils.delete(media.filename, Configuration.getPhoto800x600Directory)
+      		FileUtils.delete(media.filename, Configuration.getPhotoStandardDirectory)
+      	} else {
+      		FileUtils.delete(media.filename, Configuration.getMediaVideoFolderStandardDirectory)
+      	}
+      	Ok(Json.obj("status" -> "success", "message-key" -> "administrator.delete.media.success.html"))
+      }
+    } catch {
+      case e: Throwable => {
+        Logger.error(e.getMessage(), e) 
+        Ok(Json.obj("status" -> "failed",
+            "error-message" -> fadOutLabel(Messages("administrator.delete.media.failed.html", value(0))(Lang("fr")))))
+      }      
+    }
+  }
+  
+  private def fadOutLabel(message: String) = message + Messages("page.main.message.popup.fadeOut")(Lang("fr"))
 }

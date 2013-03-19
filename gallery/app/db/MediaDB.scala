@@ -13,6 +13,7 @@ object MediaDB {
 
   private val _DB_TBL_MEDIA: String = play.Configuration.root().getString(Configuration._TABLE_MEDIA_KEY)
   private val _DB_TBL_MEDIA_TYPE: String = play.Configuration.root().getString(Configuration._TABLE_MEDIA_TYPE_KEY)
+  private val _DB_TBL_TAG: String = play.Configuration.root().getString(Configuration._TABLE_TAG_KEY)
   
   private val simple = {
     get[Pk[Long]](_DB_TBL_MEDIA + ".id") ~
@@ -152,6 +153,13 @@ object MediaDB {
       ).on(
         'datetime -> datetime.toDate())
       sql.as(MediaDB.simple *)
+    }
+  }
+  
+  def delete(mediaId: Long) : Int = {
+    return DB.withTransaction { implicit connection =>
+      SQL("DELETE FROM " + _DB_TBL_TAG + " WHERE media = {mediaId}").on('mediaId -> mediaId).executeUpdate()
+      SQL("DELETE FROM " + _DB_TBL_MEDIA + " WHERE id = {mediaId}").on('mediaId -> mediaId).executeUpdate()
     }
   }
 }

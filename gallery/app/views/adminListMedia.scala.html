@@ -1,9 +1,7 @@
 @(title: String, feedback: Feedback, user: UserTemplate, tags: Seq[String], photos: Seq[String], videos: Seq[String])(implicit flash: play.api.mvc.Flash)
 
 @compute(totalEl: Int) = @{
-  if (totalEl > 12) {
-    0
-  } else {
+  if (totalEl > 12) 3 - (totalEl % 3) else {
     12 - totalEl
   }
 }
@@ -15,17 +13,17 @@
 			<div class="administrator-content-list-photo">
 				<video width="200" height="150" controls="controls" src="/album/get/media/video/upload/@video"></video>
 				<div class="administrator-content-list-media-panel">
-					<img onclick="redirectionToAddVideo('@video');" class="icone-plus cursorpointer" src="@routes.Assets.at("images/iconmonstr/plus-icon-white.x20.png")" title="@Messages("icone.plus.title")(Lang("fr"))" alt="media" />
-					<img onclick="deleteVideoToUploadDirectory('@video');"  class="index-application-content-comment-delete-x20 cursorpointer" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.adminListMedia.delete.media.img.title", video)(Lang("fr"))" alt="media" />
+					<img onclick="redirectionToAddVideo('@video');" class="icone-plus cursorpointer" src="@routes.Assets.at("images/iconmonstr/plus-icon-white.x20.png")" title="@Messages("icon.plus.title")(Lang("fr"))" alt="media" />
+					<img onclick="deleteVideoToUploadDirectory('@video');"  class="icon-mark cursorpointer" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.adminListMedia.delete.media.img.title", video)(Lang("fr"))" alt="media" />
 				</div>
 			</div>
 		}
 		@for(photo <- photos) {
 			<div class="administrator-content-list-photo">
-				<img src="/album/get/photo/upload/thumbnail/@photo" width="200" height="150" onclick="accesstoNewPhoto('@photo');" alt="photo" />
+				<img class="cursorpointer" src="/album/get/photo/upload/thumbnail/@photo" width="200" height="150" onclick="accesstoNewPhoto('@photo');" alt="photo" />
 				<div class="administrator-content-list-media-panel">
-					<img onclick="accesstoNewPhoto('@photo');" class="icone-plus cursorpointer" src="@routes.Assets.at("images/iconmonstr/plus-icon-white.x20.png")" title="@Messages("icone.plus.title")(Lang("fr"))" alt="media" />
-					<img onclick="deletePhotoToUploadDirectory('@photo');" class="index-application-content-comment-delete-x20 cursorpointer" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.adminListMedia.delete.media.img.title", photo)(Lang("fr"))" alt="media" />
+					<img onclick="accesstoNewPhoto('@photo');" class="icone-plus cursorpointer" src="@routes.Assets.at("images/iconmonstr/plus-icon-white.x20.png")" title="@Messages("icon.plus.title")(Lang("fr"))" alt="media" />
+					<img onclick="deletePhotoToUploadDirectory('@photo');" class="icon-mark cursorpointer" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.adminListMedia.delete.media.img.title", photo)(Lang("fr"))" alt="media" />
 				</div>
 			</div>
 		}

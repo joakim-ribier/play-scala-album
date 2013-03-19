@@ -194,7 +194,7 @@ function undoComment(mediaId, page, byTags, commentId) {
 	
 	var editOnClick = "editComment('" + mediaId + "', '" + page + "', '" + byTags + "', '" + commentId + "');";
 	$('#index-application-content-comment-update-x20-' + commentId).attr("title", getI18NValue('page.post.update.commment.img.title'));
-	$('#index-application-content-comment-update-x20-' + commentId).attr("class", "index-application-content-comment-update-x20 cursorpointer");
+	$('#index-application-content-comment-update-x20-' + commentId).attr("class", "icon-pencil cursorpointer");
 	$('#index-application-content-comment-update-x20-' + commentId).attr("src", "/assets/images/iconmonstr/pencil-6-icon-white.x20.png");
 	$('#index-application-content-comment-update-x20-' + commentId).attr("onclick", editOnClick);
 }

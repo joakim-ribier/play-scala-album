@@ -109,6 +109,10 @@ object Media {
     return media.get
   }
   
+  def list(order: OrderEnum.Value) : Seq[Media] = {
+    return MediaDB.findAll(order)
+  }
+  
   def list(offset: Long, limit: Int) : Seq[Media] = {
     return MediaDB.findAll(offset, limit)
   }
@@ -204,6 +208,16 @@ object Media {
       case MediaType.VIDEO => MediaType.VIDEO.dbId
       case _ => throw new IllegalArgumentException(
           "media type {" + mediaType +  "} is not supported in the application")
+    }
+  }
+  
+  def remove(mediaId: Option[Long]) {
+    if (!mediaId.isDefined) {
+      throw new IllegalArgumentException("params {mediaId} is required")
+    }
+    val result = MediaDB.delete(mediaId.get)
+    if (result != 1) {
+    	throw new UnsupportedOperationException("delete media with id " + mediaId.get + " failed")
     }
   }
 }

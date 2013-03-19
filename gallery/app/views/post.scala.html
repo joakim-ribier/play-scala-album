@@ -106,9 +106,9 @@
 										@if(hasSameLogin(user, comment)){
 											<img id="index-application-content-comment-undo-x20-@comment.id.id" src="@routes.Assets.at("images/iconmonstr/iconmonstr-undo-4-icon.x20.png")" alt="media" />
 											&nbsp;&nbsp;&nbsp;
-											<img id="index-application-content-comment-update-x20-@comment.id.id" class="index-application-content-comment-update-x20 cursorpointer" onclick="editComment('@media.id', '@page', '@byTags', '@comment.id.id');" src="@routes.Assets.at("images/iconmonstr/pencil-6-icon-white.x20.png")" title="@Messages("page.post.update.commment.img.title")(Lang("fr"))" alt="media" />
+											<img id="index-application-content-comment-update-x20-@comment.id.id" class="icon-pencil cursorpointer" onclick="editComment('@media.id', '@page', '@byTags', '@comment.id.id');" src="@routes.Assets.at("images/iconmonstr/pencil-6-icon-white.x20.png")" title="@Messages("page.post.update.commment.img.title")(Lang("fr"))" alt="media" />
 											&nbsp;&nbsp;&nbsp;
-											<img class="index-application-content-comment-delete-x20 cursorpointer" onclick="deleteCommentWithConfirmationWindow('@media.id', '@page', '@byTags', '@comment.id.id');" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.post.delete.commment.img.title")(Lang("fr"))" alt="media" />
+											<img class="icon-mark cursorpointer" onclick="deleteCommentWithConfirmationWindow('@media.id', '@page', '@byTags', '@comment.id.id');" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.post.delete.commment.img.title")(Lang("fr"))" alt="media" />
 											&nbsp;&nbsp;&nbsp;
 										}
 										<span>@formatDate(comment.created)</span>

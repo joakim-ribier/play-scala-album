@@ -7,18 +7,24 @@ js.global.edit.undo.img.title=annuler la modification
 js.global.edit.save.img.title=enregistrer la modification
 js.global.delete.photo=Voulez-vous vraiment supprimer cette photo ?
 js.global.delete.video=Voulez-vous vraiment supprimer cette vidéo ?
+js.global.delete.media=Êtes-vous sûr de vouloir vraiment la supprimer ?
 
 app.global.error.label.title=ERREUR
 app.global.error=Un problème est survenu, veuillez recommencer ou contacter l''administrateur de l''application.
 app.global.error.missing.field.form=Veuillez s''il vous plaît remplir correctement le formulaire.
 app.global.error.invalid.field.form=Les données renseignées ne sont pas correctes.
 app.global.icon.refresh.title=rafraîchir
-
 app.global.message.url.redirection.html=<h3>INFORMATION</h3>Сonnectez-vous pour être automatiquement redirigé.
+
+icon.plus.title=ajouter
+icon.pencil.title=modifier
 
 administrator.add.new.photo.verifying.text=Impossible de sauvegarder la photo, veuillez vérifier le formulaire et recommencer.
 administrator.delete.to.upload.directory.photo.failed=<h3>ERREUR</h3>Impossible de supprimer la photo <strong>{0}</strong>, veuillez recommencer ou contacter l''administrateur de l''application.
 administrator.delete.to.upload.directory.video.failed=<h3>ERREUR</h3>Impossible de supprimer la vidéo <strong>{0}</strong>, veuillez recommencer ou contacter l''administrateur de l''application.
+administrator.delete.media.with.comment.html=<h3>INFORMATION</h3>Vous n''avez pas le droit de supprimer ''<strong>{0}</strong>'' car des commentaires lui sont déjà associés.
+administrator.delete.media.failed.html=<h3>ERREUR</h3>Impossible de supprimer le média avec l''id ''<strong>{0}</strong>'', veuillez recommencer ou contacter l''administrateur de l''application.
+administrator.delete.media.success.html=<h3>INFORMATION</h3>Le média a bien été supprimé.
 
 application.add.new.admin.verifying.text=Configuration impossible, vérifiez votre identifiant et / ou mot de passe administrateur.
 application.add.new.admin.success.html=<h3>INFORMATION</h3>L''administrateur <strong>{0}</strong> a été créé.
@@ -80,10 +86,11 @@ page.admin.form.upload.field.size=Taille totale de fichier :
 page.admin.form.upload.field.percent=Pourcentage d''upload ( redirection automatique ) :
 page.admin.form.upload.failed=Erreur d''upload, veuillez recommencer ou contacter l''administrateur de l''application.
 page.admin.form.upload.submit=Transférer les médias
-page.admin.form.upload.title=Choisir des médias à transférer
-page.admin.show.photo.title=Liste des médias déjà transférés sur le serveur
+page.admin.form.upload.title=Transférer des photos et des vidéos
+page.admin.show.photo.title=Ajouter une photo ou une vidéo à l''album
+page.admin.show.album.media.title=Modifier une photo ou une vidéo de l''album
 page.admin.update.admin.password.title=Changer le mot de passe du compte administrateur
-page.admin.tag.already.exists.title=&Eacute;tiquettes déjà présentes dans l''album
+page.admin.tag.already.exists.title=Les &eacute;tiquettes de recherche
 page.admin.notification.title=Gestion du système de notifications
 page.admin.notification.message.empty.html=<h4>Il n''y a aucun message d''information.</h4>
 page.admin.notification.empty.html=<h4>Il n''y a aucune notification.</h4>

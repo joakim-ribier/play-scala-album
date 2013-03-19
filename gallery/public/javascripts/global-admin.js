@@ -150,6 +150,30 @@ function deleteVideoToUploadDirectory(filename) {
 	}
 }
 
+function deleteMediaToAlbum(mediaId, mediaTitle) {
+	var resultat = confirm(getI18NValue('js.global.delete.media') + " ( " + mediaTitle + " )"); 
+	if (resultat) {
+		$.post('/album/admin/delete/media/to/album',
+			{'mediaid-post': mediaId},
+			function(data) {
+				switch (data['status']) {
+						case 'success':
+							var url = '/album/admin/display/all/media/message/key/' + data['message-key'];
+							window.location.replace(url);
+							break;
+						case 'nothing' :
+						case 'failed' :
+						default :
+							$("#app-message").html(data['error-message']);
+							$('#app-message').fadeIn();
+							setTimeout(function() {
+			  					$('#app-message').fadeOut();
+							}, 10000);
+				}
+		});
+	}
+}
+
 $(document).ready(function() {
 	
 	$("#add-new-tag-input").keypress(function(event) {
@@ -200,6 +224,10 @@ $(document).ready(function() {
 		
 	$("#admin-photo-list").live("click", function() {
 		window.location.replace("/album/admin/list/photo");
+	});
+	
+	$("#admin-album-medias").live("click", function() {
+		window.location.replace("/album/admin/display/all/media");
 	});
 	
 	$("#admin-notification-title").live("click", function() {
