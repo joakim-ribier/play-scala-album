@@ -162,4 +162,21 @@ object MediaDB {
       SQL("DELETE FROM " + _DB_TBL_MEDIA + " WHERE id = {mediaId}").on('mediaId -> mediaId).executeUpdate()
     }
   }
+  
+  def update(mediaId: Long, title: String, description: Option[String], isPublic: Boolean) : Long = {
+    return DB.withConnection { implicit connection =>
+     SQL(
+        """
+          UPDATE """ + _DB_TBL_MEDIA + """
+          SET title = {title}, description = {description}, public = {public}
+          WHERE id = {mediaId}
+        """
+      ).on(
+        'mediaId -> mediaId,
+        'title -> title,
+        'description -> description,
+        'public -> isPublic
+      ).executeUpdate()
+    }
+  }
 }

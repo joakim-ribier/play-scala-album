@@ -174,6 +174,10 @@ function deleteMediaToAlbum(mediaId, mediaTitle) {
 	}
 }
 
+function updateMediaToAlbum(mediaId) {
+	window.location.replace("/album/admin/update/media/id/" + mediaId);
+}
+
 $(document).ready(function() {
 	
 	$("#add-new-tag-input").keypress(function(event) {

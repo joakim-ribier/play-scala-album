@@ -1,4 +1,4 @@
-@(title: String, feedback: Feedback, user: UserTemplate, form: Form[(String, String, String, Option[String], Boolean, List[String])], tags: Seq[String])(implicit flash: play.api.mvc.Flash)
+@(title: String, feedback: Feedback, user: UserTemplate, form: Form[(String, String, String, Option[String], Boolean, List[String], Option[Long])], tags: Seq[String])(implicit flash: play.api.mvc.Flash)
 
 @tagToId(tag: String) = @{
 	tag.replace("tags", "").replace("_", "")
@@ -14,9 +14,17 @@
 					<img src="@routes.Assets.at("images/nophotox200x150.png")" alt="photo" />
 				} else {
 					@if(form("type").value.get == "photo") {
-						<img src="/album/get/photo/upload/thumbnail/@form("filename").value.get" alt="photo" />
+						@if(form("mediaId").value) {
+							<img src="/album/get/thumbnail/photo/@form("filename").value.get" alt="photo" />
+						} else {
+							<img src="/album/get/photo/upload/thumbnail/@form("filename").value.get" alt="photo" />
+						}
 					} else {
-						<video width="400" height="300" controls="controls" src="/album/get/media/video/upload/@form("filename").value.get" />					
+						@if(form("mediaId").value) {
+							<video width="400" height="300" controls="controls" src="/album/get/media/video/standard/@form("filename").value.get" />
+						} else {
+							<video width="400" height="300" controls="controls" src="/album/get/media/video/upload/@form("filename").value.get" />
+						}			
 					}
 				}
 			} else {
@@ -27,6 +35,9 @@
 		@helper.form(routes.Administrator.saveMedia) {
     	<input type="hidden" name="filename" value="@form("filename").value.get"/>
     	<input type="hidden" name="type" value="@form("type").value.get"/>
+    	@if(form("mediaId").value) {
+    		<input type="hidden" name="mediaId" value="@form("mediaId").value.get"/>
+    	}
     	
     	<div id="administrator-content-add-new-photo-form-input-tags-hidden">
     		@helper.repeat(form("tags"), min = 0) { tag =>
@@ -41,15 +52,21 @@
 				
 	    	<p>
 	    		@if(form("description").value) {
-	    			<textarea style="background-color: transparent;" rows="6" cols="65" name="description" id="create-photo-description" value="@form("description").value.get" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
+	    			<textarea style="background-color: transparent;" rows="6" cols="65" name="description" id="create-photo-description" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))">@form("description").value.get</textarea>
 	    		} else {
-	    			<textarea style="background-color: transparent;" rows="6" cols="65" name="description" id="create-photo-description" value="" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
+	    			<textarea style="background-color: transparent;" rows="6" cols="65" name="description" id="create-photo-description" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
 	    		}
 	    	</p>
 				
 				<span style="color:rgb(0, 175, 202)">@Html(Messages("page.admin.notification.preview.html")(Lang("fr")))</span>
 				<div id="administrator-content-add-new-photo-form-description-preview" class="administrator-content-main-text-preview-html">
-					<span>@Html(Messages("page.adminAddPhoto.form.field.description")(Lang("fr")))</span>
+					<span>
+						@if(form("description").value) {
+							@form("description").value.get
+						} else {
+							@Html(Messages("page.adminAddPhoto.form.field.description")(Lang("fr")))
+						}
+					</span>
 				</div>
 				
 				<p>

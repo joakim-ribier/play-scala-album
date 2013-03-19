@@ -14,6 +14,7 @@ import play.api.Logger
 import utils._
 import scalax.file.NotFileException
 import models.post.Comment
+import org.slf4j.LoggerFactory
 
 object Visibility extends Enumeration {
   type Visibility = Value
@@ -37,7 +38,38 @@ case class Media(id: Pk[Long] = NotAssigned, filename: String, mediaType: MediaT
 
 object Media {
 
-	def create(filename: String, mediaType: MediaType.Value, title: String, description: Option[String], isPublic : Boolean, tags: Seq[String]) : Boolean = {
+  private val Logger = LoggerFactory.getLogger("Media")
+  
+	def createOrUpdate(filename: String, mediaType: MediaType.Value, title: String, description: Option[String], isPublic : Boolean, tags: Seq[String], mediaId: Option[Long]) : Boolean = {
+    if(mediaId.isDefined) {
+      return update(filename, mediaType, title, description, isPublic, tags, mediaId.get)
+    } else {
+      return create(filename, mediaType, title, description, isPublic, tags)
+    }
+	}
+	
+	private def update(filename: String, mediaType: MediaType.Value, title: String, description: Option[String], isPublic : Boolean, tags: Seq[String], mediaId: Long) : Boolean = {
+    if (title != null && !title.isEmpty()) {
+      try {
+        val media = Media.get(mediaId)
+        val result = MediaDB.update(mediaId, title, description, isPublic)
+        if (result != 1) {
+    	    throw new UnsupportedOperationException("update media id " + mediaId + " failed")
+        }
+        Tag.remove(Option.apply(media.id.get))
+     	  Tag.addTagsToPhoto(media.id.get, tags)
+     	  return true
+      } catch {
+        case e: Throwable => {
+          Logger.error(e.getMessage(), e)
+          false
+        } 
+      }
+    }
+    return false
+  }
+	
+	private def create(filename: String, mediaType: MediaType.Value, title: String, description: Option[String], isPublic : Boolean, tags: Seq[String]) : Boolean = {
     if (filename != null && title != null && !title.isEmpty() && mediaType != null) {
       try {
         if (mediaType == MediaType.PHOTO) {
@@ -51,7 +83,10 @@ object Media {
      	    return true
      	  }  
       } catch {
-        case e: Throwable => false
+        case e: Throwable => {
+          Logger.error(e.getMessage(), e)
+          false
+        } 
       }
     }
     return false

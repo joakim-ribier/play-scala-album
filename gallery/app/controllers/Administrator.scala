@@ -35,16 +35,17 @@ object Administrator extends Controller with Secured {
   private val Logger = LoggerFactory.getLogger("Administrator")
   
   private val _TITLE_HTML: String = Configuration.getHTMLTitle()
-  private val addMediaForm = Form (
+  private val addOrUpdateMediaForm = Form (
     tuple (
       "filename" -> text,
       "type" -> text,
       "title" -> text.verifying(Constraints.maxLength(30)),
       "description" -> optional(text),
       "public" -> boolean,
-      "tags" -> list(text)
+      "tags" -> list(text),
+      "mediaId" -> optional(longNumber)
     ) verifying (Messages("administrator.add.new.photo.verifying.text")(Lang("fr")), result => result match {
-      case (filename, mediaType, title, description, public, tags) => Media.create(filename, Media.toMediaType(mediaType), title, description, public, tags)
+      case (filename, mediaType, title, description, public, tags, mediaId) => Media.createOrUpdate(filename, Media.toMediaType(mediaType), title, description, public, tags, mediaId)
     })
   )
 
@@ -63,9 +64,9 @@ object Administrator extends Controller with Secured {
   
   def saveMedia = withAdmin { username => implicit request =>
     val userTemplate = Authentication.userTemplate(username, request.session)
-    addMediaForm.bindFromRequest.fold(
+    addOrUpdateMediaForm.bindFromRequest.fold(
       // Form has errors, redisplay it
-      formWithErrors => BadRequest(html.adminAddMedia(_TITLE_HTML, null, userTemplate, formWithErrors, Tag.list())),
+      formWithErrors => BadRequest(html.adminAddOrUpdateMedia(_TITLE_HTML, null, userTemplate, formWithErrors, Tag.list())),
       // We got a valid User value
       value =>  {
         val photos: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
@@ -108,14 +109,22 @@ object Administrator extends Controller with Secured {
   
   def addNewPhoto(name: String) = withAdmin { username => implicit request =>
     val userTemplate = Authentication.userTemplate(username, request.session)
-    val formFilled = addMediaForm.fill(name, MediaType.PHOTO.label, "", Option.empty, false, List(Configuration.getStringValue(Configuration._APP_TAG_DEFAULT)))
-    Ok(views.html.adminAddMedia(_TITLE_HTML, null, userTemplate, formFilled, Tag.list()))  
+    val formFilled = addOrUpdateMediaForm.fill(
+        name,
+        MediaType.PHOTO.label,
+        "", Option.empty, false,
+        List(Configuration.getStringValue(Configuration._APP_TAG_DEFAULT)), Option.empty)
+    Ok(views.html.adminAddOrUpdateMedia(_TITLE_HTML, null, userTemplate, formFilled, Tag.list()))  
   }
   
   def redirectToAddVideo(file: String) = withAdmin { username => implicit request =>
     val userTemplate = Authentication.userTemplate(username, request.session)
-    val formFilled = addMediaForm.fill(file, MediaType.VIDEO.label, "", Option.empty, false, List(Configuration.getStringValue(Configuration._APP_TAG_DEFAULT)))
-    Ok(views.html.adminAddMedia(_TITLE_HTML, null, userTemplate, formFilled, Tag.list()))  
+    val formFilled = addOrUpdateMediaForm.fill(
+        file,
+        MediaType.VIDEO.label,
+        "", Option.empty, false,
+        List(Configuration.getStringValue(Configuration._APP_TAG_DEFAULT)), Option.empty)
+    Ok(views.html.adminAddOrUpdateMedia(_TITLE_HTML, null, userTemplate, formFilled, Tag.list()))  
   }
   
   def notification = withAdmin { username => implicit request =>
@@ -263,6 +272,26 @@ object Administrator extends Controller with Secured {
         Ok(Json.obj("status" -> "failed",
             "error-message" -> fadOutLabel(Messages("administrator.delete.media.failed.html", value(0))(Lang("fr")))))
       }      
+    }
+  }
+  
+  def updateMedia(mediaId: String) = withAdmin { username => implicit request =>
+    val userTemplate = Authentication.userTemplate(username, request.session)
+    try {
+      val media = Media.get(mediaId.toLong)
+      val formFilled = addOrUpdateMediaForm.fill(
+          media.filename,
+          media.mediaType.label,
+          media.title,
+          media.description,
+          Media.toBoolean(media.visibility),
+          Tag.list(Option.apply(mediaId.toLong)).toList, Option.apply(media.id.get))
+      Ok(views.html.adminAddOrUpdateMedia(_TITLE_HTML, null, userTemplate, formFilled, Tag.list()))  
+    } catch {
+      case e: Throwable => {
+        Logger.error(e.getMessage(), e) 
+        Redirect(routes.Administrator.displayAllMedia)
+      } 
     }
   }
   

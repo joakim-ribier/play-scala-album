@@ -55,10 +55,11 @@ GET		/album/send/mail/comments/private/:key						controllers.SendMail.comments(k
 GET		/album/admin							   			controllers.Administrator.index
 GET		/album/admin/list/photo								controllers.Administrator.listPhotoUploaded
 GET		/album/admin/add/new/photo/:name					controllers.Administrator.addNewPhoto(name: String)
+GET		/album/admin/update/media/id/:mediaId				controllers.Administrator.updateMedia(mediaId: String)
 GET		/album/admin/media/redirect/add/video/:file			controllers.Administrator.redirectToAddVideo(file: String)
 GET		/album/admin/notification							controllers.Administrator.notification
 GET		/album/admin/display/all/media						controllers.Administrator.displayAllMedia
-GET		/album/admin/display/all/media/message/key/:key			controllers.Administrator.displayAllMediaWithMessage(key: String)
+GET		/album/admin/display/all/media/message/key/:key		controllers.Administrator.displayAllMediaWithMessage(key: String)
 
 POST 	/album/upload									controllers.Administrator.upload
 POST 	/album/saveMedia								controllers.Administrator.saveMedia

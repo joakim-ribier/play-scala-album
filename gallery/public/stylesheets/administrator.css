@@ -315,6 +315,9 @@
 
 #admin-notification-title {
 	cursor: pointer;
+	-webkit-transform: rotate(-3deg);
+	-moz-transform: rotate(-3deg);
+	padding: 5px;
 }
 
 .administrator-notififcation-display-message {

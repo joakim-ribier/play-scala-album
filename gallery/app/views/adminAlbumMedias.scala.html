@@ -28,7 +28,7 @@
 					<span>@titleFormat(media.title)</span>
 				</div>
 				<div class="administrator-content-list-media-panel">
-					<img class="icon-pencil cursorpointer" src="@routes.Assets.at("images/iconmonstr/pencil-6-icon-white.x20.png")" title="@Messages("icon.pencil.title")(Lang("fr"))" alt="media" />
+					<img onclick="updateMediaToAlbum('@media.id');" class="icon-pencil cursorpointer" src="@routes.Assets.at("images/iconmonstr/pencil-6-icon-white.x20.png")" title="@Messages("icon.pencil.title")(Lang("fr"))" alt="media" />
 					<img onclick="deleteMediaToAlbum('@media.id', '@media.title');" class="icon-mark cursorpointer" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.adminListMedia.delete.media.img.title", media.title)(Lang("fr"))" alt="media" />
 				</div>
 			</div>

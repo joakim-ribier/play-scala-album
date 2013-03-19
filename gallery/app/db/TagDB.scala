@@ -44,6 +44,18 @@ object TagDB {
     }
   }
   
+  def findBy(mediaId: Long) : Seq[String] = {
+    return DB.withConnection { implicit connection =>
+      val sql = SQL(
+        """
+          SELECT tag FROM """ + _DB_TBL_TAG + """
+          where media = {mediaId} ORDER BY tag 
+        """
+      ).on('mediaId -> mediaId)
+      sql().map(row => row[String]("tag")).toList
+    }
+  }
+  
   def findAll(tags: Seq[String]) : Seq[Long] = {
     return DB.withConnection { implicit connection =>
       val sql = SQL(
@@ -53,6 +65,13 @@ object TagDB {
         """
       )
       sql().map(row => row[Long]("media")).toList
+    }
+  }
+  
+  def delete(mediaId: Long) : Int = {
+    return DB.withTransaction { implicit connection =>
+      SQL("DELETE FROM " + _DB_TBL_TAG + " WHERE media = {mediaId}"
+          ).on('mediaId -> mediaId).executeUpdate()
     }
   }
 }
