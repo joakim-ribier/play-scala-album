@@ -137,4 +137,12 @@ $(document).ready(function() {
 	$(".index-application-page-refresh-view").live("mouseout", function() {
 		 $(this).attr("src", "/assets/images/iconmonstr/refresh-5-icon-white.x20.png");
 	});
+	
+	$(".icone-plus").live("mouseover", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/plus-icon-R250G199B19.x20.png");
+	});
+	
+	$(".icone-plus").live("mouseout", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/plus-icon-white.x20.png");
+	});
 });

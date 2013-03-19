@@ -13,8 +13,9 @@
 	<div id="administrator-content-main" class="administrator-content-main-border">
 		@for(video <- videos) {
 			<div class="administrator-content-list-photo">
-				<video width="200" height="150" src="/album/get/media/video/upload/@video" onclick="redirectionToAddVideo('@video');"></video>
+				<video width="200" height="150" controls="controls" src="/album/get/media/video/upload/@video"></video>
 				<div class="administrator-content-list-media-panel">
+					<img onclick="redirectionToAddVideo('@video');" class="icone-plus cursorpointer" src="@routes.Assets.at("images/iconmonstr/plus-icon-white.x20.png")" title="@Messages("icone.plus.title")(Lang("fr"))" alt="media" />
 					<img onclick="deleteVideoToUploadDirectory('@video');"  class="index-application-content-comment-delete-x20 cursorpointer" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.adminListMedia.delete.media.img.title", video)(Lang("fr"))" alt="media" />
 				</div>
 			</div>
@@ -23,6 +24,7 @@
 			<div class="administrator-content-list-photo">
 				<img src="/album/get/photo/upload/thumbnail/@photo" width="200" height="150" onclick="accesstoNewPhoto('@photo');" alt="photo" />
 				<div class="administrator-content-list-media-panel">
+					<img onclick="accesstoNewPhoto('@photo');" class="icone-plus cursorpointer" src="@routes.Assets.at("images/iconmonstr/plus-icon-white.x20.png")" title="@Messages("icone.plus.title")(Lang("fr"))" alt="media" />
 					<img onclick="deletePhotoToUploadDirectory('@photo');" class="index-application-content-comment-delete-x20 cursorpointer" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.adminListMedia.delete.media.img.title", photo)(Lang("fr"))" alt="media" />
 				</div>
 			</div>
