@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory
 import utils.EncoderUtils
 import models.post.Post
 import models.post.Comment
+import play.api.mvc.Security
 
 object SendMail extends Controller with Secured {
 
@@ -33,31 +34,36 @@ object SendMail extends Controller with Secured {
   private val _ADMIN_LOGIN = Configuration.getStringValue(Configuration._APP_ADMIN_LOGIN)
   private val _FROM = Configuration.getStringValue(Configuration._MAIL_FROM)
   
-  def newEmail = withUser { username => implicit request =>
-    try {
-	    val value = request.body.asFormUrlEncoded.get("address-post")
-	  	val addressMail: String = value(0)
-	  	if (addressMail != null && addressMail != "") {
-	  	  
-	      val generateURL = buildUrl(username, addressMail)
-				val textContent = Messages("sendmail.validation.email.text", generateURL, "\n\r")(Lang("fr"))
-				val htmlContent = Messages("sendmail.validation.email.html", generateURL)(Lang("fr"))
-	      send(
-	          Option.apply(addressMail),
-	          Option.empty,
-	          _TITLE_HTML + Messages("sendmail.validation.email.subject")(Lang("fr")),
-	          Option.apply(textContent), Option.apply(htmlContent))("validation new user email")
-	  	
-				Ok(Json.obj("status" -> "success", "return" -> addressMail))
-	  	} else {
-	  	  
-	  		Ok(Json.obj("status" -> "failed"))
-	  	}  
-    } catch {
-      case e: Throwable => {
-        Logger.error(e.getMessage(), e)
-        Ok(Json.obj("status" -> "failed")) 
-      }
+  def newEmail = Action { implicit request =>
+    val username = request.session.get(Security.username)
+    if (username.isDefined) {
+    	try {
+    		val value = request.body.asFormUrlEncoded.get("address-post")
+    				val addressMail: String = value(0)
+    				if (addressMail != null && addressMail != "") {
+    					
+    					val generateURL = buildUrl(username.get, addressMail)
+    							val textContent = Messages("sendmail.validation.email.text", generateURL, "\n\r")(Lang("fr"))
+    							val htmlContent = Messages("sendmail.validation.email.html", generateURL)(Lang("fr"))
+    							send(
+    									Option.apply(addressMail),
+    									Option.empty,
+    									_TITLE_HTML + Messages("sendmail.validation.email.subject")(Lang("fr")),
+    									Option.apply(textContent), Option.apply(htmlContent))("validation new user email")
+    									
+    									Ok(Json.obj("status" -> "success", "return" -> addressMail))
+    				} else {
+    					
+    					Ok(Json.obj("status" -> "failed"))
+    				}  
+    	} catch {
+    	case e: Throwable => {
+    		Logger.error(e.getMessage(), e)
+    		Ok(Json.obj("status" -> "failed")) 
+    	}
+    	}
+    } else {
+      Redirect(routes.Authentication.logout)
     }
   }
 

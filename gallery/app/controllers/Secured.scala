@@ -10,6 +10,8 @@ import play.api.mvc.Results
 import play.api.mvc.Security
 import org.slf4j.LoggerFactory
 import play.api.Logger
+import models.UserEmail
+import utils.Configuration
 
 trait Secured {
   
@@ -29,7 +31,14 @@ trait Secured {
 
   def withAuth(f: => String => Request[AnyContent] => Result) = {
     Security.Authenticated(username, onUnauthorized) { user =>
-      Action(request => f(user)(request))
+       Action { implicit request =>
+         val email = request.session.get(Configuration._SESSION_EMAIL_KEY) 
+         if (email.isDefined && !email.get.equals("nothing")) {
+        	 f(user)(request)
+      	 } else {
+           Results.Redirect(routes.AccountConfigurationController.index)
+         }  
+      }
     }
   }
   
@@ -37,7 +46,7 @@ trait Secured {
     if (User.isAdmin(username)) {
     	userUnauthorized(request)
     } else {
-    	f(username)(request)
+      f(username)(request)
     }
   }
   

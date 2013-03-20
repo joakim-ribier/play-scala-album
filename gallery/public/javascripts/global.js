@@ -145,4 +145,12 @@ $(document).ready(function() {
 	$(".icone-plus").live("mouseout", function() {
 		 $(this).attr("src", "/assets/images/iconmonstr/plus-icon-white.x20.png");
 	});
+	
+	$(".icon-email").live("mouseover", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/email-8-icon-R250G199B19.x48.png");
+	});
+	
+	$(".icon-email").live("mouseout", function() {
+		 $(this).attr("src", "/assets/images/iconmonstr/email-8-icon-white.x48.png");
+	});
 });

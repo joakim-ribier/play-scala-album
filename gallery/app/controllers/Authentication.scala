@@ -64,67 +64,87 @@ object Authentication extends Controller {
       	val formEmail = value._4
       	val formToken = value._5
       	val formRedirectUrl = value._6
-  			
+      	
       	val sessionId = generateSessionId(formUsername)
-        
+      	MDCUtils.getOrOpenSession(formUsername, sessionId)
+      	Logger.info("You've been logged in")
+      	
       	if (formRedirectUrl.isDefined) {
-          Logger.info("redirection '{}' after authentication successful", formRedirectUrl.get)
-          Redirect(formRedirectUrl.get).withSession(
-            Security.username -> formUsername,
-            Configuration._SESSION_ID_KEY -> sessionId,
-            Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(formUsername)).flashing("connection" -> "success")
-
+          Logger.info("redirection to '{}' after authentication successfull", formRedirectUrl.get)
+          connect(formRedirectUrl.get, formUsername, sessionId, Option.empty)(request)
       	} else {
-        	
-      	  val returnMessage = setAddressMailIfValid(formUsername, formEmail, formToken)
-    			MDCUtils.getOrOpenSession(formUsername, sessionId)
-    			Logger.info("You've been logged in")
-    			if (returnMessage.isDefined) {
-    				redirectToIndex(formUsername, sessionId, returnMessage.get)(request)
-    			} else {
-    				redirectToIndex(formUsername, sessionId)(request)
-    			}
-        }
+      	  
+      	  // validation account configuration e-mail
+      	  if (formEmail.isDefined && formToken.isDefined) {
+      	    checkAndValidAddressEmail(formUsername, formEmail.get, formToken.get, sessionId)(request)
+      	 
+      	  } else {
+      	  	connect("/album", formUsername, sessionId, Option.empty)(request)
 
+      	  }
+        }
       }
     )
   }
   
-  private def setAddressMailIfValid(username: String, formEmail: Option[String], formToken: Option[String]) : Option[String] = {
-    if (!formEmail.isDefined || !formToken.isDefined) {
-	    return Option.empty 
-	  }
-	    
+  private def checkAndValidAddressEmail(username: String, emailValidation: String, tokenValidation: String, sessionId: String) = Action { implicit request =>
     val userEmail = UserEmail.getFromLogin(username)
     if (userEmail.isDefined) {
-      return Option.apply(Messages("application.create.new.user.email.exists.html", userEmail.get)(Lang("fr")))
+      connectToAccountConfigurationPage(username, sessionId,
+          false, Messages("page.account.configuration.validation.email.already.exists")(Lang("fr")))(request)
+          
+    } else {
+      val tokenTo = EncoderUtils.generateTokenForEmailValidation(username, emailValidation)
+      if (tokenTo.equals(tokenValidation)) {
+        val user = User.findUser(Option.apply(username))
+        if (user.isDefined && User.setAddressMail(user.get, emailValidation)) {
+          connectToAccountConfigurationPage(username, sessionId,
+              true, Messages("page.account.configuration.validation.email.success")(Lang("fr")))(request)
+              
+        } else {
+          connectToAccountConfigurationPage(username, sessionId,
+              false, Messages("page.account.configuration.validation.email.failed", emailValidation)(Lang("fr")))(request)
+              
+        }
+      } else {
+        connectToAccountConfigurationPage(username, sessionId,
+              false, Messages("page.account.configuration.validation.email.failed", emailValidation)(Lang("fr")))(request)
+              
+      }
     }
-    
-    val tokenTo = EncoderUtils.generateTokenForEmailValidation(username, formEmail.get)
-		if (tokenTo.equals(formToken.get)) {
-			val user = User.findUser(Option.apply(username))
-			if (user.isDefined && User.setAddressMail(user.get, formEmail.get)) {
-				return Option.apply(Messages("application.create.new.user.email.success.html", formEmail.get)(Lang("fr")))
-			} else {
-			  return Option.apply(Messages("application.create.new.user.email.failed.html", formEmail.get)(Lang("fr")))
-			}
-		} else {
-		  return Option.apply(Messages("application.create.new.user.email.failed.html", formEmail.get)(Lang("fr")))
-		}
-  }
-
-  private def redirectToIndex(username: String, sessionId: String) = Action {
-    Redirect(routes.Application.index).withSession(
-            Security.username -> username,
-            Configuration._SESSION_ID_KEY -> sessionId,
-            Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)).flashing("connection" -> "success")
   }
   
-  private def redirectToIndex(username: String, sessionId: String, message: String) = Action {
-  	Redirect(routes.Application.index).withSession(
-            Security.username -> username,
-            Configuration._SESSION_ID_KEY -> sessionId,
-            Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)).flashing("connection" -> "success", "app-message" -> message)
+  private def connectToAccountConfigurationPage(username: String, sessionId: String, succeed: Boolean, message: String) = Action {
+    Redirect(routes.AccountConfigurationController.index).withSession(
+        Security.username -> username,
+    		Configuration._SESSION_ID_KEY -> sessionId,
+    		Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)
+    		).flashing(
+    		    "connection" -> "success",
+    		    "validation-message" -> message,
+    		    "succeed" -> succeed.toString)
+  }
+
+  private def connect(url: String, username: String, sessionId: String, message: Option[String]) = Action {
+    val email = UserEmail.getFromLogin(username)
+    if (email.isDefined) {
+    	if (message.isDefined) {
+    		Redirect(url).withSession(
+    				Security.username -> username,
+    				Configuration._SESSION_ID_KEY -> sessionId,
+    				Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)).flashing("connection" -> "success", "app-message" -> message.get)
+    	} else {
+    		Redirect(url).withSession(
+    				Security.username -> username,
+    				Configuration._SESSION_ID_KEY -> sessionId,
+    				Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)).flashing("connection" -> "success")
+    	}
+    } else {
+      Redirect(routes.AccountConfigurationController.index).withSession(
+    				Security.username -> username,
+    				Configuration._SESSION_ID_KEY -> sessionId,
+    				Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)).flashing("connection" -> "success")
+    }	
   }
   
   private def formatUserEmailToString(username: String) : String = {

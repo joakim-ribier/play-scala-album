@@ -49,7 +49,7 @@
 	padding: 10px;
 }
 
-#index-application-tag {
+#index-application-footer {
 	background-color: #FFFFFF;
 	clear: both;
 	padding: 10px;
@@ -161,7 +161,7 @@
 	padding-right: 5px;
 }
 
-#index-tag-search-title {
+#index-application-footer-title {
 	padding-top: 20px;
 	text-align: center;
 	font-size: 18px;
@@ -172,12 +172,12 @@
 	clear: both;
 }
 
-#index-tag-search-title a {
+#index-application-footer-title a {
 	color: rgb(0, 175, 202);
 	text-decoration: none;
 }
 
-#index-tag-search-title-explication {
+#index-application-footer-explication {
 	padding-top: 5px;
 	text-align: center;
 	font-size: 12px;
@@ -460,4 +460,45 @@
 	padding: 5px;
 	color: rgb(0, 175, 202);
 	font-weight: bold;
+}
+
+#index-application-content-configuration {
+	margin: -30px 0px 100px 30px;
+	color: #FFFFFF;
+	-webkit-transform: rotate(-5deg);
+	-moz-transform: rotate(-5deg);
+}
+
+#index-application-content-configuration-warning {
+	margin-top: 20px;
+	margin-bottom: 50px;
+	font-size: 16px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+#index-application-content-configuration-info {
+	width: 600px; 
+	margin-left: 200px;
+	text-align: justify;
+}
+
+#index-application-content-configuration-info input {
+	background-color: transparent;
+	color: rgb(0, 175, 202);
+	font-weight: bold;
+	padding: 10px;
+	width: 430px;
+}
+
+#index-application-content-configuration-info-email-input {
+	float: left;
+	padding-top: 8px;
+	padding-right: 10px;
+}
+
+#index-application-content-configuration-info-email-callback {
+	margin-top: 10px;
+	font-weight: bold;
+	text-align: justify;
 }

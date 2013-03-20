@@ -38,8 +38,8 @@ GET		/album/get/next/media/:mediaId/post/page/:page/tags/:tags				controllers.Po
 
 # CONFIGURATION CONTROLLER
 
-GET		/album/configuration													controllers.Application.configuration
-POST	/album/configuration													controllers.Application.createAdministrator
+GET		/album/admin/configuration													controllers.Application.configuration
+POST	/album/admin/configuration													controllers.Application.createAdministrator
 POST	/album/get/post/value/from/key											controllers.Application.getStringPostValueFromKey
 
 
@@ -84,6 +84,9 @@ GET		/album/authenticate														controllers.Authentication.redirectAuthent
 
 GET 	/album/i18n/lang/:lang												controllers.JavaScriptController.i18n(lang: String)
 
+
+# ACCOUNT CONFIGURATION CONTROLLER
+GET		/album/user/configuration				controllers.AccountConfigurationController.index
 
 # Map static resources from the /public folder to the /assets URL path
 

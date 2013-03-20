@@ -238,21 +238,13 @@ $(document).ready(function() {
 		$('#index-tag-search-title-href').attr("href", url);
 	});
 	
-	$("#footer-information-email-ckx").live("change", function() {
-		if ($(this).is(':checked')) {
-			$('#footer-information-new-email').fadeIn();
-		} else {
-			$('#footer-information-new-email').fadeOut();
-		}
-	});
-	
-	$("#footer-information-email-button").live("click", function() {
-		var waitText = 'Envoi en cours ...';
-		$("#footer-information-new-email-return").html(waitText);
+	$("#index-application-content-configuration-new-mail-button").live("click", function() {
+		var waitText = getI18NValue('js.global.send.user.email.wait');
+		$("#index-application-content-configuration-info-email-callback").html(waitText);
 		
 		var errorText = getI18NValue('js.global.send.user.email.failed');
 		
-		var value = $("#footer-information-email-input").val();
+		var value = $("#index-application-content-configuration-new-mail-input").val();
 		if (value != null && value != "") {
 			$.post('/album/user/new/address/mail',
 				{'address-post': value},
@@ -261,16 +253,16 @@ $(document).ready(function() {
 					case 'success':
 						var okText1 = getI18NValue('js.global.send.user.email.success.1', data['return']);
 						var okText2 = getI18NValue('js.global.send.user.email.success.2');
-						$("#footer-information-new-email-return").html(okText1 + okText2);
+						$("#index-application-content-configuration-info-email-callback").html(okText1 + okText2);
 						break;
 					case 'nothing' :
 					case 'failed' :
 					default :
-						$("#footer-information-new-email-return").html(errorText);
+						$("#index-application-content-configuration-info-email-callback").html(errorText);
 				}
 			});
 		} else {
-			$("#footer-information-new-email-return").html(errorText);
+			$("#index-application-content-configuration-info-email-callback").html(errorText);
 		}
 	});
 	

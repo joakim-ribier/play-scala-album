@@ -1,6 +1,7 @@
-js.global.send.user.email.failed=Impossible d''envoyer le courrier électronique, veuillez vérifier votre adresse mail puis recommencer.
-js.global.send.user.email.success.1=Le courrier électronique de validation a été envoyé à [ {0} ], veuillez vérifier votre boite de réception.
-js.global.send.user.email.success.2=<br />(si vous ne le recevez pas, vérifiez également votre dossier spam)
+js.global.send.user.email.wait=Le courrier électronique est en cours d''envoi ...
+js.global.send.user.email.failed=Une erreur est survenue, il est impossible d''envoyer le courrier électronique de validation, veuillez vérifier votre adresse électronique puis recommencer.
+js.global.send.user.email.success.1=Le courrier électronique de validation a été envoyé à <u><strong>{0}</strong></u>, veuillez vérifier votre boite de réception.
+js.global.send.user.email.success.2=&nbsp;( si vous ne le recevez pas, vérifiez également votre dossier spam )
 js.global.delete.comment.answer=Voulez-vous vraiment supprimer ce commentaire ?
 js.global.edit.textarea.placeholder=modifiez le commentaire ici ...
 js.global.edit.undo.img.title=annuler la modification
@@ -10,11 +11,12 @@ js.global.delete.video=Voulez-vous vraiment supprimer cette vidéo ?
 js.global.delete.media=Êtes-vous sûr de vouloir vraiment la supprimer ?
 
 app.global.error.label.title=ERREUR
-app.global.error=Un problème est survenu, veuillez recommencer ou contacter l''administrateur de l''application.
+app.global.error=Une erreur est survenue, veuillez recommencer ou contacter l''administrateur de l''application.
 app.global.error.missing.field.form=Veuillez s''il vous plaît remplir correctement le formulaire.
 app.global.error.invalid.field.form=Les données renseignées ne sont pas correctes.
 app.global.icon.refresh.title=rafraîchir
 app.global.message.url.redirection.html=<h3>INFORMATION</h3>Сonnectez-vous pour être automatiquement redirigé.
+app.global.message.email=courrier électronique
 
 icon.plus.title=ajouter
 icon.pencil.title=modifier
@@ -28,10 +30,7 @@ administrator.delete.media.success.html=<h3>INFORMATION</h3>Le média a bien ét
 
 application.add.new.admin.verifying.text=Configuration impossible, vérifiez votre identifiant et / ou mot de passe administrateur.
 application.add.new.admin.success.html=<h3>INFORMATION</h3>L''administrateur <strong>{0}</strong> a été créé.
-application.create.new.user.email.failed.html=<h3>ERREUR</h3>Il est impossible de valider l''adresse mail <strong{0}</strong> pour ce compte, veuillez recommencer ou contacter l''administrateur de l''application.
-application.create.new.user.email.success.html=<h3>INFORMATION</h3>L''adresse mail <strong>{0}</strong> est validée pour ce compte.
-application.create.new.user.email.exists.html=<h3>INFORMATION</h3>Ce compte est déjà associé à l''adresse mail <strong>{0}</strong>.
-application.create.new.user.email.redirection.to.login=<h3>INFORMATION</h3>Avant de valider l''adresse mail <strong>{0}</strong>, veuillez vous identifier avec le compte asssocié.
+application.create.new.user.email.redirection.to.login=<h3>INFORMATION</h3>Afin de valider l''adresse électronique <u><strong>{0}</strong></u>, veuillez vous identifier avec le compte asssocié.
 
 authentication.login.verifying.text=Connexion impossible, vérifiez votre identifiant et / ou mot de passe.
 
@@ -73,9 +72,6 @@ page.login.form.title=Formulaire de connexion
 
 page.main.connected.user=Connecté en tant que  [ {0} ]
 page.main.disconnecte=Se déconnecter
-page.main.update.site.html=&Ecirc;tre informé des mises à jour du site
-page.main.update.site.valid.email=adresse mail valide
-page.main.update.site.register=Je veux m''enregistrer
 page.main.update.site.create.of=Création de
 page.main.update.site.disponibility.of=disponible sur
 page.main.update.site.ie.redirection.html=<h3>INFORMATION</h3>Pour une expérience utilisateur optimale le navigateur <strong>Microsoft Internet Explorer</strong> n''est pas recommandé !<br /><br />Navigateurs recommandés :<ol><li>Firefox ( Windows, Linux & Mac )</li><li>Opera ( Windows, Linux & Mac )</li><li>Google Chrome ( Windows, Linux & Mac )</li><li>Safari ( Mac )</li></ol>
@@ -148,3 +144,16 @@ page.post.update.comment.success.html=<h3>INFORMATION</h3>Le commentaire a bien 
 page.post.icon.avatar=avatar
 page.post.previous.media=précédente
 page.post.next.media=suivante
+
+page.account.configuration.new.email.input=inscrivez votre adresse électronique ici pour continuer
+page.account.configuration.new.email.button=recevoir un mail de validation
+page.account.configuration.warning.information=configuration et validation de l''adresse électronique du compte
+page.account.configuration.info.title=Avec votre adresse électronique,
+page.account.configuration.info.1=Vous n''avez plus à vous connecter sans cesse sur le site, vous recevrez automatiquement un courrier électronique <strong>une fois par semaine</strong> avec les nouvelles photos et vidéos.
+page.account.configuration.info.2=&Agrave; chaque nouveau commentaire sur une photo ou une vidéo, sûr laquelle, vous avez déjà posté un commentaire, vous recevrez alors automatiquement une notification par courrier électronique.
+page.account.configuration.info.3=Vous avez perdu votre mot de passe ? Votre adresse électronique est là pour ça !
+page.account.configuration.title=Configuration de votre compte
+page.account.configuration.title.explication=( les informations liées à votre compte )
+page.account.configuration.validation.email.already.exists=Vous avez déjà effectué la validation de votre adresse électronique.
+page.account.configuration.validation.email.success=L''adresse électronique pour ce compte est validée.
+page.account.configuration.validation.email.failed=Une erreur est survenue, il est impossible de valider l''adresse électronique <u><strong>{0}</strong></u> pour ce compte, veuillez recommencer ou contacter l''administrateur de l''application.
