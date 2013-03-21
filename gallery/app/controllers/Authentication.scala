@@ -15,6 +15,12 @@ import play.api.i18n.Messages
 import play.api.i18n.Lang
 import org.slf4j.LoggerFactory
 import utils.EncoderUtils
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatterBuilder
+import org.joda.time.format.DateTimeFormatter
+import utils.DateTimeUtils
+import play.cache.Cache
 
 object Authentication extends Controller {
   
@@ -42,8 +48,13 @@ object Authentication extends Controller {
   	    val feedback = new Feedback(Messages("app.global.message.url.redirection.html")(Lang("fr")), FeedbackClass.ok)
   	    Ok(views.html.login(fill, _TITLE_HTML, feedback))
     	} else {
-    	  Ok(views.html.login(form, _TITLE_HTML, null))
-    	}
+    	  if (request.flash.get("app-message").isDefined) {
+    	    val feedback = new Feedback(request.flash.get("app-message").get, FeedbackClass.ok)
+          Ok(views.html.login(form, _TITLE_HTML, feedback))
+        } else {
+          Ok(views.html.login(form, _TITLE_HTML, null))
+        }
+      }
     } else {
     	Redirect(routes.Application.configuration)
     }
@@ -65,8 +76,10 @@ object Authentication extends Controller {
       	val formToken = value._5
       	val formRedirectUrl = value._6
       	
-      	val sessionId = generateSessionId(formUsername)
-      	MDCUtils.getOrOpenSession(formUsername, sessionId)
+      	val dateTime = DateTime.now().toString("yyyy-MM-dd'T'HH:mm:ss")
+      	val sessionId = "uuid-" + formUsername + "-" + dateTime 
+      	Cache.set(sessionId + "-" + Configuration._SESSION_TIMEOUT_KEY, DateTimeUtils.now)
+      	MDCUtils.put(sessionId)
       	Logger.info("You've been logged in")
       	
       	if (formRedirectUrl.isDefined) {
@@ -132,7 +145,8 @@ object Authentication extends Controller {
     		Redirect(url).withSession(
     				Security.username -> username,
     				Configuration._SESSION_ID_KEY -> sessionId,
-    				Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)).flashing("connection" -> "success", "app-message" -> message.get)
+    				Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)
+    				).flashing("connection" -> "success", "app-message" -> message.get)
     	} else {
     		Redirect(url).withSession(
     				Security.username -> username,
@@ -143,7 +157,8 @@ object Authentication extends Controller {
       Redirect(routes.AccountConfigurationController.index).withSession(
     				Security.username -> username,
     				Configuration._SESSION_ID_KEY -> sessionId,
-    				Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)).flashing("connection" -> "success")
+    				Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)
+    				).flashing("connection" -> "success")
     }	
   }
   
@@ -165,15 +180,12 @@ object Authentication extends Controller {
     if (request.flash.get("redirect-url").isDefined) {
     	Redirect(routes.Authentication.login).withNewSession.flashing("redirect-url" -> request.flash.get("redirect-url").get)
     } else {
-    	Redirect(routes.Authentication.login).withNewSession
+      if (request.flash.get("app-message").isDefined) {
+      	Redirect(routes.Authentication.login).withNewSession.flashing("app-message" -> request.flash.get("app-message").get)
+      } else {
+        Redirect(routes.Authentication.login).withNewSession
+      }
     }
-  }
-  
-  private def generateSessionId(username: String) : String = {
-  	val date: Calendar = Calendar.getInstance();
-		val dateformatter: SimpleDateFormat  = new SimpleDateFormat("yyyy.MM.dd_hh:mm:ss")
-		val now: String = dateformatter.format(date.getTime())
-		return username + "-" + now 
   }
   
   def userTemplate(username: String, session: Session) : UserTemplate = {

@@ -3,14 +3,8 @@ package utils
 import org.slf4j.MDC
 
 object MDCUtils {
+
+  def put(sessionId: String) = MDC.put(Configuration._SESSION_ID_KEY, sessionId)
   
-  def getOrOpenSession(username: String, sessionId: String) = {
-    MDC.put("username", username)
-		MDC.put("sessionId", sessionId);
-  }
-  
-  def closeSession() = {
-  	MDC.clear()
-  }
-  
+  def closeSession() = MDC.clear()
 }

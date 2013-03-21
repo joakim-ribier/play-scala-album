@@ -47,10 +47,9 @@ object Global extends GlobalSettings {
   }
   
   override def onRouteRequest(request: RequestHeader): Option[Handler] = {
-    val username = request.session.get(Security.username)
-    val sessionId = request.session.get("sessionId")
-    if (username.isDefined && sessionId.isDefined) {
-      MDCUtils.getOrOpenSession(username.get, sessionId.get)
+    val sessionId = request.session.get(Configuration._SESSION_ID_KEY)
+    if (sessionId.isDefined) {
+      MDCUtils.put(sessionId.get)
     } else {
     	MDCUtils.closeSession()
     }

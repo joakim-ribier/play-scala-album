@@ -18,6 +18,8 @@ app.global.icon.refresh.title=rafraîchir
 app.global.message.url.redirection.html=<h3>INFORMATION</h3>Сonnectez-vous pour être automatiquement redirigé.
 app.global.message.email=courrier électronique
 
+app.global.message.secured.session.expired=<h3>INFORMATION</h3>La session est invalide ou le délai de validité a expiré, veuillez vous reconnecter.
+
 icon.plus.title=ajouter
 icon.pencil.title=modifier
 

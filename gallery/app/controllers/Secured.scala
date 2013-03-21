@@ -12,6 +12,11 @@ import org.slf4j.LoggerFactory
 import play.api.Logger
 import models.UserEmail
 import utils.Configuration
+import org.joda.time.DateTime
+import play.api.i18n.Messages
+import play.api.i18n.Lang
+import utils.DateTimeUtils
+import play.cache.Cache
 
 trait Secured {
   
@@ -32,12 +37,20 @@ trait Secured {
   def withAuth(f: => String => Request[AnyContent] => Result) = {
     Security.Authenticated(username, onUnauthorized) { user =>
        Action { implicit request =>
-         val email = request.session.get(Configuration._SESSION_EMAIL_KEY) 
-         if (email.isDefined && !email.get.equals("nothing")) {
-        	 f(user)(request)
-      	 } else {
-           Results.Redirect(routes.AccountConfigurationController.index)
-         }  
+         
+        val sessionId = request.session.get(Configuration._SESSION_ID_KEY)
+         if (isExpired(sessionId)) {
+           Results.Redirect(routes.Authentication.logout
+               ).flashing("app-message" -> Messages("app.global.message.secured.session.expired")(Lang("fr")))
+         } else {
+           Cache.set(sessionId.get + "-" + Configuration._SESSION_TIMEOUT_KEY, DateTimeUtils.now)
+           val email = request.session.get(Configuration._SESSION_EMAIL_KEY) 
+    			 if (email.isDefined && !email.get.equals("nothing")) {
+    				 f(user)(request)
+    			 } else {
+    				 Results.Redirect(routes.AccountConfigurationController.index)
+    			 }  
+         }
       }
     }
   }
@@ -56,5 +69,16 @@ trait Secured {
     } else {
     	adminUnauthorized(request)
     }
+  }
+  
+  private def isExpired(sessionId: Option[String]) : Boolean = {
+    if (sessionId.isDefined) {
+      val value = Cache.get(sessionId.get + "-" + Configuration._SESSION_TIMEOUT_KEY)
+      if (value != null) {
+      	val dateTime : DateTime = DateTimeUtils.convertToDateTime(Option.apply(value.toString()))
+      	return !DateTimeUtils.isAfterNowMinusMinutes(Option.apply(dateTime), Option.apply(Configuration.sessionExpiredMinutes))
+      }
+    }
+    return true
   }
 }
