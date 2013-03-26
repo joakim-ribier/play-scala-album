@@ -68,4 +68,11 @@ object User {
     val id = UserEmail.createEmail(user, email)
     return id.isInstanceOf[Long]
   }
+  
+  def findByEmail(email: Option[String]) : Option[User] = {
+    if (!email.isDefined) {
+      return Option.empty
+    }
+    return UserDB.findByEmail(email.get) 
+  }
 }

@@ -19,7 +19,7 @@
 				<div id="index-application-content-configuration">
 					
 					<div id="index-application-content-configuration-warning">
-						<img src="@routes.Assets.at("images/iconmonstr/email-11-icon-white.x48.png")" title="warning" alt="media" />
+						<img src="@routes.Assets.at("images/iconmonstr/email-11-icon-white.x48.png")" title="email" alt="media" />
 						<span>&nbsp;@Messages("page.account.configuration.warning.information")(Lang("fr"))</span>
 					</div>
 					
@@ -55,9 +55,14 @@
 							<div id="index-application-content-configuration-info-email-callback">
 								@if(messageValidationEmail.isDefined) {
 									@if(validationEmailIsOK.isDefined && validationEmailIsOK.get == "true") {
-										<img src="@routes.Assets.at("images/iconmonstr/check-mark-10-icon-white.x48.png")" title="error" alt="media" />
+										<img src="@routes.Assets.at("images/iconmonstr/check-mark-10-icon-white.x48.png")" alt="media" />
+										<script type="text/javascript">
+		    								setTimeout(function() {
+		    									redirectTo('/album')
+											}, 10000);
+	    								</script>
 									} else {
-										<img src="@routes.Assets.at("images/iconmonstr/error-4-icon-white.x48.png")" title="error" alt="media" />
+										<img src="@routes.Assets.at("images/iconmonstr/error-4-icon-white.x48.png")" alt="media" />
 									}
 									@Html(messageValidationEmail.get)
 								}

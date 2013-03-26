@@ -1,7 +1,7 @@
 js.global.send.user.email.wait=Le courrier électronique est en cours d''envoi ...
 js.global.send.user.email.failed=Une erreur est survenue, il est impossible d''envoyer le courrier électronique de validation, veuillez vérifier votre adresse électronique puis recommencer.
 js.global.send.user.email.success.1=Le courrier électronique de validation a été envoyé à <u><strong>{0}</strong></u>, veuillez vérifier votre boite de réception.
-js.global.send.user.email.success.2=&nbsp;( si vous ne le recevez pas, vérifiez également votre dossier spam )
+js.global.send.user.email.success.2=&nbsp;( si vous ne le recevez pas, vérifiez également votre dossier spam )<br/><br/>ATTENTION, pour valider votre adresse électronique, n''oubliez pas de cliquer sur le lien à l'intérieur du courrier.
 js.global.delete.comment.answer=Voulez-vous vraiment supprimer ce commentaire ?
 js.global.edit.textarea.placeholder=modifiez le commentaire ici ...
 js.global.edit.undo.img.title=annuler la modification
@@ -39,11 +39,11 @@ application.create.new.user.email.redirection.to.login=<h3>INFORMATION</h3>Afin 
 
 authentication.login.verifying.text=Connexion impossible, vérifiez votre identifiant et / ou mot de passe.
 
-sendmail.info.auto.html=Ceci est un courrier électronique automatique envoyé par {0}, merci de ne pas y répondre.<br /><br />Vous recevez ce courrier électronique car vous avez souhaité ''<strong>Être informé des mises à jour du site</strong>''.<br /><br /><br />
-sendmail.info.auto.text=Ceci est un courrier électronique automatique envoyé par {0}, merci de ne pas y répondre.{1}{1}Vous recevez ce courrier électronique car vous avez souhaité ''Être informé des mises à jour du site''.{1}{1}{1}
+sendmail.info.auto.html=Ceci est un courrier électronique automatique envoyé par {0}, merci de ne pas y répondre.<br /><br />Vous recevez ce courrier électronique afin d''<strong>être informé des mises à jour du site</strong>.<br /><br /><br />
+sendmail.info.auto.text=Ceci est un courrier électronique automatique envoyé par {0}, merci de ne pas y répondre.{1}{1}Vous recevez ce courrier électronique afin d''être informé des mises à jour du site.{1}{1}{1}
 
-sendmail.validation.email.html=Vous le recevez afin de valider votre adresse mail.<br /><br /><br />Pour valider votre adresse mail, veuillez cliquer sur le lien internet ci-dessous :<br /><a href="{0}">{0}</a>
-sendmail.validation.email.text=Vous le recevez afin de valider votre adresse mail.{1}{1}{1}Pour valider votre adresse mail, veuillez cliquer sur le lien internet ci-dessous :{1}{0}
+sendmail.validation.email.html=<br />Pour valider votre adresse électronique, veuillez cliquer sur le lien internet ci-dessous :<br /><a href="{0}">{0}</a>
+sendmail.validation.email.text={1}Pour valider votre adresse électronique, veuillez cliquer sur le lien internet ci-dessous :{1}{0}
 
 sendmail.notify.new.photo.html={1}, depuis le <strong>{0}</strong>  : <br /><i>(si les photos ne sont pas affichées, cliquez sur "Afficher les images" dans votre client de messagerie)</i><br /><br />{2}
 sendmail.notify.new.photo.text={1}, depuis le {0}.
@@ -53,7 +53,7 @@ sendmail.comment.text=Il y a {0} sur le sujet ''{1}''.{2}{2}
 sendmail.comment.single=1 commentaire
 sendmail.comment.multi={0} commentaires
 
-sendmail.validation.email.subject= : Validation de l''adresse mail
+sendmail.validation.email.subject= : Validation de l''adresse électronique
 sendmail.notify.new.photo.subject= : Mise à jour ( {0} )
 sendmail.notify.new.photo.single.text={0} nouvelle photo
 sendmail.notify.new.photo.multiple.text={0} nouvelles photos
@@ -160,5 +160,6 @@ page.account.configuration.info.3=Vous avez perdu votre mot de passe ? Votre adr
 page.account.configuration.title=Configuration de votre compte
 page.account.configuration.title.explication=( les informations liées à votre compte )
 page.account.configuration.validation.email.already.exists=Vous avez déjà effectué la validation de votre adresse électronique.
-page.account.configuration.validation.email.success=L''adresse électronique pour ce compte est validée.
+page.account.configuration.validation.email.success=L''adresse électronique pour ce compte est validée.<br/><br/><i>( fermeture automatique de la fenêtre dans 10 secondes ... )</i>
 page.account.configuration.validation.email.failed=Une erreur est survenue, il est impossible de valider l''adresse électronique <u><strong>{0}</strong></u> pour ce compte, veuillez recommencer ou contacter l''administrateur de l''application.
+page.account.configuration.validation.email.already.exists.for.other.user=L''adresse électronique <u><strong>{0}</strong></u> est déjà utilisée pour un autre compte.

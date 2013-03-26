@@ -12,6 +12,7 @@ import db.UserDB
 
 object NotificationUserDB {
 
+  private val _DB_TBL_USER: String = Configuration.getStringValue(Configuration._TABLE_USER_KEY)
   val _DB_TBL_NOTIFICATION_USER: String = Configuration.getStringValue(Configuration._TABLE_NOTIFICATION_USER_KEY)
 
   def findClosedBy(username: String, notificationId: Long): Option[Boolean] = {
@@ -19,10 +20,10 @@ object NotificationUserDB {
       SQL(
           """
           SELECT * FROM """ + _DB_TBL_NOTIFICATION_USER + """
-          JOIN """ + UserDB._DB_TBL_USER + """
-          ON (""" + _DB_TBL_NOTIFICATION_USER + """.user_id = """ + UserDB._DB_TBL_USER + """.id)
+          JOIN """ + _DB_TBL_USER + """
+          ON (""" + _DB_TBL_NOTIFICATION_USER + """.user_id = """ + _DB_TBL_USER + """.id)
           where """ + _DB_TBL_NOTIFICATION_USER + """.notification = {notificationId}
-          and """ + UserDB._DB_TBL_USER + """.login = {login}
+          and """ + _DB_TBL_USER + """.login = {login}
           """
       ).on(
           'notificationId -> notificationId,

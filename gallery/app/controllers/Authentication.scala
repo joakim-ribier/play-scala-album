@@ -101,11 +101,16 @@ object Authentication extends Controller {
   }
   
   private def checkAndValidAddressEmail(username: String, emailValidation: String, tokenValidation: String, sessionId: String) = Action { implicit request =>
+    val user = User.findByEmail(Option.apply(emailValidation))
     val userEmail = UserEmail.getFromLogin(username)
-    if (userEmail.isDefined) {
-      connectToAccountConfigurationPage(username, sessionId,
-          false, Messages("page.account.configuration.validation.email.already.exists")(Lang("fr")))(request)
-          
+    if (userEmail.isDefined || user.isDefined) {
+      if (user.isDefined) {
+        connectToAccountConfigurationPage(username, sessionId,
+      			false, Messages("page.account.configuration.validation.email.already.exists.for.other.user", emailValidation)(Lang("fr")))(request)
+      } else {
+      	connectToAccountConfigurationPage(username, sessionId,
+      			false, Messages("page.account.configuration.validation.email.already.exists")(Lang("fr")))(request)
+      }
     } else {
       val tokenTo = EncoderUtils.generateTokenForEmailValidation(username, emailValidation)
       if (tokenTo.equals(tokenValidation)) {
