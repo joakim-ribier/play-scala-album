@@ -71,7 +71,16 @@ object Administrator extends Controller with Secured {
       value =>  {
         val photos: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
         val videos: List[String] = FileUtils.listFilename(Configuration.getMediaVideoFolderUploadDirectory())
-        Ok(views.html.adminListMedia(_TITLE_HTML, null, userTemplate, Tag.list(), photos, videos))
+        
+        val mediaTitle = value._3
+        val mediaId = value._7
+        if (mediaId.isDefined) {
+          val feedback = new Feedback(Messages("administrator.update.media.success.html", mediaTitle)(Lang("fr")), FeedbackClass.ok)
+        	Ok(views.html.adminListMedia(_TITLE_HTML, feedback, userTemplate, Tag.list(), photos, videos))
+        } else {
+        	val feedback = new Feedback(Messages("administrator.add.media.success.html", mediaTitle)(Lang("fr")), FeedbackClass.ok)
+        	Ok(views.html.adminListMedia(_TITLE_HTML, feedback, userTemplate, Tag.list(), photos, videos))
+        }
       }
    )
   }

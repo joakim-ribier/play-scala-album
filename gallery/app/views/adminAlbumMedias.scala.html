@@ -20,7 +20,7 @@
 		@for(media <- medias) {
 			<div class="administrator-content-list-photo">
 				@if(media.mediaType.label == "photo"){
-					<img class="cursorpointer" width="200" height="150" src="/album/get/thumbnail/photo/@media.filename" alt="media" />
+					<img onclick="updateMediaToAlbum('@media.id');" class="cursorpointer" width="200" height="150" src="/album/get/thumbnail/photo/@media.filename" alt="media" />
 				} else {
 					<video width="200" height="150" controls="controls" src="/album/get/media/video/standard/@media.filename"></video>
 				}

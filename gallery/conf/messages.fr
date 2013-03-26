@@ -24,11 +24,14 @@ icon.plus.title=ajouter
 icon.pencil.title=modifier
 
 administrator.add.new.photo.verifying.text=Impossible de sauvegarder la photo, veuillez vérifier le formulaire et recommencer.
+administrator.add.media.success.html=<h3>INFORMATION</h3>Le média <u><strong>{0}</strong></u> a bien été ajouté.
+administrator.update.media.success.html=<h3>INFORMATION</h3>Le média <u><strong>{0}</strong></u> a bien été modifié.
 administrator.delete.to.upload.directory.photo.failed=<h3>ERREUR</h3>Impossible de supprimer la photo <strong>{0}</strong>, veuillez recommencer ou contacter l''administrateur de l''application.
 administrator.delete.to.upload.directory.video.failed=<h3>ERREUR</h3>Impossible de supprimer la vidéo <strong>{0}</strong>, veuillez recommencer ou contacter l''administrateur de l''application.
 administrator.delete.media.with.comment.html=<h3>INFORMATION</h3>Vous n''avez pas le droit de supprimer ''<strong>{0}</strong>'' car des commentaires lui sont déjà associés.
 administrator.delete.media.failed.html=<h3>ERREUR</h3>Impossible de supprimer le média avec l''id ''<strong>{0}</strong>'', veuillez recommencer ou contacter l''administrateur de l''application.
 administrator.delete.media.success.html=<h3>INFORMATION</h3>Le média a bien été supprimé.
+
 
 application.add.new.admin.verifying.text=Configuration impossible, vérifiez votre identifiant et / ou mot de passe administrateur.
 application.add.new.admin.success.html=<h3>INFORMATION</h3>L''administrateur <strong>{0}</strong> a été créé.
