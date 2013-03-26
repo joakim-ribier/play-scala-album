@@ -212,9 +212,7 @@ $(document).ready(function() {
 			search = search + '.' + $(value).html();
  		});
 		search = search.substring(1);
-		
-		var numberPage = $('#index-application-page-number-value').html();
-		var url = '/album/page/' + numberPage + '/tags/' + search;
+		var url = '/album/page/1/tags/' + search;
 		$('#index-tag-search-title-href').attr("href", url);
 	});
 	
@@ -232,9 +230,7 @@ $(document).ready(function() {
  			});
  			search = search.substring(1);
 		}
-		
-		var numberPage = $('#index-application-page-number-value').html();
-		var url = '/album/page/' + numberPage + '/tags/' + search;
+		var url = '/album/page/1/tags/' + search;
 		$('#index-tag-search-title-href').attr("href", url);
 	});
 	
