@@ -1,0 +1,107 @@
+@(title: String, feedback: models.fr.joakimribier.playalbum.Feedback, user: models.fr.joakimribier.playalbum.UserTemplate, form: Form[(String, String, String, Option[String], Boolean, List[String], Option[Long])], tags: Seq[String])(implicit flash: play.api.mvc.Flash)
+
+@tagToId(tag: String) = @{
+	tag.replace("tags", "").replace("_", "")
+}
+		
+@admin(title, feedback, user, tags, "adminAddPhoto") {
+
+	<div id="administrator-content-main" class="administrator-content-main-border">
+		
+			<div id="administrator-content-add-new-photo-img">
+			@if(form("filename").value) {
+				@if(form("filename").value.get == "nophoto") {
+					<img src="@routes.Assets.at("images/nophotox200x150.png")" alt="photo" />
+				} else {
+					@if(form("type").value.get == "photo") {
+						@if(form("mediaId").value) {
+							<img src="/album/get/thumbnail/photo/@form("filename").value.get" alt="photo" />
+						} else {
+							<img src="/album/get/photo/upload/thumbnail/@form("filename").value.get" alt="photo" />
+						}
+					} else {
+						@if(form("mediaId").value) {
+							<video width="400" height="300" controls="controls" src="/album/get/media/video/standard/@form("filename").value.get" />
+						} else {
+							<video width="400" height="300" controls="controls" src="/album/get/media/video/upload/@form("filename").value.get" />
+						}			
+					}
+				}
+			} else {
+				<img src="@routes.Assets.at("images/nophotox200x150.png")" alt="photo" />
+			}
+			</div>
+					
+		@helper.form(controllers.fr.joakimribier.playalbum.routes.AdministratorController.saveMedia) {
+    	<input type="hidden" name="filename" value="@form("filename").value.get"/>
+    	<input type="hidden" name="type" value="@form("type").value.get"/>
+    	@if(form("mediaId").value) {
+    		<input type="hidden" name="mediaId" value="@form("mediaId").value.get"/>
+    	}
+    	
+    	<div id="administrator-content-add-new-photo-form-input-tags-hidden">
+    		@helper.repeat(form("tags"), min = 0) { tag =>
+					<input type="hidden" name="tags[@tagToId(tag.id)]" value="@tag.value">
+				}
+    	</div>
+    		
+    	<div id="administrator-content-add-new-photo-form">
+	    	<p>
+					<input type="text" style="background-color: transparent;" size="30" placeholder="@Messages("page.adminAddPhoto.form.field.title")(Lang("fr"))" name="title" value="@form("title").value.get" maxlength="30"/>
+				</p>
+				
+	    	<p>
+	    		@if(form("description").value) {
+	    			<textarea style="background-color: transparent;" rows="6" cols="65" name="description" id="create-photo-description" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))">@form("description").value.get</textarea>
+	    		} else {
+	    			<textarea style="background-color: transparent;" rows="6" cols="65" name="description" id="create-photo-description" placeholder="@Messages("page.adminAddPhoto.form.field.description")(Lang("fr"))"></textarea>
+	    		}
+	    	</p>
+				
+				<span style="color:rgb(0, 175, 202)">@Html(Messages("page.admin.notification.preview.html")(Lang("fr")))</span>
+				<div id="administrator-content-add-new-photo-form-description-preview" class="administrator-content-main-text-preview-html">
+					<span>
+						@if(form("description").value) {
+							@form("description").value.get
+						} else {
+							@Html(Messages("page.adminAddPhoto.form.field.description")(Lang("fr")))
+						}
+					</span>
+				</div>
+				
+				<p>
+				<input type="text" size="30" style="background-color: transparent;" id="add-new-tag-input" placeholder="@Messages("page.adminAddPhoto.form.field.tag")(Lang("fr"))"/>
+				</p>
+				
+				<p>
+					@defining(
+						if(form("public").value) {
+							if(form("public").value.get == "true") {
+								"checked"			
+							}
+						}
+					) { checked =>
+	  				<input type="checkbox" id="public" name="public" value="true" @checked />
+						<span id="checkbox-label">@Messages("page.adminAddPhoto.form.field.public")(Lang("fr"))</span>
+					}
+				</p>
+				
+				<div id="administrator-content-add-new-photo-form-input-tags">
+					@helper.repeat(form("tags"), min = 0) { tag =>
+						<div class="add-new-tag">@tag.value</div>
+					}
+				</div>
+				 
+				<div id="form-error">
+					@form.globalError.map { error =>
+	            @error.message
+	        }
+				 </div>
+
+    		<button type="submit" >@Messages("page.adminAddPhoto.form.field.submit")(Lang("fr"))</button>
+			</div>
+			
+			<div id="form-title">@Messages("page.adminAddPhoto.form.title")(Lang("fr"))</div>
+		}
+	</div>
+}

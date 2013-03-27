@@ -1,0 +1,50 @@
+@(form: Form[(String, String, Option[String], Option[String], Option[String], Option[String])], title: String, feedback: models.fr.joakimribier.playalbum.Feedback)(implicit flash: play.api.mvc.Flash)
+
+@import controllers.fr.joakimribier.playalbum._
+@import models.fr.joakimribier.playalbum._
+
+@main(title, feedback, null) {
+
+	<div id="main">
+		
+		<div id="form">
+		
+			@helper.form(routes.AuthenticationController.authenticate) {
+	            
+	            @if(form("email").value.isDefined && form("token").value.isDefined) {
+	            	<input type="hidden" name="email" value="@form("email").value.get" id="email" />
+	            	<input type="hidden" name="token" value="@form("token").value.get" id="token" />
+	            }
+	            
+	            @if(form("redirect-url").value.isDefined) {
+	            	<input type="hidden" name="redirect-url" value="@form("redirect-url").value.get"/>
+	            }
+	            
+	            <p><input type="text" name="login" placeholder="@Messages("page.login.form.field.login")(Lang("fr"))" id="login"></p>
+	            <p><input type="password" name="password" id="password" placeholder="@Messages("page.login.form.field.password")(Lang("fr"))"></p>
+	            
+	            <p><button type="submit" id="loginbutton">@Messages("page.login.form.field.submit")(Lang("fr"))</button></p>
+	           	
+	           	<div id="form-new-user"> 
+		            <p>
+		            	<input type="checkbox" id="new" onclick='changeDisableState("new", "code-access");'>
+		            	<label id="checkbox-label">@Messages("page.login.form.field.new.account")(Lang("fr"))</label>
+		            </p>
+		            <p><input disabled="disabled" type="text" name="code-access" id="code-access" placeholder="@Messages("page.login.form.field.new.account.code")(Lang("fr"))"></p>
+	       			</div>
+	       			
+	       			
+	    }
+	    
+      <div id="form-error">
+				@form.globalError.map { error =>
+	        @error.message
+	     	}
+	     </div>
+	      
+	     <div id="form-title">@Messages("page.login.form.title")(Lang("fr"))</div> 
+		</div>
+		
+	</div>
+
+}

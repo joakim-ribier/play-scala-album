@@ -1,0 +1,82 @@
+@(title: String, feedback: models.fr.joakimribier.playalbum.Feedback, user: models.fr.joakimribier.playalbum.UserTemplate, tags: Seq[String], page: String)(content: Html)(implicit flash: play.api.mvc.Flash)
+
+@import helper._
+
+@main(title, feedback, user) {
+
+	<div id="administrator-form">
+		
+		<div id="administrator-form-menu">
+		
+			<div id="admin-upload-form" class="administrator-box-shadow">
+				@form(action = controllers.fr.joakimribier.playalbum.routes.AdministratorController.upload, 'enctype -> "multipart/form-data") {
+				    <p><input type="file" id="photos" multiple="multiple" onchange="fileSelected()"; /></p>
+				
+						<div class="admin-upload-form-photo-details" id="admin-upload-form-photo-count">
+							@Messages("page.admin.form.upload.field.count")(Lang("fr")) <span id="admin-upload-form-count-photo-value">0</span>
+						</div>
+						<div class="admin-upload-form-photo-details" id="admin-upload-form-photo-size">
+							@Messages("page.admin.form.upload.field.size")(Lang("fr")) <span id="admin-upload-form-size-photo-value">0MB</span>
+						</div>
+				
+						<div id="admin-upload-form-photo-details-upload">
+							@Messages("page.admin.form.upload.field.percent")(Lang("fr")) <span id="admin-upload-form-photo-progress-number">0%</span>
+						</div>
+						<div id="admin-upload-form-photo-details-upload-error">@Messages("page.admin.form.upload.failed")(Lang("fr"))</div>
+						
+				    <p><input type="button" onclick="uploadFile()" value="@Messages("page.admin.form.upload.submit")(Lang("fr"))" /></p>
+				}
+				<div id="form-title">@Messages("page.admin.form.upload.title")(Lang("fr"))<br /><i>( @play.Play.application().configuration().getString("app.media.format.allowed") )</i></div>
+			</div>
+			
+			<div id="admin-photo-list" class="administrator-box-shadow @("administrator-current-page".when(page != "adminListPhoto"))">
+				<div id="form-title">@Messages("page.admin.show.photo.title")(Lang("fr"))</div>
+			</div>
+			
+			<div id="admin-album-medias" class="administrator-box-shadow @("administrator-current-page".when(page != "adminAlbumMedias"))">
+				<div id="form-title">@Messages("page.admin.show.album.media.title")(Lang("fr"))</div>
+			</div>
+			
+			<div id="admin-notification" class="administrator-box-shadow @("administrator-current-page".when(page != "adminNotification"))">
+				
+				<div id="admin-notification-title"  class="admin-form-title">
+					<div id="form-title">@Messages("page.admin.notification.title")(Lang("fr"))</div>
+				</div>
+				
+				<div id="administrator-content-main-notification-create" >
+					@helper.form(controllers.fr.joakimribier.playalbum.routes.AdministratorController.saveNewNotification) {
+					
+						<div id="administrator-content-main-notification-create-textarea">
+							<textarea style="background-color: transparent;" rows="4" cols="45" name="notification" id="textarea-notification" placeholder="@Messages("page.adminNotification.form.field.notification.html")(Lang("fr"))"></textarea>
+						</div>
+						
+						<span style="color:rgb(0, 175, 202)" >@Html(Messages("page.admin.notification.preview.html")(Lang("fr")))</span>
+						<div id="administrator-content-main-notification-create-preview" class="administrator-content-main-text-preview-html">
+								<span>@Html(Messages("page.adminNotification.form.field.notification.html")(Lang("fr")))</span>
+						</div>
+						<div id="administrator-content-main-notification-create-submit">
+							<br />
+							<button type="submit" >@Messages("page.adminNotification.form.submit")(Lang("fr"))</button>
+						</div>
+						@if(flash.get("notifcation-create-error").isDefined) {
+							<span class="feedback-ko"><br />@flash.get("notifcation-create-error")</span>
+						}
+					}
+				</div>
+			</div>
+
+			<div id="admin-application-tag" class="administrator-box-shadow @("administrator-current-page".when(page != "adminAddPhoto"))">
+				@for(tag <- tags) {
+					<div class="admin-tag-already-exists">@tag</div>
+				}
+				<div id="form-title">@Html(Messages("page.admin.tag.already.exists.title")(Lang("fr")))</div>
+			</div>
+			
+		</div>
+		
+		<div id="administrator-content">
+			@content
+		</div>
+
+	</div>
+}

@@ -1,12 +1,13 @@
+import java.io.File
+
+import org.slf4j.LoggerFactory
+
 import play.api.Application
 import play.api.GlobalSettings
-import play.api.Logger
-import java.io._
-import play.api.mvc.RequestHeader
 import play.api.mvc.Handler
-import play.api.mvc.Security
-import utils._
-import org.slf4j.LoggerFactory
+import play.api.mvc.RequestHeader
+import utils.fr.joakimribier.playalbum.ConfigurationUtils
+import utils.fr.joakimribier.playalbum.MDCUtils
 
 object Global extends GlobalSettings {
 

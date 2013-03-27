@@ -1,0 +1,39 @@
+@(title: String, feedback: models.fr.joakimribier.playalbum.Feedback, user: models.fr.joakimribier.playalbum.UserTemplate, tags: Seq[String], photos: Seq[String], videos: Seq[String])(implicit flash: play.api.mvc.Flash)
+
+@compute(totalEl: Int) = @{
+  if (totalEl > 12) 3 - (totalEl % 3) else {
+    12 - totalEl
+  }
+}
+
+@admin(title, feedback, user, tags, "adminListPhoto") {
+
+	<div id="administrator-content-main" class="administrator-content-main-border">
+		@for(video <- videos) {
+			<div class="administrator-content-list-photo">
+				<video width="200" height="150" controls="controls" src="/album/get/media/video/upload/@video"></video>
+				<div class="administrator-content-list-media-panel">
+					<img onclick="redirectionToAddVideo('@video');" class="icone-plus cursorpointer" src="@routes.Assets.at("images/iconmonstr/plus-icon-white.x20.png")" title="@Messages("icon.plus.title")(Lang("fr"))" alt="media" />
+					<img onclick="deleteVideoToUploadDirectory('@video');"  class="icon-mark cursorpointer" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.adminListMedia.delete.media.img.title", video)(Lang("fr"))" alt="media" />
+				</div>
+			</div>
+		}
+		@for(photo <- photos) {
+			<div class="administrator-content-list-photo">
+				<img class="cursorpointer" src="/album/get/photo/upload/thumbnail/@photo" width="200" height="150" onclick="accesstoNewPhoto('@photo');" alt="photo" />
+				<div class="administrator-content-list-media-panel">
+					<img onclick="accesstoNewPhoto('@photo');" class="icone-plus cursorpointer" src="@routes.Assets.at("images/iconmonstr/plus-icon-white.x20.png")" title="@Messages("icon.plus.title")(Lang("fr"))" alt="media" />
+					<img onclick="deletePhotoToUploadDirectory('@photo');" class="icon-mark cursorpointer" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.adminListMedia.delete.media.img.title", photo)(Lang("fr"))" alt="media" />
+				</div>
+			</div>
+		}
+		@for(i <- 1 to compute(photos.length + videos.length)) {
+			<div class="administrator-content-list-photo">
+				<img src="@routes.Assets.at("images/nophotox200x150.png")" alt="photo" />
+				<div class="administrator-content-list-media-panel">
+					<img src="@routes.Assets.at("images/iconmonstr/iconmonstr-x-mark-5-icon.x20.png")" />
+				</div>
+			</div>
+		}
+	</div>
+}

@@ -1,0 +1,30 @@
+@(form: Form[(String, String, String)], title: String)(implicit flash: play.api.mvc.Flash)
+
+@import controllers.fr.joakimribier.playalbum._
+
+@main(title, null, null) {
+    
+	<div id="main">
+	
+		<div id="form">
+			
+			@helper.form(routes.ApplicationController.createAdministrator) {
+	    	<p><input type="text" name="login" value="@form("login").value" id="login" readonly="readonly"></p>
+	    	<p><input type="password" name="password" id="password" placeholder="@Messages("page.configuration.form.field.password")(Lang("fr"))"></p>
+	    	<p><input type="email" name="email" id="email" placeholder="@Messages("page.configuration.form.field.email")(Lang("fr"))"></p>
+	    	
+	    	<p><button type="submit" >@Messages("page.configuration.form.field.submit")(Lang("fr"))</button></p>
+	    }
+		    
+			<div id="form-error">
+				@form.globalError.map { error =>
+        	@error.message
+        }
+			 </div>
+				  
+			<div id="form-title">@Messages("page.configuration.form.title")(Lang("fr"))</div>
+			
+	   </div>
+	   
+	</div>
+}

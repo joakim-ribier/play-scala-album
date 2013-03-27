@@ -2,91 +2,91 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET		/								   												controllers.AuthenticationController.redirect
-GET		/album								   											controllers.ApplicationController.index
+GET		/								   												controllers.fr.joakimribier.playalbum.AuthenticationController.redirect
+GET		/album								   											controllers.fr.joakimribier.playalbum.ApplicationController.index
 
 # APPLICATION CONTROLLER
 
-GET		/album/get/photo/upload/thumbnail/:photo														controllers.ApplicationController.getPhotoInUploadThumbailDirectory(photo: String)
-GET		/album/get/photo/:photo																			controllers.ApplicationController.getPhotoInStandardDirectory(photo: String)
-GET		/album/get/thumbnail/photo/:photo																controllers.ApplicationController.getPhotoInThumbailDirectory(photo: String)
-GET		/album/get/800x600/photo/:photo																	controllers.ApplicationController.getPhotoIn800x600Directory(photo: String)
-GET		/album/page/:page/tags/:tags    																controllers.ApplicationController.page(page: String, tags: String)
+GET		/album/get/photo/upload/thumbnail/:photo														controllers.fr.joakimribier.playalbum.ApplicationController.getPhotoInUploadThumbailDirectory(photo: String)
+GET		/album/get/photo/:photo																			controllers.fr.joakimribier.playalbum.ApplicationController.getPhotoInStandardDirectory(photo: String)
+GET		/album/get/thumbnail/photo/:photo																controllers.fr.joakimribier.playalbum.ApplicationController.getPhotoInThumbailDirectory(photo: String)
+GET		/album/get/800x600/photo/:photo																	controllers.fr.joakimribier.playalbum.ApplicationController.getPhotoIn800x600Directory(photo: String)
+GET		/album/page/:page/tags/:tags    																controllers.fr.joakimribier.playalbum.ApplicationController.page(page: String, tags: String)
 
-GET		/album/photo/previous/:id/tags/:tags 															controllers.ApplicationController.getPreviousPhoto(id: String, tags: String)
-GET		/album/photo/next/:id/tags/:tags 																controllers.ApplicationController.getNextPhoto(id: String, tags: String)
+GET		/album/photo/previous/:id/tags/:tags 															controllers.fr.joakimribier.playalbum.ApplicationController.getPreviousPhoto(id: String, tags: String)
+GET		/album/photo/next/:id/tags/:tags 																controllers.fr.joakimribier.playalbum.ApplicationController.getNextPhoto(id: String, tags: String)
 
-GET 	/album/user/new/address/mail/validation/:email/token/:token										controllers.ApplicationController.saveNewUserEmail(email: String, token: String)
+GET 	/album/user/new/address/mail/validation/:email/token/:token										controllers.fr.joakimribier.playalbum.ApplicationController.saveNewUserEmail(email: String, token: String)
 
-POST 	/album/user/popup/notify/close																	controllers.ApplicationController.userPopupNotifyClose
+POST 	/album/user/popup/notify/close																	controllers.fr.joakimribier.playalbum.ApplicationController.userPopupNotifyClose
 
-GET		/album/get/media/video/upload/:file																controllers.ApplicationController.getVideoInUploadDirectory(file: String)
-GET		/album/get/media/video/standard/:file															controllers.ApplicationController.getVideoInStandardDirectory(file: String)
+GET		/album/get/media/video/upload/:file																controllers.fr.joakimribier.playalbum.ApplicationController.getVideoInUploadDirectory(file: String)
+GET		/album/get/media/video/standard/:file															controllers.fr.joakimribier.playalbum.ApplicationController.getVideoInStandardDirectory(file: String)
 
 
 # POST CONTROLLER
 
-GET		/album/get/media/:id/post/page/:page/tags/:tags							controllers.PostController.index(id: String, page: String, tags: String)
-GET		/album/get/media/:id/post/page/:page/tags/:tags/message/key/:key		controllers.PostController.indexWithMessageKey(id: String, page: String, tags: String, key: String)
-POST	/album/media/post/add/comment											controllers.PostController.addNewComment
-POST 	/album/media/post/remove/comment										controllers.PostController.removeComment
-POST 	/album/media/post/update/comment										controllers.PostController.updateComment
+GET		/album/get/media/:id/post/page/:page/tags/:tags							controllers.fr.joakimribier.playalbum.PostController.index(id: String, page: String, tags: String)
+GET		/album/get/media/:id/post/page/:page/tags/:tags/message/key/:key		controllers.fr.joakimribier.playalbum.PostController.indexWithMessageKey(id: String, page: String, tags: String, key: String)
+POST	/album/media/post/add/comment											controllers.fr.joakimribier.playalbum.PostController.addNewComment
+POST 	/album/media/post/remove/comment										controllers.fr.joakimribier.playalbum.PostController.removeComment
+POST 	/album/media/post/update/comment										controllers.fr.joakimribier.playalbum.PostController.updateComment
 
-GET		/album/get/previous/media/:mediaId/post/page/:page/tags/:tags			controllers.PostController.previous(mediaId: String, page: String, tags: String)
-GET		/album/get/next/media/:mediaId/post/page/:page/tags/:tags				controllers.PostController.next(mediaId: String, page: String, tags: String)
+GET		/album/get/previous/media/:mediaId/post/page/:page/tags/:tags			controllers.fr.joakimribier.playalbum.PostController.previous(mediaId: String, page: String, tags: String)
+GET		/album/get/next/media/:mediaId/post/page/:page/tags/:tags				controllers.fr.joakimribier.playalbum.PostController.next(mediaId: String, page: String, tags: String)
 
 
 # CONFIGURATION CONTROLLER
 
-GET		/album/admin/configuration													controllers.ApplicationController.configuration
-POST	/album/admin/configuration													controllers.ApplicationController.createAdministrator
-POST	/album/get/post/value/from/key												controllers.ApplicationController.getStringPostValueFromKey
+GET		/album/admin/configuration													controllers.fr.joakimribier.playalbum.ApplicationController.configuration
+POST	/album/admin/configuration													controllers.fr.joakimribier.playalbum.ApplicationController.createAdministrator
+POST	/album/get/post/value/from/key												controllers.fr.joakimribier.playalbum.ApplicationController.getStringPostValueFromKey
 
 
 # SEND MAIL CONTROLLER
 
-POST	/album/user/new/address/mail								controllers.SendMailController.newEmail
-GET		/album/notify/new/photo/private/:key						controllers.SendMailController.notifyNewPhoto(key: String)
-GET		/album/send/mail/comments/private/:key						controllers.SendMailController.comments(key: String)
+POST	/album/user/new/address/mail								controllers.fr.joakimribier.playalbum.SendMailController.newEmail
+GET		/album/notify/new/photo/private/:key						controllers.fr.joakimribier.playalbum.SendMailController.notifyNewPhoto(key: String)
+GET		/album/send/mail/comments/private/:key						controllers.fr.joakimribier.playalbum.SendMailController.comments(key: String)
 
 
 # ADMINSTRATOR CONTROLLER
 
-GET		/album/admin							   			controllers.AdministratorController.index
-GET		/album/admin/list/photo								controllers.AdministratorController.listPhotoUploaded
-GET		/album/admin/add/new/photo/:name					controllers.AdministratorController.addNewPhoto(name: String)
-GET		/album/admin/update/media/id/:mediaId				controllers.AdministratorController.updateMedia(mediaId: String)
-GET		/album/admin/media/redirect/add/video/:file			controllers.AdministratorController.redirectToAddVideo(file: String)
-GET		/album/admin/notification							controllers.AdministratorController.notification
-GET		/album/admin/display/all/media						controllers.AdministratorController.displayAllMedia
-GET		/album/admin/display/all/media/message/key/:key		controllers.AdministratorController.displayAllMediaWithMessage(key: String)
+GET		/album/admin							   			controllers.fr.joakimribier.playalbum.AdministratorController.index
+GET		/album/admin/list/photo								controllers.fr.joakimribier.playalbum.AdministratorController.listPhotoUploaded
+GET		/album/admin/add/new/photo/:name					controllers.fr.joakimribier.playalbum.AdministratorController.addNewPhoto(name: String)
+GET		/album/admin/update/media/id/:mediaId				controllers.fr.joakimribier.playalbum.AdministratorController.updateMedia(mediaId: String)
+GET		/album/admin/media/redirect/add/video/:file			controllers.fr.joakimribier.playalbum.AdministratorController.redirectToAddVideo(file: String)
+GET		/album/admin/notification							controllers.fr.joakimribier.playalbum.AdministratorController.notification
+GET		/album/admin/display/all/media						controllers.fr.joakimribier.playalbum.AdministratorController.displayAllMedia
+GET		/album/admin/display/all/media/message/key/:key		controllers.fr.joakimribier.playalbum.AdministratorController.displayAllMediaWithMessage(key: String)
 
-POST 	/album/upload									controllers.AdministratorController.upload
-POST 	/album/saveMedia								controllers.AdministratorController.saveMedia
-POST 	/album/admin/notification/message/save			controllers.AdministratorController.saveNewNotification
-POST 	/album/admin/notification/save					controllers.AdministratorController.saveNewNotificationAlarm
-POST 	/album/admin/notification/message/delete		controllers.AdministratorController.deleteNotificationMessage
-POST 	/album/admin/notification/delete				controllers.AdministratorController.deleteNotification
-POST	/album/admin/delete/photo/to/upload/directory	controllers.AdministratorController.deletePhotoToUploadDirectory
-POST	/album/admin/delete/video/to/upload/directory	controllers.AdministratorController.deleteVideoToUploadDirectory
-POST	/album/admin/delete/media/to/album				controllers.AdministratorController.deleteMediaToAlbum
+POST 	/album/upload									controllers.fr.joakimribier.playalbum.AdministratorController.upload
+POST 	/album/saveMedia								controllers.fr.joakimribier.playalbum.AdministratorController.saveMedia
+POST 	/album/admin/notification/message/save			controllers.fr.joakimribier.playalbum.AdministratorController.saveNewNotification
+POST 	/album/admin/notification/save					controllers.fr.joakimribier.playalbum.AdministratorController.saveNewNotificationAlarm
+POST 	/album/admin/notification/message/delete		controllers.fr.joakimribier.playalbum.AdministratorController.deleteNotificationMessage
+POST 	/album/admin/notification/delete				controllers.fr.joakimribier.playalbum.AdministratorController.deleteNotification
+POST	/album/admin/delete/photo/to/upload/directory	controllers.fr.joakimribier.playalbum.AdministratorController.deletePhotoToUploadDirectory
+POST	/album/admin/delete/video/to/upload/directory	controllers.fr.joakimribier.playalbum.AdministratorController.deleteVideoToUploadDirectory
+POST	/album/admin/delete/media/to/album				controllers.fr.joakimribier.playalbum.AdministratorController.deleteMediaToAlbum
 
 
 # AUTHENTICATION CONTROLLER
 
-GET		/album/login															controllers.AuthenticationController.login
-GET		/album/logout															controllers.AuthenticationController.logout
-POST	/album/authenticate														controllers.AuthenticationController.authenticate
-GET		/album/authenticate														controllers.AuthenticationController.redirectAuthenticate
+GET		/album/login															controllers.fr.joakimribier.playalbum.AuthenticationController.login
+GET		/album/logout															controllers.fr.joakimribier.playalbum.AuthenticationController.logout
+POST	/album/authenticate														controllers.fr.joakimribier.playalbum.AuthenticationController.authenticate
+GET		/album/authenticate														controllers.fr.joakimribier.playalbum.AuthenticationController.redirectAuthenticate
 
 
 # JS CONTROLLER
 
-GET 	/album/i18n/lang/:lang												controllers.JavaScriptController.i18n(lang: String)
+GET 	/album/i18n/lang/:lang												controllers.fr.joakimribier.playalbum.JavaScriptController.i18n(lang: String)
 
 
 # ACCOUNT CONFIGURATION CONTROLLER
-GET		/album/user/configuration				controllers.AccountConfigurationController.index
+GET		/album/user/configuration				controllers.fr.joakimribier.playalbum.AccountConfigurationController.index
 
 # Map static resources from the /public folder to the /assets URL path
 

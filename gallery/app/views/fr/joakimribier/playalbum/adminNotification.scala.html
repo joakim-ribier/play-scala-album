@@ -1,0 +1,80 @@
+@(title: String, feedback: models.fr.joakimribier.playalbum.Feedback, user: models.fr.joakimribier.playalbum.UserTemplate, tags: Seq[String], messages: Seq[models.fr.joakimribier.playalbum.Message], notifications: Seq[models.fr.joakimribier.playalbum.NotificationMessage])(implicit flash: play.api.mvc.Flash)
+
+@import controllers.fr.joakimribier.playalbum._
+@import models.fr.joakimribier.playalbum._
+@import org.joda.time.DateTime
+
+@formatDate(date: DateTime) = @{
+ 	date.toString("yyyy-MM-dd")
+}
+
+@alreadyExistsInNotification(message: Message, notifications: Seq[NotificationMessage]) = @{
+	var is = false
+	for (notification <- notifications) {
+		for (m <- notification.messages) {
+			if (message.id.get == m.id.get) {
+			  is = true
+			}
+		}
+	}
+	is
+}
+
+@admin(title, feedback, user, tags, "adminNotification") {
+
+	<div id="administrator-content-main" class="administrator-content-main-border">
+	
+			<div id="form-title">@Html(Messages("page.adminNotification.title")(Lang("fr")))</div>
+			
+			@helper.form(action = routes.AdministratorController.saveNewNotificationAlarm, 'id -> "notification-create-alarm-form") {
+			
+				<span>Du <i>( inclus )</i> &nbsp;</span><input type="text" id="startDate" name="startDate" placeholder="yyyy-MM-dd" />
+				<span>Au <i>( non inclus )</i> &nbsp;</span><input type="text" id="endDate" name="endDate"placeholder="yyyy-MM-dd" />
+			
+				<div id="administrator-content-main-notification-list">
+					@if(messages.size < 1) {
+						<div class="notification-list-el">
+							<span>@Html(Messages("page.admin.notification.message.empty.html")(Lang("fr")))</span>
+						</div>
+					}
+					@for(message <- messages) {
+						<div class="notification-list-el">
+							<div class="notification-list-checkbox notification-list-float"><input type="checkbox" value="@message.id"></div>
+					  	@if(!alreadyExistsInNotification(message, notifications)) {
+					  		<span class="notification-list-el-message-delete" onclick="deleteNotificationMessage('@message.id');">&nbsp;@Messages("page.adminNotification.delete.message")(Lang("fr"))</span>
+					  	}
+							<div class="notification-list-message">@message.message</div>
+						</div>
+					}
+				</div>
+				<br />				
+				<button type="submit" >@Messages("page.adminNotification.form.create.alarm.submit")(Lang("fr"))</button>
+				<span class="feedback-ko" id="notification-message-error-label">
+					@if(flash.get("notification-alarm-create-error").isDefined) {
+						<br />@flash.get("notification-alarm-create-error")
+					}
+				</span>
+			}
+			
+			@if(notifications.size > 0) {
+				<span><h3>@Messages("page.admin.notification.list.title")(Lang("fr"))</h3></span>
+			} else {
+				<span>@Html(Messages("page.admin.notification.empty.html")(Lang("fr")))</span>
+			}
+			
+			@for(notification <- notifications) {
+				<div class="notification-list-el">
+					Du @formatDate(notification.notification.startDate) jusqu'au @formatDate(notification.notification.endDate)
+					<span class="notification-list-el-message-delete" onclick="deleteNotification('@notification.notification.id');">&nbsp;@Messages("page.adminNotification.delete.message")(Lang("fr"))</span>
+					<div class="administrator-notififcation-display-message">
+						@for(message <- notification.messages) {
+							<div class="administrator-notififcation-display-message-preview">
+								@Html(message.message)
+							</div>
+						}
+					</div>
+				</div>
+			}
+	</div>
+	
+}

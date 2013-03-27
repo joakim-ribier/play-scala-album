@@ -1,0 +1,49 @@
+@(title: String, feedback: models.fr.joakimribier.playalbum.Feedback, user: models.fr.joakimribier.playalbum.UserTemplate, tags: Seq[String], medias: Seq[models.fr.joakimribier.playalbum.Media])(implicit flash: play.api.mvc.Flash)
+
+@titleFormat(title: String) = @{
+	if (title.length > 25) {
+		title.substring(0, 25) + " ..."
+	} else {
+		title
+	}
+}
+
+@compute(totalEl: Int) = @{
+  if (totalEl > 12) 3 - (totalEl % 3) else {
+    12 - totalEl
+  }
+}
+
+@admin(title, feedback, user, tags, "adminAlbumMedias") {
+
+	<div id="administrator-content-main" class="administrator-content-main-border">
+		@for(media <- medias) {
+			<div class="administrator-content-list-photo">
+				@if(media.mediaType.label == "photo"){
+					<img onclick="updateMediaToAlbum('@media.id');" class="cursorpointer" width="200" height="150" src="/album/get/thumbnail/photo/@media.filename" alt="media" />
+				} else {
+					<video width="200" height="150" controls="controls" src="/album/get/media/video/standard/@media.filename"></video>
+				}
+				<div class="administrator-content-list-media-title">
+					<span>@titleFormat(media.title)</span>
+				</div>
+				<div class="administrator-content-list-media-panel">
+					<img onclick="updateMediaToAlbum('@media.id');" class="icon-pencil cursorpointer" src="@routes.Assets.at("images/iconmonstr/pencil-6-icon-white.x20.png")" title="@Messages("icon.pencil.title")(Lang("fr"))" alt="media" />
+					<img onclick="deleteMediaToAlbum('@media.id', '@media.title');" class="icon-mark cursorpointer" src="@routes.Assets.at("images/iconmonstr/x-mark-5-icon-white.x20.png")" title="@Messages("page.adminListMedia.delete.media.img.title", media.title)(Lang("fr"))" alt="media" />
+				</div>
+			</div>
+		}
+
+		@for(i <- 1 to compute(medias.length)) {
+			<div class="administrator-content-list-photo">
+				<img src="@routes.Assets.at("images/nophotox200x150.png")" alt="photo" />
+				<div class="administrator-content-list-media-title">
+					<span>@Messages("page.index.no.photo.label")(Lang("fr"))</span>
+				</div>
+				<div class="administrator-content-list-media-panel">
+					<img src="@routes.Assets.at("images/iconmonstr/iconmonstr-x-mark-5-icon.x20.png")" />
+				</div>
+			</div>
+		}
+	</div>
+}
