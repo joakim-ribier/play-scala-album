@@ -12,8 +12,8 @@ import db.UserDB
 
 object NotificationUserDB {
 
-  private val _DB_TBL_USER: String = Configuration.getStringValue(Configuration._TABLE_USER_KEY)
-  val _DB_TBL_NOTIFICATION_USER: String = Configuration.getStringValue(Configuration._TABLE_NOTIFICATION_USER_KEY)
+  private val _DB_TBL_USER: String = ConfigurationUtils.getStringValue(ConfigurationUtils._TABLE_USER_KEY)
+  val _DB_TBL_NOTIFICATION_USER: String = ConfigurationUtils.getStringValue(ConfigurationUtils._TABLE_NOTIFICATION_USER_KEY)
 
   def findClosedBy(username: String, notificationId: Long): Option[Boolean] = {
     return DB.withConnection { implicit connection =>

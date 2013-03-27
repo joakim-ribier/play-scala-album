@@ -94,25 +94,25 @@ object Media {
   
   private def createPhotoFile(filename: String) {
     try {
-      val file: File = new File(Configuration.getPhotoUploadStandardDirectory() + filename)
+      val file: File = new File(ConfigurationUtils.getPhotoUploadStandardDirectory() + filename)
 		  if (!file.isFile()) {
 		  	throw new NoSuchElementException("photo file " + filename)
 		  }  
       
-      val thumbnail: File = new File(Configuration.getPhotoUploadThumbnailDirectory() + filename)
+      val thumbnail: File = new File(ConfigurationUtils.getPhotoUploadThumbnailDirectory() + filename)
       if (thumbnail.isFile()) {
-        FileUtils.move(thumbnail, Configuration.getPhotoThumbnailDirectory(), filename)
+        FileUtils.move(thumbnail, ConfigurationUtils.getPhotoThumbnailDirectory(), filename)
       } else {
         FileUtils.createThumbnails(
-          Configuration.getPhotoUploadStandardDirectory(),
-          Configuration.getPhotoThumbnailDirectory(), filename, 200, 150) 
+          ConfigurationUtils.getPhotoUploadStandardDirectory(),
+          ConfigurationUtils.getPhotoThumbnailDirectory(), filename, 200, 150) 
       }
       
       FileUtils.createThumbnails(
-          Configuration.getPhotoUploadStandardDirectory(),
-          Configuration.getPhoto800x600Directory(), filename, 800, 600)
+          ConfigurationUtils.getPhotoUploadStandardDirectory(),
+          ConfigurationUtils.getPhoto800x600Directory(), filename, 800, 600)
      
-      FileUtils.move(file, Configuration.getPhotoStandardDirectory(), filename)
+      FileUtils.move(file, ConfigurationUtils.getPhotoStandardDirectory(), filename)
     } catch {
       case e: Throwable => {
         Logger.error(e.getMessage(), e)
@@ -123,11 +123,11 @@ object Media {
   
   private def createVideoFile(filename: String) {
     try {
-      val file: File = new File(Configuration.getMediaVideoFolderUploadDirectory() + filename)
+      val file: File = new File(ConfigurationUtils.getMediaVideoFolderUploadDirectory() + filename)
       if (!file.isFile()) {
 		  	throw new NoSuchElementException("video file " + filename)
 		  }  
-      FileUtils.move(file, Configuration.getMediaVideoFolderStandardDirectory(), filename)
+      FileUtils.move(file, ConfigurationUtils.getMediaVideoFolderStandardDirectory(), filename)
     } catch {
       case e: Throwable => {
         Logger.error(e.getMessage(), e)

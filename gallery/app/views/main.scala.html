@@ -118,12 +118,12 @@
     				<span>- [ @user.email ]</span>
     			}
     			<span> - </span>
-    			<a href="@routes.Authentication.logout">@Messages("page.main.disconnecte")(Lang("fr"))</a>
+    			<a href="@routes.AuthenticationController.logout">@Messages("page.main.disconnecte")(Lang("fr"))</a>
     		}
     		</div>
     		
     		<div id="footer-2">
-    			<span><a href="@routes.Application.index">@getTitleWithVersion(title)</a></span>
+    			<span><a href="@routes.ApplicationController.index">@getTitleWithVersion(title)</a></span>
     			 - 
     			<span><a href="http://www.playframework.org" target="_blank">Play framework</a></span>
     			 - 

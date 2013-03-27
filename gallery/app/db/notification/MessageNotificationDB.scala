@@ -12,7 +12,7 @@ import models.notification.Message
 
 object MessageNotificationDB {
 
-  val _DB_TBL_MESSAGE_NOTIFICATION: String = Configuration.getStringValue(Configuration._TABLE_MESSAGE_NOTIFICATION_KEY)
+  val _DB_TBL_MESSAGE_NOTIFICATION: String = ConfigurationUtils.getStringValue(ConfigurationUtils._TABLE_MESSAGE_NOTIFICATION_KEY)
 
   def insert(messageId: Long, notificationId: Long) : Long = {
     return DB.withConnection { implicit connection =>

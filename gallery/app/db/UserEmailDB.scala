@@ -10,8 +10,8 @@ import utils._
 
 object UserEmailDB {
 
-  private val _DB_TBL_USER_EMAIL: String = play.Configuration.root().getString(Configuration._TABLE_EMAIL_KEY)
-  private val _DB_TBL_USER: String = play.Configuration.root().getString(Configuration._TABLE_USER_KEY)
+  private val _DB_TBL_USER_EMAIL: String = play.Configuration.root().getString(ConfigurationUtils._TABLE_EMAIL_KEY)
+  private val _DB_TBL_USER: String = play.Configuration.root().getString(ConfigurationUtils._TABLE_USER_KEY)
   
   def findByLogin(login: String): Option[String] = {
     return DB.withConnection { implicit connection =>

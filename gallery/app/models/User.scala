@@ -18,7 +18,7 @@ object User {
       return true
     }
     
-    if (code.isDefined && code.get == Configuration.getCreateNewUserCode()) {
+    if (code.isDefined && code.get == ConfigurationUtils.getCreateNewUserCode()) {
       // check if user exists and/or create it
       if (createUser(login, password)) {
         return true
@@ -61,7 +61,7 @@ object User {
   }
   
   def isAdmin(login: String) : Boolean = {
-    return login.equals(Configuration.getAdminLogin())
+    return login.equals(ConfigurationUtils.getAdminLogin())
   }
   
   def setAddressMail(user: User, email: String) : Boolean = {

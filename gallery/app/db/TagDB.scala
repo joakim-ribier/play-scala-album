@@ -10,7 +10,7 @@ import models.Tag
 
 object TagDB {
 
-  private val _DB_TBL_TAG: String = play.Configuration.root().getString(Configuration._TABLE_TAG_KEY)
+  private val _DB_TBL_TAG: String = play.Configuration.root().getString(ConfigurationUtils._TABLE_TAG_KEY)
   private val simple = {
     get[Pk[Long]](_DB_TBL_TAG + ".id") ~
     get[String](_DB_TBL_TAG + ".tag") map {

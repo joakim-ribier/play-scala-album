@@ -5,7 +5,7 @@ import com.typesafe.plugin._
 import play.api.Play.current
 import play.api.libs.json.Json
 import java.net.URLDecoder
-import utils.Configuration
+import utils.ConfigurationUtils
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.i18n.Lang
@@ -23,16 +23,16 @@ import models.post.Post
 import models.post.Comment
 import play.api.mvc.Security
 
-object SendMail extends Controller with Secured {
+object SendMailController extends Controller with Secured {
 
   private val Logger = LoggerFactory.getLogger("SendMail")
   
-	private val _TITLE_HTML = Configuration.getHTMLTitle()
-  private val _PRIVATE_KEY = Configuration.getStringValue(Configuration._MAIL_AUTO_SEND_PRIVATE_KEY)
-  private val _DAY_DURATION = Configuration.getIntValue(Configuration._MAIL_AUTO_SEND_DAY_DURATION)
-  private val _MINUTES_DURATION = Configuration.getIntValue(Configuration._MAIL_AUTO_SEND_COMMENTS_MINUTES_DURATION)
-  private val _ADMIN_LOGIN = Configuration.getStringValue(Configuration._APP_ADMIN_LOGIN)
-  private val _FROM = Configuration.getStringValue(Configuration._MAIL_FROM)
+	private val _TITLE_HTML = ConfigurationUtils.getHTMLTitle()
+  private val _PRIVATE_KEY = ConfigurationUtils.getStringValue(ConfigurationUtils._MAIL_AUTO_SEND_PRIVATE_KEY)
+  private val _DAY_DURATION = ConfigurationUtils.getIntValue(ConfigurationUtils._MAIL_AUTO_SEND_DAY_DURATION)
+  private val _MINUTES_DURATION = ConfigurationUtils.getIntValue(ConfigurationUtils._MAIL_AUTO_SEND_COMMENTS_MINUTES_DURATION)
+  private val _ADMIN_LOGIN = ConfigurationUtils.getStringValue(ConfigurationUtils._APP_ADMIN_LOGIN)
+  private val _FROM = ConfigurationUtils.getStringValue(ConfigurationUtils._MAIL_FROM)
   
   def newEmail = Action { implicit request =>
     val username = request.session.get(Security.username)
@@ -63,7 +63,7 @@ object SendMail extends Controller with Secured {
     	}
     	}
     } else {
-      Redirect(routes.Authentication.logout)
+      Redirect(routes.AuthenticationController.logout)
     }
   }
 
@@ -130,7 +130,7 @@ object SendMail extends Controller with Secured {
   }
   
   private def sendComments(comments: Seq[Comment], media: Media, bccSeq: Seq[String], to: String)(log: String) {
-    val link = Configuration.getHost() + "/album/get/media/" + media.id + "/post/page/1/tags/all"
+    val link = ConfigurationUtils.getHost() + "/album/get/media/" + media.id + "/post/page/1/tags/all"
     val linkText = Messages("sendmail.access.post.comments.link.text", link)(Lang("fr"))
     val linkHtml = Messages("sendmail.access.post.comments.link.html", link)(Lang("fr"))
 
@@ -170,7 +170,7 @@ object SendMail extends Controller with Secured {
   private def sendNotifyNewPhotoMail(dateTime: DateTime, recipient: String, photos: Seq[Media]) {
   	val photosSize = photos.size
 		var content = ""
-		val host = Configuration.getHost()
+		val host = ConfigurationUtils.getHost()
 		
 		var photoCount = 0
 		var videoCount = 0
@@ -226,7 +226,7 @@ object SendMail extends Controller with Secured {
   private def buildUrl(username: String, addressMail: String) : String = {
     val validationURL = "/album/user/new/address/mail/validation/"
     val token = EncoderUtils.generateTokenForEmailValidation(username, addressMail)
-    return Configuration.getHost() + validationURL + addressMail + "/token/" + token
+    return ConfigurationUtils.getHost() + validationURL + addressMail + "/token/" + token
   }
   
   private def send(recipient: Option[String], bcc: Option[Seq[String]], subject: String, textContent: Option[String], htmlContent: Option[String])(log: String) {
@@ -256,14 +256,14 @@ object SendMail extends Controller with Secured {
     try {
     	if (textContent.isDefined && htmlContent.isDefined) {
     		mail.send(
-    		    Messages("sendmail.info.auto.text", Configuration.getHost(), "\n\r")(Lang("fr")) + textContent.get,
-    		    Messages("sendmail.info.auto.html", Configuration.getHost())(Lang("fr")) + htmlContent.get)
+    		    Messages("sendmail.info.auto.text", ConfigurationUtils.getHost(), "\n\r")(Lang("fr")) + textContent.get,
+    		    Messages("sendmail.info.auto.html", ConfigurationUtils.getHost())(Lang("fr")) + htmlContent.get)
     	} else {
     		if (textContent.isDefined) {
-    			mail.send(Messages("sendmail.info.auto.text", Configuration.getHost(), "\n\r")(Lang("fr")) +  textContent.get)
+    			mail.send(Messages("sendmail.info.auto.text", ConfigurationUtils.getHost(), "\n\r")(Lang("fr")) +  textContent.get)
     		}
     		if (htmlContent.isDefined) {
-    			mail.sendHtml(Messages("sendmail.info.auto.html", Configuration.getHost())(Lang("fr")) + htmlContent.get)
+    			mail.sendHtml(Messages("sendmail.info.auto.html", ConfigurationUtils.getHost())(Lang("fr")) + htmlContent.get)
     		}
     	}
     	Logger.info("send mail '{}' success", log)

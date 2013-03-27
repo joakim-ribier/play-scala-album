@@ -1,6 +1,6 @@
 package db.post
 
-import utils.Configuration
+import utils.ConfigurationUtils
 import org.joda.time.DateTime
 import play.api.db.DB
 import play.api.Play.current
@@ -16,10 +16,10 @@ import utils.OrderEnum
 
 object PostDB {
 
-  private val _DB_TBL_MEDIA_POST: String = play.Configuration.root().getString(Configuration._TABLE_MEDIA_POST_KEY)
-  private val _DB_TBL_MEDIA_MESSAGE : String = play.Configuration.root().getString(Configuration._TABLE_MEDIA_POST_MESSAGE_KEY)
-  private val _DB_TBL_USER : String = play.Configuration.root().getString(Configuration._TABLE_USER_KEY)
-  private val _DB_TBL_USER_EMAIL : String = play.Configuration.root().getString(Configuration._TABLE_EMAIL_KEY)
+  private val _DB_TBL_MEDIA_POST: String = play.Configuration.root().getString(ConfigurationUtils._TABLE_MEDIA_POST_KEY)
+  private val _DB_TBL_MEDIA_MESSAGE : String = play.Configuration.root().getString(ConfigurationUtils._TABLE_MEDIA_POST_MESSAGE_KEY)
+  private val _DB_TBL_USER : String = play.Configuration.root().getString(ConfigurationUtils._TABLE_USER_KEY)
+  private val _DB_TBL_USER_EMAIL : String = play.Configuration.root().getString(ConfigurationUtils._TABLE_EMAIL_KEY)
   
   private val id = {
     get[Pk[Long]](_DB_TBL_MEDIA_POST + ".id") map {

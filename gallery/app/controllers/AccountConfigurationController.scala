@@ -1,7 +1,7 @@
 package controllers
 
 import play.api.mvc.Controller
-import utils.Configuration
+import utils.ConfigurationUtils
 import models.UserTemplate
 import models.Media
 import org.slf4j.LoggerFactory
@@ -16,12 +16,12 @@ import play.api.mvc.Security
 object AccountConfigurationController extends Controller {
 
   private val Logger = LoggerFactory.getLogger("AccountConfigurationController")
-  private val _TITLE_HTML: String = Configuration.getHTMLTitle()
+  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle()
   
   def index = Action { implicit request =>
     val username = request.session.get(Security.username)
     if (username.isDefined) {
-    	val userTemplate = new UserTemplate(username.get, request.session.get(Configuration._SESSION_EMAIL_KEY))
+    	val userTemplate = new UserTemplate(username.get, request.session.get(ConfigurationUtils._SESSION_EMAIL_KEY))
     	if (request.flash.get("validation-message").isDefined) {
     		Ok(views.html.accountConfiguration(
     		    _TITLE_HTML, null, userTemplate,
@@ -31,7 +31,7 @@ object AccountConfigurationController extends Controller {
     		    _TITLE_HTML, null, userTemplate, Option.empty, Option.empty))
     	}
     } else {
-    	Redirect(routes.Authentication.logout)
+    	Redirect(routes.AuthenticationController.logout)
     }
   }
 }

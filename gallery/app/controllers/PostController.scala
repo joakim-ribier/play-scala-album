@@ -1,7 +1,7 @@
 package controllers
 
 import play.api.mvc.Controller
-import utils.Configuration
+import utils.ConfigurationUtils
 import models.UserTemplate
 import models.Media
 import org.slf4j.LoggerFactory
@@ -23,7 +23,7 @@ import models.User
 object PostController extends Controller with Secured {
 
   private val Logger = LoggerFactory.getLogger("PostController")
-  private val _TITLE_HTML: String = Configuration.getHTMLTitle()
+  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle()
   
   private val formNewComment = Form (
     tuple (
@@ -47,23 +47,23 @@ object PostController extends Controller with Secured {
   
   private def redirectToIndex(id: String, page: String, byTags: String, messageKey: Option[String], username: String) = Action { implicit request =>
     try {
-      val userTemplate = new UserTemplate(username, request.session.get(Configuration._SESSION_EMAIL_KEY))
+      val userTemplate = new UserTemplate(username, request.session.get(ConfigurationUtils._SESSION_EMAIL_KEY))
 
       val mediaId = id.asInstanceOf[String].toInt
       val media = Media.get(mediaId)
-      Ok(views.html.post(_TITLE_HTML, Authentication.buildFeedbackObjFromRequestOrKey(request, messageKey),
+      Ok(views.html.post(_TITLE_HTML, AuthenticationController.buildFeedbackObjFromRequestOrKey(request, messageKey),
           userTemplate, media, page, byTags, formNewComment, Post.list(Option.apply(media.id.get)), Media.computePos(Option.apply(media.id.get)), Media.total))
     } catch {
       case e: Throwable => {
        Logger.error(e.getMessage(), e) 
-       Redirect(routes.Application.index)
+       Redirect(routes.ApplicationController.index)
       }
     }
   }
   
   def addNewComment = withUser { username => implicit request =>
     Logger.info("add new comment")
-    val userTemplate = Authentication.userTemplate(username, request.session)
+    val userTemplate = AuthenticationController.userTemplate(username, request.session)
     formNewComment.bindFromRequest.fold(
       formWithErrors => {
         val mediaId = formWithErrors.data.get("mediaId").get
@@ -116,7 +116,7 @@ object PostController extends Controller with Secured {
     } catch {
       case e: Throwable => {
         Logger.error(e.getMessage(), e) 
-        Redirect(routes.Application.index)
+        Redirect(routes.ApplicationController.index)
       }
     }
   }
@@ -128,7 +128,7 @@ object PostController extends Controller with Secured {
     } catch {
       case e: Throwable => {
         Logger.error(e.getMessage(), e) 
-        Redirect(routes.Application.index)
+        Redirect(routes.ApplicationController.index)
       }
     }
   }

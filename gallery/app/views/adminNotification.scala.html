@@ -24,7 +24,7 @@
 	
 			<div id="form-title">@Html(Messages("page.adminNotification.title")(Lang("fr")))</div>
 			
-			@helper.form(action = routes.Administrator.saveNewNotificationAlarm, 'id -> "notification-create-alarm-form") {
+			@helper.form(action = routes.AdministratorController.saveNewNotificationAlarm, 'id -> "notification-create-alarm-form") {
 			
 				<span>Du <i>( inclus )</i> &nbsp;</span><input type="text" id="startDate" name="startDate" placeholder="yyyy-MM-dd" />
 				<span>Au <i>( non inclus )</i> &nbsp;</span><input type="text" id="endDate" name="endDate"placeholder="yyyy-MM-dd" />

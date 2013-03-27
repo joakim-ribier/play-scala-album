@@ -12,7 +12,7 @@ import models.notification.Message
 
 object MessageDB {
 
-  val _DB_TBL_MESSAGE: String = Configuration.getStringValue(Configuration._TABLE_MESSAGE_KEY)
+  val _DB_TBL_MESSAGE: String = ConfigurationUtils.getStringValue(ConfigurationUtils._TABLE_MESSAGE_KEY)
   val simple = {
     get[Pk[Long]](_DB_TBL_MESSAGE + ".id") ~
     get[String](_DB_TBL_MESSAGE + ".html")~

@@ -20,7 +20,7 @@ import scala.collection.immutable.Seq
 import scala.collection.immutable.Nil
 import models.UserTemplate
 import utils.FileUtils
-import utils.Configuration
+import utils.ConfigurationUtils
 import play.api.i18n.Messages
 import play.api.i18n.Lang
 import play.api.data.Mapping
@@ -30,11 +30,11 @@ import org.slf4j.LoggerFactory
 import utils.OrderEnum
 import models.post.Post
 
-object Administrator extends Controller with Secured {
+object AdministratorController extends Controller with Secured {
 
-  private val Logger = LoggerFactory.getLogger("Administrator")
+  private val Logger = LoggerFactory.getLogger("AdministratorController")
   
-  private val _TITLE_HTML: String = Configuration.getHTMLTitle()
+  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle()
   private val addOrUpdateMediaForm = Form (
     tuple (
       "filename" -> text,
@@ -59,18 +59,18 @@ object Administrator extends Controller with Secured {
   )
   
   def index = withAdmin { username => implicit request =>
-     Redirect(routes.Administrator.listPhotoUploaded)
+     Redirect(routes.AdministratorController.listPhotoUploaded)
   }
   
   def saveMedia = withAdmin { username => implicit request =>
-    val userTemplate = Authentication.userTemplate(username, request.session)
+    val userTemplate = AuthenticationController.userTemplate(username, request.session)
     addOrUpdateMediaForm.bindFromRequest.fold(
       // Form has errors, redisplay it
       formWithErrors => BadRequest(html.adminAddOrUpdateMedia(_TITLE_HTML, null, userTemplate, formWithErrors, Tag.list())),
       // We got a valid User value
       value =>  {
-        val photos: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
-        val videos: List[String] = FileUtils.listFilename(Configuration.getMediaVideoFolderUploadDirectory())
+        val photos: List[String] = FileUtils.listFilename(ConfigurationUtils.getPhotoUploadThumbnailDirectory())
+        val videos: List[String] = FileUtils.listFilename(ConfigurationUtils.getMediaVideoFolderUploadDirectory())
         
         val mediaTitle = value._3
         val mediaId = value._7
@@ -87,21 +87,21 @@ object Administrator extends Controller with Secured {
   
   def upload = withAdmin { username => implicit request =>
     val files = request.body.asMultipartFormData.get.files.seq
-    val formats = Configuration.getMediaFormatsAllowed()
+    val formats = ConfigurationUtils.getMediaFormatsAllowed()
     for (media <- files) {
       val filename = media.filename
       val contentType = media.contentType
       val fileType: String = FileUtils.getFileType(filename)
       
-      if (Configuration.isMediaFormatAllowed(formats, fileType)) {
+      if (ConfigurationUtils.isMediaFormatAllowed(formats, fileType)) {
       	val newFileName = "_" + DateTime.now().getMillis() + "." + fileType
-        if (Configuration._MEDIA_FORMAT_VIDEO.equalsIgnoreCase(fileType)) {
-          media.ref.moveTo(new File(Configuration.getMediaVideoFolderUploadDirectory() + newFileName))
+        if (ConfigurationUtils._MEDIA_FORMAT_VIDEO.equalsIgnoreCase(fileType)) {
+          media.ref.moveTo(new File(ConfigurationUtils.getMediaVideoFolderUploadDirectory() + newFileName))
         } else {
-    			media.ref.moveTo(new File(Configuration.getPhotoUploadStandardDirectory() + newFileName))
+    			media.ref.moveTo(new File(ConfigurationUtils.getPhotoUploadStandardDirectory() + newFileName))
     			FileUtils.createThumbnails(
-    					Configuration.getPhotoUploadStandardDirectory(),
-    					Configuration.getPhotoUploadThumbnailDirectory(), newFileName, 200, 150)
+    					ConfigurationUtils.getPhotoUploadStandardDirectory(),
+    					ConfigurationUtils.getPhotoUploadThumbnailDirectory(), newFileName, 200, 150)
         }
       }
       
@@ -110,49 +110,49 @@ object Administrator extends Controller with Secured {
   }
   
   def listPhotoUploaded = withAdmin { username => implicit request =>
-    val userTemplate = Authentication.userTemplate(username, request.session)
-    val photos: List[String] = FileUtils.listFilename(Configuration.getPhotoUploadThumbnailDirectory())
-    val videos: List[String] = FileUtils.listFilename(Configuration.getMediaVideoFolderUploadDirectory())
+    val userTemplate = AuthenticationController.userTemplate(username, request.session)
+    val photos: List[String] = FileUtils.listFilename(ConfigurationUtils.getPhotoUploadThumbnailDirectory())
+    val videos: List[String] = FileUtils.listFilename(ConfigurationUtils.getMediaVideoFolderUploadDirectory())
     Ok(views.html.adminListMedia(_TITLE_HTML, null, userTemplate, Tag.list(), photos, videos))
   }
   
   def addNewPhoto(name: String) = withAdmin { username => implicit request =>
-    val userTemplate = Authentication.userTemplate(username, request.session)
+    val userTemplate = AuthenticationController.userTemplate(username, request.session)
     val formFilled = addOrUpdateMediaForm.fill(
         name,
         MediaType.PHOTO.label,
         "", Option.empty, false,
-        List(Configuration.getStringValue(Configuration._APP_TAG_DEFAULT)), Option.empty)
+        List(ConfigurationUtils.getStringValue(ConfigurationUtils._APP_TAG_DEFAULT)), Option.empty)
     Ok(views.html.adminAddOrUpdateMedia(_TITLE_HTML, null, userTemplate, formFilled, Tag.list()))  
   }
   
   def redirectToAddVideo(file: String) = withAdmin { username => implicit request =>
-    val userTemplate = Authentication.userTemplate(username, request.session)
+    val userTemplate = AuthenticationController.userTemplate(username, request.session)
     val formFilled = addOrUpdateMediaForm.fill(
         file,
         MediaType.VIDEO.label,
         "", Option.empty, false,
-        List(Configuration.getStringValue(Configuration._APP_TAG_DEFAULT)), Option.empty)
+        List(ConfigurationUtils.getStringValue(ConfigurationUtils._APP_TAG_DEFAULT)), Option.empty)
     Ok(views.html.adminAddOrUpdateMedia(_TITLE_HTML, null, userTemplate, formFilled, Tag.list()))  
   }
   
   def notification = withAdmin { username => implicit request =>
-    val userTemplate = Authentication.userTemplate(username, request.session)
+    val userTemplate = AuthenticationController.userTemplate(username, request.session)
     Ok(views.html.adminNotification(_TITLE_HTML, null, userTemplate, Tag.list(), Notification.listMessages(), Notification.list()))
   }
   
   def saveNewNotification = withAdmin { username => implicit request =>
     Logger.info("save new notification")
-    val userTemplate = Authentication.userTemplate(username, request.session)
+    val userTemplate = AuthenticationController.userTemplate(username, request.session)
     createNewNotificationForm.bindFromRequest.fold(
-      formWithErrors => Redirect(routes.Administrator.notification).flashing("notifcation-create-error" -> Messages("app.global.error")(Lang("fr"))),
+      formWithErrors => Redirect(routes.AdministratorController.notification).flashing("notifcation-create-error" -> Messages("app.global.error")(Lang("fr"))),
       value => {
        Logger.info("create new notification : " + value)
        val id = Notification.createMessage(value)
        if (id.isInstanceOf[Long]) {
-      	 Redirect(routes.Administrator.notification)
+      	 Redirect(routes.AdministratorController.notification)
        } else {
-      	 Redirect(routes.Administrator.notification).flashing("notifcation-create-error" -> Messages("app.global.error")(Lang("fr")))
+      	 Redirect(routes.AdministratorController.notification).flashing("notifcation-create-error" -> Messages("app.global.error")(Lang("fr")))
        }
       }
     )
@@ -160,20 +160,20 @@ object Administrator extends Controller with Secured {
   
   def saveNewNotificationAlarm = withAdmin { username => implicit request =>
     Logger.info("save new notification alarm")
-    val userTemplate = Authentication.userTemplate(username, request.session)
+    val userTemplate = AuthenticationController.userTemplate(username, request.session)
     createNewNotificationAlarmForm.bindFromRequest.fold(
-      formWithErrors => Redirect(routes.Administrator.notification).flashing("notification-alarm-create-error" -> Messages("app.global.error.missing.field.form")(Lang("fr"))),
+      formWithErrors => Redirect(routes.AdministratorController.notification).flashing("notification-alarm-create-error" -> Messages("app.global.error.missing.field.form")(Lang("fr"))),
       value => {
         try {
         	if (Notification.add(value._1, value._2, value._3)) {
-        		Redirect(routes.Administrator.notification)
+        		Redirect(routes.AdministratorController.notification)
         	} else {
-        		Redirect(routes.Administrator.notification).flashing("notification-alarm-create-error" -> Messages("app.global.error")(Lang("fr")))
+        		Redirect(routes.AdministratorController.notification).flashing("notification-alarm-create-error" -> Messages("app.global.error")(Lang("fr")))
         	}
         } catch {
         	case e => {
         		Logger.error(e.getMessage(), e)
-        		Redirect(routes.Administrator.notification).flashing("notification-alarm-create-error" -> e.getMessage())
+        		Redirect(routes.AdministratorController.notification).flashing("notification-alarm-create-error" -> e.getMessage())
         	}
         }
       }
@@ -206,8 +206,8 @@ object Administrator extends Controller with Secured {
     val value = request.body.asFormUrlEncoded.get("filename-post")
     Logger.info("delete photo {} to upload server directory", value)
     try {
-      if (FileUtils.delete(value(0), Configuration.getPhotoUploadThumbnailDirectory)) {
-      	if (FileUtils.delete(value(0), Configuration.getPhotoUploadStandardDirectory)) {
+      if (FileUtils.delete(value(0), ConfigurationUtils.getPhotoUploadThumbnailDirectory)) {
+      	if (FileUtils.delete(value(0), ConfigurationUtils.getPhotoUploadStandardDirectory)) {
       		Ok(Json.obj("status" -> "success"))
       	} else {
       		Ok(Json.obj("status" -> "failed", "error-message" -> fadOutLabel(Messages("administrator.delete.to.upload.directory.photo.failed", value(0))(Lang("fr")))))
@@ -227,7 +227,7 @@ object Administrator extends Controller with Secured {
     val value = request.body.asFormUrlEncoded.get("filename-post")
     Logger.info("delete video {} to upload server directory", value)
     try {
-      if (FileUtils.delete(value(0), Configuration.getMediaVideoFolderUploadDirectory)) {
+      if (FileUtils.delete(value(0), ConfigurationUtils.getMediaVideoFolderUploadDirectory)) {
         Ok(Json.obj("status" -> "success"))
       } else {
       	Ok(Json.obj("status" -> "failed", "error-message" -> fadOutLabel(Messages("administrator.delete.to.upload.directory.video.failed", value(0))(Lang("fr")))))
@@ -249,10 +249,10 @@ object Administrator extends Controller with Secured {
   }
   
   private def redirectToDisplayAllMedia(messageKey: Option[String], username: String) = Action { implicit request =>
-    val userTemplate = Authentication.userTemplate(username, request.session)
+    val userTemplate = AuthenticationController.userTemplate(username, request.session)
     val medias = Media.list(OrderEnum.DESC)
     Ok(views.html.adminAlbumMedias(_TITLE_HTML,
-        Authentication.buildFeedbackObjFromRequestOrKey(request, messageKey), userTemplate, Tag.list(), medias))
+        AuthenticationController.buildFeedbackObjFromRequestOrKey(request, messageKey), userTemplate, Tag.list(), medias))
   }
   
   def deleteMediaToAlbum = withAdmin { username => implicit request =>
@@ -267,11 +267,11 @@ object Administrator extends Controller with Secured {
       } else {
       	Media.remove(Option.apply(media.id.get))
         if (media.mediaType == MediaType.PHOTO) {
-        	FileUtils.delete(media.filename, Configuration.getPhotoThumbnailDirectory)
-        	FileUtils.delete(media.filename, Configuration.getPhoto800x600Directory)
-      		FileUtils.delete(media.filename, Configuration.getPhotoStandardDirectory)
+        	FileUtils.delete(media.filename, ConfigurationUtils.getPhotoThumbnailDirectory)
+        	FileUtils.delete(media.filename, ConfigurationUtils.getPhoto800x600Directory)
+      		FileUtils.delete(media.filename, ConfigurationUtils.getPhotoStandardDirectory)
       	} else {
-      		FileUtils.delete(media.filename, Configuration.getMediaVideoFolderStandardDirectory)
+      		FileUtils.delete(media.filename, ConfigurationUtils.getMediaVideoFolderStandardDirectory)
       	}
       	Ok(Json.obj("status" -> "success", "message-key" -> "administrator.delete.media.success.html"))
       }
@@ -285,7 +285,7 @@ object Administrator extends Controller with Secured {
   }
   
   def updateMedia(mediaId: String) = withAdmin { username => implicit request =>
-    val userTemplate = Authentication.userTemplate(username, request.session)
+    val userTemplate = AuthenticationController.userTemplate(username, request.session)
     try {
       val media = Media.get(mediaId.toLong)
       val formFilled = addOrUpdateMediaForm.fill(
@@ -299,7 +299,7 @@ object Administrator extends Controller with Secured {
     } catch {
       case e: Throwable => {
         Logger.error(e.getMessage(), e) 
-        Redirect(routes.Administrator.displayAllMedia)
+        Redirect(routes.AdministratorController.displayAllMedia)
       } 
     }
   }

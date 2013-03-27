@@ -13,29 +13,29 @@ object Global extends GlobalSettings {
   private val Logger = LoggerFactory.getLogger("GlobalSettings")
   
   private val appTablesDB = List(
-      Configuration._TABLE_USER_KEY,
-      Configuration._TABLE_EMAIL_KEY,
-      Configuration._TABLE_MEDIA_KEY,
-      Configuration._TABLE_MEDIA_TYPE_KEY,
-      Configuration._TABLE_TAG_KEY,
-      Configuration._TABLE_MESSAGE_KEY,
-      Configuration._TABLE_MESSAGE_NOTIFICATION_KEY,
-      Configuration._TABLE_NOTIFICATION_KEY,
-      Configuration._TABLE_NOTIFICATION_USER_KEY,
-      Configuration._TABLE_MEDIA_POST_KEY,
-      Configuration._TABLE_MEDIA_POST_MESSAGE_KEY)
+      ConfigurationUtils._TABLE_USER_KEY,
+      ConfigurationUtils._TABLE_EMAIL_KEY,
+      ConfigurationUtils._TABLE_MEDIA_KEY,
+      ConfigurationUtils._TABLE_MEDIA_TYPE_KEY,
+      ConfigurationUtils._TABLE_TAG_KEY,
+      ConfigurationUtils._TABLE_MESSAGE_KEY,
+      ConfigurationUtils._TABLE_MESSAGE_NOTIFICATION_KEY,
+      ConfigurationUtils._TABLE_NOTIFICATION_KEY,
+      ConfigurationUtils._TABLE_NOTIFICATION_USER_KEY,
+      ConfigurationUtils._TABLE_MEDIA_POST_KEY,
+      ConfigurationUtils._TABLE_MEDIA_POST_MESSAGE_KEY)
   
   override def onStart(app: Application) {
     Logger.info("{} application has started",
-        play.Configuration.root().getString(Configuration._APP_TITLE))
+        play.Configuration.root().getString(ConfigurationUtils._APP_TITLE))
         
     Logger.info("Version {}",
         play.Configuration.root().getString("app.version"))
      
     Logger.info("### check file configuration")
-    logAndReturnValue(Configuration._APP_ADMIN_LOGIN)
-    logAndReturnValue(Configuration._APP_CONNECTION_DATE)
-    logAndReturnValue(Configuration._APP_HTML_TITLE)
+    logAndReturnValue(ConfigurationUtils._APP_ADMIN_LOGIN)
+    logAndReturnValue(ConfigurationUtils._APP_CONNECTION_DATE)
+    logAndReturnValue(ConfigurationUtils._APP_HTML_TITLE)
     logAndReturnValue("app.google.analytics")
     
     checkDBConfiguration()
@@ -47,7 +47,7 @@ object Global extends GlobalSettings {
   }
   
   override def onRouteRequest(request: RequestHeader): Option[Handler] = {
-    val sessionId = request.session.get(Configuration._SESSION_ID_KEY)
+    val sessionId = request.session.get(ConfigurationUtils._SESSION_ID_KEY)
     if (sessionId.isDefined) {
       MDCUtils.put(sessionId.get)
     } else {
@@ -63,7 +63,7 @@ object Global extends GlobalSettings {
     }
   }
   
-  private def getApplicationName() = logAndReturnValue(Configuration._APP_TITLE)
+  private def getApplicationName() = logAndReturnValue(ConfigurationUtils._APP_TITLE)
   
   private def logAndReturnValue(key: String) : String = {
     val value: String = play.Configuration.root().getString(key)
@@ -76,17 +76,17 @@ object Global extends GlobalSettings {
   
   private def checkFolderStorePhotos() {
     Logger.info("# check folders")
-    createDirectoryIfNotExists(Configuration._APP_UPLOAD_PHOTO)
-    createDirectoryIfNotExists(Configuration._APP_UPLOAD_STANDARD_PHOTO)
-    createDirectoryIfNotExists(Configuration._APP_UPLOAD_THUMBNAIL_PHOTO)
+    createDirectoryIfNotExists(ConfigurationUtils._APP_UPLOAD_PHOTO)
+    createDirectoryIfNotExists(ConfigurationUtils._APP_UPLOAD_STANDARD_PHOTO)
+    createDirectoryIfNotExists(ConfigurationUtils._APP_UPLOAD_THUMBNAIL_PHOTO)
     
-	  createDirectoryIfNotExists(Configuration._APP_STANDARD_PHOTO)
-    createDirectoryIfNotExists(Configuration._APP_THUMBNAIL_PHOTO)
-    createDirectoryIfNotExists(Configuration._APP_800x600_PHOTO)
+	  createDirectoryIfNotExists(ConfigurationUtils._APP_STANDARD_PHOTO)
+    createDirectoryIfNotExists(ConfigurationUtils._APP_THUMBNAIL_PHOTO)
+    createDirectoryIfNotExists(ConfigurationUtils._APP_800x600_PHOTO)
     
-    createDirectoryIfNotExists(Configuration._APP_MEDIA_VIDEO_FOLDER)
-    createDirectoryIfNotExists(Configuration._APP_MEDIA_VIDEO_STANDARD_FOLDER)
-    createDirectoryIfNotExists(Configuration._APP_MEDIA_VIDEO_UPLOAD_FOLDER)
+    createDirectoryIfNotExists(ConfigurationUtils._APP_MEDIA_VIDEO_FOLDER)
+    createDirectoryIfNotExists(ConfigurationUtils._APP_MEDIA_VIDEO_STANDARD_FOLDER)
+    createDirectoryIfNotExists(ConfigurationUtils._APP_MEDIA_VIDEO_UPLOAD_FOLDER)
   }
   
   private def createDirectoryIfNotExists(keyDirectory: String) {

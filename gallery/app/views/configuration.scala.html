@@ -6,7 +6,7 @@
 	
 		<div id="form">
 			
-			@helper.form(routes.Application.createAdministrator) {
+			@helper.form(routes.ApplicationController.createAdministrator) {
 	    	<p><input type="text" name="login" value="@form("login").value" id="login" readonly="readonly"></p>
 	    	<p><input type="password" name="password" id="password" placeholder="@Messages("page.configuration.form.field.password")(Lang("fr"))"></p>
 	    	<p><input type="email" name="email" id="email" placeholder="@Messages("page.configuration.form.field.email")(Lang("fr"))"></p>

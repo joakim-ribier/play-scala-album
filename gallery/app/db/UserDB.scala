@@ -7,12 +7,12 @@ import play.api.Play.current
 import anorm.SqlParser._
 import anorm._
 import models.User
-import utils.Configuration
+import utils.ConfigurationUtils
 
 object UserDB {
 
-  private val _DB_TBL_USER: String = Configuration.getStringValue(Configuration._TABLE_USER_KEY)
-	private val _DB_TBL_USER_EMAIL: String = Configuration.getStringValue(Configuration._TABLE_EMAIL_KEY)
+  private val _DB_TBL_USER: String = ConfigurationUtils.getStringValue(ConfigurationUtils._TABLE_USER_KEY)
+	private val _DB_TBL_USER_EMAIL: String = ConfigurationUtils.getStringValue(ConfigurationUtils._TABLE_EMAIL_KEY)
   
   private val simple = {
     get[Pk[Long]](_DB_TBL_USER + ".id") ~

@@ -12,7 +12,7 @@ import models.notification.Notification
 
 object NotificationDB {
 
-  private val _DB_TBL_NOTIFICATION: String = Configuration.getStringValue(Configuration._TABLE_NOTIFICATION_KEY)
+  private val _DB_TBL_NOTIFICATION: String = ConfigurationUtils.getStringValue(ConfigurationUtils._TABLE_NOTIFICATION_KEY)
   
   private val simple = {
     get[Pk[Long]](_DB_TBL_NOTIFICATION + ".id") ~

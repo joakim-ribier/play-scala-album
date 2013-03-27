@@ -17,19 +17,19 @@ import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import play.api.mvc.Action
 import play.api.mvc.Controller
 import play.api.mvc.Result
-import utils.Configuration
+import utils.ConfigurationUtils
 import utils.FileUtils
 import views.html
 import models.notification.Notification
 import org.slf4j.LoggerFactory
 import models.post.Post
 
-object Application extends Controller with Secured {
+object ApplicationController extends Controller with Secured {
 
-  private val Logger = LoggerFactory.getLogger("Application")
+  private val Logger = LoggerFactory.getLogger("ApplicationController")
   
-  private val _TITLE_HTML: String = Configuration.getHTMLTitle()
-  private val _LIMIT = Configuration.getDisplayPhotoLimit()
+  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle()
+  private val _LIMIT = ConfigurationUtils.getDisplayPhotoLimit()
   
   private val _TAG_ALL = "all"
   private val _TAG_SEPARATOR = "\\."
@@ -67,9 +67,9 @@ object Application extends Controller with Secured {
   }
   
   def index = withAuth { username => implicit request =>
-    val userTemplate = new UserTemplate(username, request.session.get(Configuration._SESSION_EMAIL_KEY))
+    val userTemplate = new UserTemplate(username, request.session.get(ConfigurationUtils._SESSION_EMAIL_KEY))
   	if (User.isAdmin(username)) {
-  		Redirect(routes.Administrator.index)
+  		Redirect(routes.AdministratorController.index)
   	} else {
   	  val medias = Media.list(0, _LIMIT)
   	  val numberCommentsByMedia = Post.count(medias)
@@ -84,7 +84,7 @@ object Application extends Controller with Secured {
   
   def page(page: String, tags: String) = withUser { username => implicit request =>
     try {
-      val userTemplate = new UserTemplate(username, request.session.get(Configuration._SESSION_EMAIL_KEY))
+      val userTemplate = new UserTemplate(username, request.session.get(ConfigurationUtils._SESSION_EMAIL_KEY))
        
       val pageToInt = page.asInstanceOf[String].toInt
       if (pageToInt >= 1) {
@@ -103,13 +103,13 @@ object Application extends Controller with Secured {
         
       } else {
         
-        Redirect(routes.Application.index)
+        Redirect(routes.ApplicationController.index)
       }
       
     } catch {
       case e: Throwable => {
        Logger.error(e.getMessage(), e) 
-       Redirect(routes.Application.index)
+       Redirect(routes.ApplicationController.index)
       }
     }
   }
@@ -196,11 +196,11 @@ object Application extends Controller with Secured {
   }
   
   def configuration = Action { implicit request =>
-    val u = User.findUser(Option.apply(Configuration.getAdminLogin()))
+    val u = User.findUser(Option.apply(ConfigurationUtils.getAdminLogin()))
     if (u.isDefined) {
-       Redirect(routes.Application.index)
+       Redirect(routes.ApplicationController.index)
     } else {
-      val filledForm = formNewAdmin.fill(Configuration.getAdminLogin(), null, null)
+      val filledForm = formNewAdmin.fill(ConfigurationUtils.getAdminLogin(), null, null)
       Ok(views.html.configuration(filledForm, _TITLE_HTML))   
     }
   }
@@ -212,32 +212,32 @@ object Application extends Controller with Secured {
       // We got a valid User value
       value => {
         val successText = Messages("application.add.new.admin.success.html", value._1)(Lang("fr"))
-        Ok(views.html.login(Authentication.form, _TITLE_HTML, new Feedback(successText, FeedbackClass.ok))) 
+        Ok(views.html.login(AuthenticationController.form, _TITLE_HTML, new Feedback(successText, FeedbackClass.ok))) 
       }
     )
   }
 
   def saveNewUserEmail(email: String, token: String) = Action { implicit request =>
-    val form = Authentication.form.fill("nothing", "nothing", Option.empty, Option.apply(email), Option.apply(token), Option.empty)
+    val form = AuthenticationController.form.fill("nothing", "nothing", Option.empty, Option.apply(email), Option.apply(token), Option.empty)
   	Ok(views.html.login(
   	    form, _TITLE_HTML,
   	    new Feedback(Messages("application.create.new.user.email.redirection.to.login", email)(Lang("fr")), FeedbackClass.ok))).withNewSession
   }
   
   def getPhotoInUploadThumbailDirectory(filename: String) = withAuth { username => implicit request =>
-    getFile(Configuration.getPhotoUploadThumbnailDirectory(), filename)(request)
+    getFile(ConfigurationUtils.getPhotoUploadThumbnailDirectory(), filename)(request)
   }
    
   def getPhotoInStandardDirectory(filename: String) = withAuth { username => implicit request =>
-    getFile(Configuration.getPhotoStandardDirectory(), filename)(request)
+    getFile(ConfigurationUtils.getPhotoStandardDirectory(), filename)(request)
   }
   
   def getPhotoInThumbailDirectory(filename: String) = Action { implicit request =>
-    getFile(Configuration.getPhotoThumbnailDirectory(), filename)(request)
+    getFile(ConfigurationUtils.getPhotoThumbnailDirectory(), filename)(request)
   }
   
   def getPhotoIn800x600Directory(filename: String) = withAuth { username => implicit request =>
-    getFile(Configuration.getPhoto800x600Directory(), filename)(request)
+    getFile(ConfigurationUtils.getPhoto800x600Directory(), filename)(request)
   }
   
   def userPopupNotifyClose = withUser { username => implicit request =>
@@ -250,17 +250,17 @@ object Application extends Controller with Secured {
   }
   
   def getVideoInStandardDirectory(file: String) = withAuth { username => implicit request =>
-    getFile(Configuration.getMediaVideoFolderStandardDirectory(), file)(request)
+    getFile(ConfigurationUtils.getMediaVideoFolderStandardDirectory(), file)(request)
   }
   
   def getVideoInUploadDirectory(file: String) = withAuth { username => implicit request =>
-    getFile(Configuration.getMediaVideoFolderUploadDirectory(), file)(request)
+    getFile(ConfigurationUtils.getMediaVideoFolderUploadDirectory(), file)(request)
   }
   
   def getStringPostValueFromKey = Action { implicit request =>
   	val keyTab = request.body.asFormUrlEncoded.get("configuration-key")
   	if (!keyTab.isEmpty) {
-  	  val value = Configuration.getStringValue(keyTab(0).toString())
+  	  val value = ConfigurationUtils.getStringValue(keyTab(0).toString())
   	  if (!value.isEmpty()) {
   	  	Ok(Json.obj("status" -> "success", "value" -> value))
   	  } else {

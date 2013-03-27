@@ -10,7 +10,7 @@ import org.slf4j.MDC
 import java.util.Calendar
 import java.text.SimpleDateFormat
 import utils.MDCUtils
-import utils.Configuration
+import utils.ConfigurationUtils
 import play.api.i18n.Messages
 import play.api.i18n.Lang
 import org.slf4j.LoggerFactory
@@ -22,10 +22,10 @@ import org.joda.time.format.DateTimeFormatter
 import utils.DateTimeUtils
 import play.cache.Cache
 
-object Authentication extends Controller {
+object AuthenticationController extends Controller {
   
-  val Logger = LoggerFactory.getLogger("Authentication")
-  private val _TITLE_HTML: String = Configuration.getHTMLTitle()
+  val Logger = LoggerFactory.getLogger("AuthenticationController")
+  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle()
   
   val form = Form (
     tuple (
@@ -41,7 +41,7 @@ object Authentication extends Controller {
   )
   
   def login = Action { implicit request =>
-  	val u = User.findUser(Option.apply(Configuration.getAdminLogin()))
+  	val u = User.findUser(Option.apply(ConfigurationUtils.getAdminLogin()))
     if (u.isDefined) {
     	if (request.flash.get("redirect-url").isDefined) {
     	  val fill = form.fill("nothing", "nothing", Option.empty, Option.empty, Option.empty, Option.apply(request.flash.get("redirect-url").get))
@@ -56,12 +56,12 @@ object Authentication extends Controller {
         }
       }
     } else {
-    	Redirect(routes.Application.configuration)
+    	Redirect(routes.ApplicationController.configuration)
     }
   }
   
   def redirect = Action { request =>
-  	Redirect(routes.Application.configuration)
+  	Redirect(routes.ApplicationController.configuration)
   }
   
   def authenticate = Action { implicit request =>
@@ -78,7 +78,7 @@ object Authentication extends Controller {
       	
       	val dateTime = DateTime.now().toString("yyyy-MM-dd'T'HH:mm:ss")
       	val sessionId = "uuid-" + formUsername + "-" + dateTime 
-      	Cache.set(sessionId + "-" + Configuration._SESSION_TIMEOUT_KEY, DateTimeUtils.now)
+      	Cache.set(sessionId + "-" + ConfigurationUtils._SESSION_TIMEOUT_KEY, DateTimeUtils.now)
       	MDCUtils.put(sessionId)
       	Logger.info("You've been logged in")
       	
@@ -135,8 +135,8 @@ object Authentication extends Controller {
   private def connectToAccountConfigurationPage(username: String, sessionId: String, succeed: Boolean, message: String) = Action {
     Redirect(routes.AccountConfigurationController.index).withSession(
         Security.username -> username,
-    		Configuration._SESSION_ID_KEY -> sessionId,
-    		Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)
+    		ConfigurationUtils._SESSION_ID_KEY -> sessionId,
+    		ConfigurationUtils._SESSION_EMAIL_KEY -> formatUserEmailToString(username)
     		).flashing(
     		    "connection" -> "success",
     		    "validation-message" -> message,
@@ -149,20 +149,20 @@ object Authentication extends Controller {
     	if (message.isDefined) {
     		Redirect(url).withSession(
     				Security.username -> username,
-    				Configuration._SESSION_ID_KEY -> sessionId,
-    				Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)
+    				ConfigurationUtils._SESSION_ID_KEY -> sessionId,
+    				ConfigurationUtils._SESSION_EMAIL_KEY -> formatUserEmailToString(username)
     				).flashing("connection" -> "success", "app-message" -> message.get)
     	} else {
     		Redirect(url).withSession(
     				Security.username -> username,
-    				Configuration._SESSION_ID_KEY -> sessionId,
-    				Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)).flashing("connection" -> "success")
+    				ConfigurationUtils._SESSION_ID_KEY -> sessionId,
+    				ConfigurationUtils._SESSION_EMAIL_KEY -> formatUserEmailToString(username)).flashing("connection" -> "success")
     	}
     } else {
       Redirect(routes.AccountConfigurationController.index).withSession(
     				Security.username -> username,
-    				Configuration._SESSION_ID_KEY -> sessionId,
-    				Configuration._SESSION_EMAIL_KEY -> formatUserEmailToString(username)
+    				ConfigurationUtils._SESSION_ID_KEY -> sessionId,
+    				ConfigurationUtils._SESSION_EMAIL_KEY -> formatUserEmailToString(username)
     				).flashing("connection" -> "success")
     }	
   }
@@ -176,25 +176,25 @@ object Authentication extends Controller {
   }
   
   def redirectAuthenticate = Action {
-  	Redirect(routes.Application.index)
+  	Redirect(routes.ApplicationController.index)
   }
   
   def logout = Action { request =>
     Logger.info("You've been logged out")
     MDCUtils.closeSession()
     if (request.flash.get("redirect-url").isDefined) {
-    	Redirect(routes.Authentication.login).withNewSession.flashing("redirect-url" -> request.flash.get("redirect-url").get)
+    	Redirect(routes.AuthenticationController.login).withNewSession.flashing("redirect-url" -> request.flash.get("redirect-url").get)
     } else {
       if (request.flash.get("app-message").isDefined) {
-      	Redirect(routes.Authentication.login).withNewSession.flashing("app-message" -> request.flash.get("app-message").get)
+      	Redirect(routes.AuthenticationController.login).withNewSession.flashing("app-message" -> request.flash.get("app-message").get)
       } else {
-        Redirect(routes.Authentication.login).withNewSession
+        Redirect(routes.AuthenticationController.login).withNewSession
       }
     }
   }
   
   def userTemplate(username: String, session: Session) : UserTemplate = {
-    return new UserTemplate(username, session.get(Configuration._SESSION_EMAIL_KEY))
+    return new UserTemplate(username, session.get(ConfigurationUtils._SESSION_EMAIL_KEY))
   }
   
   def buildFeedbackObjFromRequestOrKey(request: RequestHeader, messageKey: Option[String]) : Feedback = {

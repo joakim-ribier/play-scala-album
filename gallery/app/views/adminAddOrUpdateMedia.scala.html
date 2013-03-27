@@ -32,7 +32,7 @@
 			}
 			</div>
 					
-		@helper.form(routes.Administrator.saveMedia) {
+		@helper.form(routes.AdministratorController.saveMedia) {
     	<input type="hidden" name="filename" value="@form("filename").value.get"/>
     	<input type="hidden" name="type" value="@form("type").value.get"/>
     	@if(form("mediaId").value) {

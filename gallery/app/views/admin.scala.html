@@ -10,7 +10,7 @@
 		<div id="administrator-form-menu">
 		
 			<div id="admin-upload-form" class="administrator-box-shadow">
-				@form(action = routes.Administrator.upload, 'enctype -> "multipart/form-data") {
+				@form(action = routes.AdministratorController.upload, 'enctype -> "multipart/form-data") {
 				    <p><input type="file" id="photos" multiple="multiple" onchange="fileSelected()"; /></p>
 				
 						<div class="admin-upload-form-photo-details" id="admin-upload-form-photo-count">
@@ -45,7 +45,7 @@
 				</div>
 				
 				<div id="administrator-content-main-notification-create" >
-					@helper.form(routes.Administrator.saveNewNotification) {
+					@helper.form(routes.AdministratorController.saveNewNotification) {
 					
 						<div id="administrator-content-main-notification-create-textarea">
 							<textarea style="background-color: transparent;" rows="4" cols="45" name="notification" id="textarea-notification" placeholder="@Messages("page.adminNotification.form.field.notification.html")(Lang("fr"))"></textarea>

@@ -2,7 +2,7 @@ package utils
 
 import play.Play
 
-object Configuration {
+object ConfigurationUtils {
   
   private val _MEDIA_FORMAT_SEPARATOR = ","
   
@@ -68,7 +68,7 @@ object Configuration {
   def getToken() = getStringValue(_APP_TOKEN)
   def getCreateNewUserCode() = getStringValue(_APP_CREATE_NEW_USER_CODE)
   def getDisplayPhotoLimit() = getIntValue(_APP_DISPLAY_PHOTO_LIMIT)
-  def getHost() = Configuration.getStringValue(Configuration._APP_HOST)
+  def getHost() = ConfigurationUtils.getStringValue(ConfigurationUtils._APP_HOST)
   
   
   def getMediaFormatsAllowed() : Seq[String] = {

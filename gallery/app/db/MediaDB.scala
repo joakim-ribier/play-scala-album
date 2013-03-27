@@ -11,9 +11,9 @@ import utils._
 
 object MediaDB {
 
-  private val _DB_TBL_MEDIA: String = play.Configuration.root().getString(Configuration._TABLE_MEDIA_KEY)
-  private val _DB_TBL_MEDIA_TYPE: String = play.Configuration.root().getString(Configuration._TABLE_MEDIA_TYPE_KEY)
-  private val _DB_TBL_TAG: String = play.Configuration.root().getString(Configuration._TABLE_TAG_KEY)
+  private val _DB_TBL_MEDIA: String = play.Configuration.root().getString(ConfigurationUtils._TABLE_MEDIA_KEY)
+  private val _DB_TBL_MEDIA_TYPE: String = play.Configuration.root().getString(ConfigurationUtils._TABLE_MEDIA_TYPE_KEY)
+  private val _DB_TBL_TAG: String = play.Configuration.root().getString(ConfigurationUtils._TABLE_TAG_KEY)
   
   private val simple = {
     get[Pk[Long]](_DB_TBL_MEDIA + ".id") ~

@@ -6,7 +6,7 @@
 		
 		<div id="form">
 		
-			@helper.form(routes.Authentication.authenticate) {
+			@helper.form(routes.AuthenticationController.authenticate) {
 	            
 	            @if(form("email").value.isDefined && form("token").value.isDefined) {
 	            	<input type="hidden" name="email" value="@form("email").value.get" id="email" />
