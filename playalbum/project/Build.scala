@@ -5,7 +5,7 @@ import Keys._
 object ApplicationBuild extends Build {
 
     val appName         = "playalbum"
-    val appVersion      = "1.0-SNAPSHOT"
+    val appVersion      = "1.0"
 
     val appDependencies = Seq(
     	anorm, javaJdbc,

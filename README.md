@@ -1,4 +1,10 @@
-play2-scala-gallery
+Photo Album Project 1.0
 ===================
 
-My first project with Play2 and scala language
+First project in Play2 for scala language.
+
+* Play2 for scala
+
+* License Apache2
+
+( http://opensource.org/licenses/Apache-2.0 )
