@@ -7,7 +7,7 @@
     <password>password</password>
     <subject>Application Title %logger{20} - %m</subject>
     <layout class="ch.qos.logback.classic.PatternLayout">
-        <pattern>%d{HH:mm:ss.SSS} [%-5level] {%logger{32}} [%X{sessionId}/%X{username}]:%msg%n</pattern>
+        <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%-5level] {%logger{32}} [%X{sessionId}]:%msg%n</pattern>
     </layout>
     <cyclicBufferTracker class="ch.qos.logback.core.spi.CyclicBufferTrackerImpl">
       <bufferSize>50</bufferSize>

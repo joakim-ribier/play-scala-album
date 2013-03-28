@@ -4,7 +4,7 @@ import Keys._
 
 object ApplicationBuild extends Build {
 
-    val appName         = "gallery"
+    val appName         = "playalbum"
     val appVersion      = "1.0-SNAPSHOT"
 
     val appDependencies = Seq(
