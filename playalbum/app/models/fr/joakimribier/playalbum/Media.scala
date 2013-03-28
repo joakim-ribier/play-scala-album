@@ -10,6 +10,7 @@ import anorm.NotAssigned
 import utils.fr.joakimribier.playalbum.ConfigurationUtils
 import db.fr.joakimribier.playalbum.MediaDB
 
+
 object Visibility extends Enumeration {
   type Visibility = Value
   val PUBLIC, PRIVATE = Value
@@ -28,6 +29,26 @@ import MediaType._
 
 case class Media(id: Pk[Long] = NotAssigned, filename: String, mediaType: MediaType.Value, title: String, description: Option[String], visibility: Visibility, created: DateTime)
 
+/**
+ * 
+ * Copyright 2013 Joakim Ribier
+ * 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * 
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
 object Media {
 
   private val Logger = LoggerFactory.getLogger("Media")
