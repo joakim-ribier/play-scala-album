@@ -30,12 +30,12 @@ import utils.fr.joakimribier.playalbum.ConfigurationUtils
 object AccountConfigurationController extends Controller {
 
   private val Logger = LoggerFactory.getLogger("AccountConfigurationController")
-  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle()
+  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle
   
   def index = Action { implicit request =>
     val username = request.session.get(Security.username)
     if (username.isDefined) {
-    	val userTemplate = new UserTemplate(username.get, request.session.get(ConfigurationUtils._SESSION_EMAIL_KEY))
+    	val userTemplate = new UserTemplate(username.get, request.session.get(ConfigurationUtils.getSessionEmailID))
     	if (request.flash.get("validation-message").isDefined) {
     		Ok(views.html.fr.joakimribier.playalbum.accountConfiguration(
     		    _TITLE_HTML, null, userTemplate,

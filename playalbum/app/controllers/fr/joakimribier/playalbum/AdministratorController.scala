@@ -54,7 +54,7 @@ object AdministratorController extends Controller with Secured {
 
   private val Logger = LoggerFactory.getLogger("AdministratorController")
   
-  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle()
+  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle
   private val addOrUpdateMediaForm = Form (
     tuple (
       "filename" -> text,
@@ -89,8 +89,8 @@ object AdministratorController extends Controller with Secured {
       formWithErrors => BadRequest(views.html.fr.joakimribier.playalbum.adminAddOrUpdateMedia(_TITLE_HTML, null, userTemplate, formWithErrors, Tag.list())),
       // We got a valid User value
       value =>  {
-        val photos: List[String] = FileUtils.listFilename(ConfigurationUtils.getPhotoUploadThumbnailDirectory())
-        val videos: List[String] = FileUtils.listFilename(ConfigurationUtils.getMediaVideoFolderUploadDirectory())
+        val photos: List[String] = FileUtils.listFilename(ConfigurationUtils.getPhotoUploadThumbnailFolderPath)
+        val videos: List[String] = FileUtils.listFilename(ConfigurationUtils.getVideoUploadFolderPath)
         
         val mediaTitle = value._3
         val mediaId = value._7
@@ -107,7 +107,7 @@ object AdministratorController extends Controller with Secured {
   
   def upload = withAdmin { username => implicit request =>
     val files = request.body.asMultipartFormData.get.files.seq
-    val formats = ConfigurationUtils.getMediaFormatsAllowed()
+    val formats = ConfigurationUtils.getMediaFormatsAllowed
     for (media <- files) {
       val filename = media.filename
       val contentType = media.contentType
@@ -115,13 +115,13 @@ object AdministratorController extends Controller with Secured {
       
       if (ConfigurationUtils.isMediaFormatAllowed(formats, fileType)) {
       	val newFileName = "_" + DateTime.now().getMillis() + "." + fileType
-        if (ConfigurationUtils._MEDIA_FORMAT_VIDEO.equalsIgnoreCase(fileType)) {
-          media.ref.moveTo(new File(ConfigurationUtils.getMediaVideoFolderUploadDirectory() + newFileName))
+        if (ConfigurationUtils.getVideoFormatAllowed.equalsIgnoreCase(fileType)) {
+          media.ref.moveTo(new File(ConfigurationUtils.getVideoUploadFolderPath + newFileName))
         } else {
-    			media.ref.moveTo(new File(ConfigurationUtils.getPhotoUploadStandardDirectory() + newFileName))
+    			media.ref.moveTo(new File(ConfigurationUtils.getPhotoUploadStandardFolderPath + newFileName))
     			FileUtils.createThumbnails(
-    					ConfigurationUtils.getPhotoUploadStandardDirectory(),
-    					ConfigurationUtils.getPhotoUploadThumbnailDirectory(), newFileName, 200, 150)
+    					ConfigurationUtils.getPhotoUploadStandardFolderPath,
+    					ConfigurationUtils.getPhotoUploadThumbnailFolderPath, newFileName, 200, 150)
         }
       }
       
@@ -131,8 +131,8 @@ object AdministratorController extends Controller with Secured {
   
   def listPhotoUploaded = withAdmin { username => implicit request =>
     val userTemplate = AuthenticationController.userTemplate(username, request.session)
-    val photos: List[String] = FileUtils.listFilename(ConfigurationUtils.getPhotoUploadThumbnailDirectory())
-    val videos: List[String] = FileUtils.listFilename(ConfigurationUtils.getMediaVideoFolderUploadDirectory())
+    val photos: List[String] = FileUtils.listFilename(ConfigurationUtils.getPhotoUploadThumbnailFolderPath)
+    val videos: List[String] = FileUtils.listFilename(ConfigurationUtils.getVideoUploadFolderPath)
     Ok(views.html.fr.joakimribier.playalbum.adminListMedia(_TITLE_HTML, null, userTemplate, Tag.list(), photos, videos))
   }
   
@@ -142,7 +142,7 @@ object AdministratorController extends Controller with Secured {
         name,
         MediaType.PHOTO.label,
         "", Option.empty, false,
-        List(ConfigurationUtils.getStringValue(ConfigurationUtils._APP_TAG_DEFAULT)), Option.empty)
+        List(ConfigurationUtils.getDefaultTag), Option.empty)
     Ok(views.html.fr.joakimribier.playalbum.adminAddOrUpdateMedia(_TITLE_HTML, null, userTemplate, formFilled, Tag.list()))  
   }
   
@@ -152,7 +152,7 @@ object AdministratorController extends Controller with Secured {
         file,
         MediaType.VIDEO.label,
         "", Option.empty, false,
-        List(ConfigurationUtils.getStringValue(ConfigurationUtils._APP_TAG_DEFAULT)), Option.empty)
+        List(ConfigurationUtils.getDefaultTag), Option.empty)
     Ok(views.html.fr.joakimribier.playalbum.adminAddOrUpdateMedia(_TITLE_HTML, null, userTemplate, formFilled, Tag.list()))  
   }
   
@@ -226,8 +226,8 @@ object AdministratorController extends Controller with Secured {
     val value = request.body.asFormUrlEncoded.get("filename-post")
     Logger.info("delete photo {} to upload server directory", value)
     try {
-      if (FileUtils.delete(value(0), ConfigurationUtils.getPhotoUploadThumbnailDirectory)) {
-      	if (FileUtils.delete(value(0), ConfigurationUtils.getPhotoUploadStandardDirectory)) {
+      if (FileUtils.delete(value(0), ConfigurationUtils.getPhotoUploadThumbnailFolderPath)) {
+      	if (FileUtils.delete(value(0), ConfigurationUtils.getPhotoUploadStandardFolderPath)) {
       		Ok(Json.obj("status" -> "success"))
       	} else {
       		Ok(Json.obj("status" -> "failed", "error-message" -> fadOutLabel(Messages("administrator.delete.to.upload.directory.photo.failed", value(0))(Lang("fr")))))
@@ -247,7 +247,7 @@ object AdministratorController extends Controller with Secured {
     val value = request.body.asFormUrlEncoded.get("filename-post")
     Logger.info("delete video {} to upload server directory", value)
     try {
-      if (FileUtils.delete(value(0), ConfigurationUtils.getMediaVideoFolderUploadDirectory)) {
+      if (FileUtils.delete(value(0), ConfigurationUtils.getVideoUploadFolderPath)) {
         Ok(Json.obj("status" -> "success"))
       } else {
       	Ok(Json.obj("status" -> "failed", "error-message" -> fadOutLabel(Messages("administrator.delete.to.upload.directory.video.failed", value(0))(Lang("fr")))))
@@ -287,11 +287,11 @@ object AdministratorController extends Controller with Secured {
       } else {
       	Media.remove(Option.apply(media.id.get))
         if (media.mediaType == MediaType.PHOTO) {
-        	FileUtils.delete(media.filename, ConfigurationUtils.getPhotoThumbnailDirectory)
-        	FileUtils.delete(media.filename, ConfigurationUtils.getPhoto800x600Directory)
-      		FileUtils.delete(media.filename, ConfigurationUtils.getPhotoStandardDirectory)
+        	FileUtils.delete(media.filename, ConfigurationUtils.getPhotoThumbnailFolderPath)
+        	FileUtils.delete(media.filename, ConfigurationUtils.getPhoto800x600FolderPath)
+      		FileUtils.delete(media.filename, ConfigurationUtils.getPhotoStandardFolderPath)
       	} else {
-      		FileUtils.delete(media.filename, ConfigurationUtils.getMediaVideoFolderStandardDirectory)
+      		FileUtils.delete(media.filename, ConfigurationUtils.getVideoStandardFolderPath)
       	}
       	Ok(Json.obj("status" -> "success", "message-key" -> "administrator.delete.media.success.html"))
       }

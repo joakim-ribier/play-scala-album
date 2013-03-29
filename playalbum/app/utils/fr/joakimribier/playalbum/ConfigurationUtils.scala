@@ -6,6 +6,8 @@ import akka.actor._
 import scala.concurrent.duration._
 import play.api.libs.concurrent.Execution.Implicits._
 import actor.fr.joakimribier.playalbum.AppActor
+import play.api.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * 
@@ -29,38 +31,15 @@ import actor.fr.joakimribier.playalbum.AppActor
  */
 object ConfigurationUtils {
   
-  private val _MEDIA_FORMAT_SEPARATOR = ","
+  private val Logger = LoggerFactory.getLogger("ConfigurationUtils")
   
-  // SESSION KEY
-  val _SESSION_EMAIL_KEY = "user-email"
-  val _SESSION_ID_KEY = "session-id"
-  val _SESSION_TIMEOUT_KEY = "session-timeout"
- 
-  // CONFIGURATION KEYS
-  val _MEDIA_FORMAT_VIDEO = "webm"
-  val _APP_HOST = "app.host"
-  val _APP_TOKEN = "token"
-  val _APP_TAG_DEFAULT = "tag.default"
-  val _APP_CREATE_NEW_USER_CODE = "app.connection.code"
-  val _APP_ADMIN_LOGIN = "app.connection.admin.login"
-  val _APP_CONNECTION_DATE = "app.connection.date"
-  val _APP_HTML_TITLE = "app.html.title"
-  val _APP_TITLE = "app.name"
-  val _APP_DISPLAY_PHOTO_LIMIT= "app.display.photo.limit"
-  val _APP_MEDIA_FORMAT_ALLOWED = "app.media.format.allowed"
-  val _APP_UPLOAD_PHOTO = "app.folder.store.upload.photo"
-  val _APP_UPLOAD_STANDARD_PHOTO = "app.folder.store.upload.standard.photo"
-  val _APP_UPLOAD_THUMBNAIL_PHOTO = "app.folder.store.upload.thumbnail.photo"
-  val _APP_STANDARD_PHOTO = "app.folder.store.standard.photo"
-  val _APP_THUMBNAIL_PHOTO = "app.folder.store.thumbnail.photo"
-  val _APP_800x600_PHOTO = "app.folder.store.800x600.photo"
-  val _APP_MEDIA_VIDEO_FOLDER = "app.folder.store.video"
-  val _APP_MEDIA_VIDEO_UPLOAD_FOLDER= "app.folder.store.upload.video"
-  val _APP_MEDIA_VIDEO_STANDARD_FOLDER = "app.folder.store.standard.video"
-  val _MAIL_FROM = "app.send.mail.from"
-  val _MAIL_AUTO_SEND_PRIVATE_KEY = "app.send.mail.auto.private.key"
-  val _MAIL_AUTO_SEND_DAY_DURATION = "app.send.mail.auto.day.duration"
-  val _MAIL_AUTO_SEND_COMMENTS_MINUTES_DURATION = "app.send.mail.auto.comment.minutes.duration"
+  private val _MEDIA_FORMAT_SEPARATOR = ","
+  private val _MEDIA_FORMAT_VIDEO = "webm"
+  
+  private val _SESSION_EMAIL_KEY = "user-email"
+  private val _SESSION_ID_KEY = "session-id"
+  private val _SESSION_TIMEOUT_KEY = "session-timeout"
+  
   val _TABLE_USER_KEY = "app.db.tbl.user"
   val _TABLE_EMAIL_KEY = "app.db.tbl.email"
   val _TABLE_MEDIA_KEY = "app.db.tbl.media"
@@ -74,38 +53,64 @@ object ConfigurationUtils {
   val _TABLE_MEDIA_POST_MESSAGE_KEY = "app.db.tbl.mediapostmessage"
     
   def getStringValue(key: String) : String = {
-    return Play.application().configuration().getString(key)
+    val value = Play.application().configuration().getString(key)
+    if (value == null) {
+      throw new IllegalArgumentException("Value for Key {" + key + "} not found in application.conf file")
+    }
+    return value
   }
 
   def getIntValue(key: String) : Int = {
-    return Play.application().configuration().getInt(key)
+    val value = getStringValue(key)
+    try {
+      return value.toInt
+    } catch {
+      case e: Throwable => throw e
+    }
   }
   
-  def getHTMLTitle() = getStringValue(_APP_HTML_TITLE)
-  def getPhotoUploadStandardDirectory() = getStringValue(_APP_UPLOAD_STANDARD_PHOTO)
-  def getPhotoUploadThumbnailDirectory() = getStringValue(_APP_UPLOAD_THUMBNAIL_PHOTO)
-  def getPhotoStandardDirectory() = getStringValue(_APP_STANDARD_PHOTO)
-  def getPhotoThumbnailDirectory() = getStringValue(_APP_THUMBNAIL_PHOTO)
-  def getPhoto800x600Directory() = getStringValue(_APP_800x600_PHOTO)
-  def getMediaVideoFolderStandardDirectory() = getStringValue(_APP_MEDIA_VIDEO_STANDARD_FOLDER)
-  def getMediaVideoFolderUploadDirectory() = getStringValue(_APP_MEDIA_VIDEO_UPLOAD_FOLDER)
-  def getAdminLogin() = getStringValue(_APP_ADMIN_LOGIN)
-  def getToken() = getStringValue(_APP_TOKEN)
-  def getCreateNewUserCode() = getStringValue(_APP_CREATE_NEW_USER_CODE)
-  def getDisplayPhotoLimit() = getIntValue(_APP_DISPLAY_PHOTO_LIMIT)
-  def getHost() = ConfigurationUtils.getStringValue(ConfigurationUtils._APP_HOST)
+  def getSessionEmailID = _SESSION_EMAIL_KEY
+  def getSessionID = _SESSION_ID_KEY
+  def getSessionTimeoutID = _SESSION_TIMEOUT_KEY
   
+  def getHost = ConfigurationUtils.getStringValue("app.host")
+  def getAppName = getStringValue("app.name")
+  def getAppVersion = getStringValue("app.version")
+  def getHTMLTitle = getStringValue("app.html.title")
+  def getGoogleAnalyticsCode = getStringValue("app.google.analytics")
   
-  def getMediaFormatsAllowed() : Seq[String] = {
-    val formats = getStringValue(_APP_MEDIA_FORMAT_ALLOWED)
+  def getCreateNewUserCode = getStringValue("app.connection.code")
+  def getAdminLogin = getStringValue("app.connection.admin.login")
+  def getToken = getStringValue("app.token")
+  
+  def getDefaultTag = getStringValue("app.tag.default")
+  
+  def getPhotoRootFolderPath = getStringValue("app.folder.store.photo.root")
+  def getVideoRootFolderPath = getStringValue("app.folder.store.video.root")
+  
+  def getPhotoUploadFolderPath = getStringValue("app.folder.store.photo.upload.root")
+  def getVideoUploadFolderPath = getStringValue("app.folder.store.video.upload.root")
+  
+  def getPhotoUploadStandardFolderPath = getStringValue("app.folder.store.photo.upload.standard.root")
+  def getPhotoUploadThumbnailFolderPath = getStringValue("app.folder.store.photo.upload.thumbnail.root")
+  
+  def getPhotoStandardFolderPath = getStringValue("app.folder.store.photo.standard.root")
+  def getPhotoThumbnailFolderPath = getStringValue("app.folder.store.photo.thumbnail.root")
+  def getPhoto800x600FolderPath = getStringValue("app.folder.store.photo.800x600.root")
+
+  def getVideoStandardFolderPath = getStringValue("app.folder.store.video.standard.root")
+ 
+  def getDisplayPhotoLimit = getIntValue("app.display.photo.limit")
+  def getVideoFormatAllowed = _MEDIA_FORMAT_VIDEO
+  def getMediaFormatsAllowed : Seq[String] = {
+    val formats = getStringValue("app.media.format.allowed")
     return getMediaFormatsAllowed(formats)
   }
   
   def getMediaFormatsAllowed(formats: String) : Seq[String] = {
     if (formats == null) {
-    	return Seq.empty
+      return Seq.empty
     }
-    
     val formatsArray = formats.toLowerCase().trim().split(_MEDIA_FORMAT_SEPARATOR)
     if (!formatsArray.isEmpty) {
       return formatsArray.toSeq
@@ -121,13 +126,16 @@ object ConfigurationUtils {
     }
   }
   
-  def sessionExpiredMinutes = getIntValue("app.session.expired.time.minute")
+  def getSessionExpiredMinutesDuration = getIntValue("app.session.expired.time.minute")
 
-  def getSendingCommentsEveryMinutesDuration = ConfigurationUtils.getIntValue(ConfigurationUtils._MAIL_AUTO_SEND_COMMENTS_MINUTES_DURATION)
+  def getSendingMailEveryDayDuration = getIntValue("app.send.mail.auto.day.duration")
+  def getSendingMailFromValue = getStringValue("app.send.mail.from")
+  def getSendingCommentsEveryMinutesDuration = getIntValue("app.send.mail.auto.comment.minutes.duration")
   
   def schedulers {
     val appActor = Akka.system.actorOf(Props[AppActor], name = "applicationactor")
     
+    Logger.info("#### Akka.system.scheduler.schedule.sendcomments")
     Akka.system.scheduler.schedule(
       1 minutes,
       getSendingCommentsEveryMinutesDuration minutes,
@@ -135,6 +143,7 @@ object ConfigurationUtils {
       "sendcomments"
     )
     
+    Logger.info("##### Akka.system.scheduler.schedule.sendnewmedia")
     Akka.system.scheduler.schedule(
       1 minutes,
       1 hours,

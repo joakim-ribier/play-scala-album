@@ -41,7 +41,7 @@ import utils.fr.joakimribier.playalbum.ConfigurationUtils
 object PostController extends Controller with Secured {
 
   private val Logger = LoggerFactory.getLogger("PostController")
-  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle()
+  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle
   
   private val formNewComment = Form (
     tuple (
@@ -65,7 +65,7 @@ object PostController extends Controller with Secured {
   
   private def redirectToIndex(id: String, page: String, byTags: String, messageKey: Option[String], username: String) = Action { implicit request =>
     try {
-      val userTemplate = new UserTemplate(username, request.session.get(ConfigurationUtils._SESSION_EMAIL_KEY))
+      val userTemplate = new UserTemplate(username, request.session.get(ConfigurationUtils.getSessionEmailID))
 
       val mediaId = id.asInstanceOf[String].toInt
       val media = Media.get(mediaId)

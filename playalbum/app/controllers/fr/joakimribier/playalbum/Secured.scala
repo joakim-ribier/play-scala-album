@@ -55,18 +55,18 @@ trait Secured {
     Security.Authenticated(username, onUnauthorized) { user =>
        Action { implicit request =>
          
-        val sessionId = request.session.get(ConfigurationUtils._SESSION_ID_KEY)
+        val sessionId = request.session.get(ConfigurationUtils.getSessionID)
          if (isExpired(sessionId)) {
            Results.Redirect(routes.AuthenticationController.logout
                ).flashing("app-message" -> Messages("app.global.message.secured.session.expired")(Lang("fr")))
          } else {
-           Cache.set(sessionId.get + "-" + ConfigurationUtils._SESSION_TIMEOUT_KEY, DateTimeUtils.now)
-           val email = request.session.get(ConfigurationUtils._SESSION_EMAIL_KEY) 
-    			 if (email.isDefined && !email.get.equals("nothing")) {
-    				 f(user)(request)
-    			 } else {
-    				 Results.Redirect(routes.AccountConfigurationController.index)
-    			 }  
+           Cache.set(sessionId.get + "-" + ConfigurationUtils.getSessionTimeoutID, DateTimeUtils.now)
+           val email = request.session.get(ConfigurationUtils.getSessionEmailID)
+           if (email.isDefined && !email.get.equals("nothing")) {
+             f(user)(request)
+           } else {
+             Results.Redirect(routes.AccountConfigurationController.index)
+           }  
          }
       }
     }
@@ -90,10 +90,10 @@ trait Secured {
   
   private def isExpired(sessionId: Option[String]) : Boolean = {
     if (sessionId.isDefined) {
-      val value = Cache.get(sessionId.get + "-" + ConfigurationUtils._SESSION_TIMEOUT_KEY)
+      val value = Cache.get(sessionId.get + "-" + ConfigurationUtils.getSessionTimeoutID)
       if (value != null) {
       	val dateTime : DateTime = DateTimeUtils.convertToDateTime(Option.apply(value.toString()))
-      	return !DateTimeUtils.isAfterNowMinusMinutes(Option.apply(dateTime), Option.apply(ConfigurationUtils.sessionExpiredMinutes))
+      	return !DateTimeUtils.isAfterNowMinusMinutes(Option.apply(dateTime), Option.apply(ConfigurationUtils.getSessionExpiredMinutesDuration))
       }
     }
     return true

@@ -46,9 +46,8 @@ object ApplicationController extends Controller with Secured {
 
   private val Logger = LoggerFactory.getLogger("ApplicationController")
   
-  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle()
-  private val _LIMIT = ConfigurationUtils.getDisplayPhotoLimit()
-  
+  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle
+  private val _LIMIT = ConfigurationUtils.getDisplayPhotoLimit
   private val _TAG_ALL = "all"
   private val _TAG_SEPARATOR = "\\."
     
@@ -85,7 +84,7 @@ object ApplicationController extends Controller with Secured {
   }
   
   def index = withAuth { username => implicit request =>
-    val userTemplate = new UserTemplate(username, request.session.get(ConfigurationUtils._SESSION_EMAIL_KEY))
+    val userTemplate = new UserTemplate(username, request.session.get(ConfigurationUtils.getSessionEmailID))
   	if (User.isAdmin(username)) {
   		Redirect(routes.AdministratorController.index)
   	} else {
@@ -102,7 +101,7 @@ object ApplicationController extends Controller with Secured {
   
   def page(page: String, tags: String) = withUser { username => implicit request =>
     try {
-      val userTemplate = new UserTemplate(username, request.session.get(ConfigurationUtils._SESSION_EMAIL_KEY))
+      val userTemplate = new UserTemplate(username, request.session.get(ConfigurationUtils.getSessionEmailID))
        
       val pageToInt = page.asInstanceOf[String].toInt
       if (pageToInt >= 1) {
@@ -214,11 +213,11 @@ object ApplicationController extends Controller with Secured {
   }
   
   def configuration = Action { implicit request =>
-    val u = User.findUser(Option.apply(ConfigurationUtils.getAdminLogin()))
+    val u = User.findUser(Option.apply(ConfigurationUtils.getAdminLogin))
     if (u.isDefined) {
        Redirect(routes.ApplicationController.index)
     } else {
-      val filledForm = formNewAdmin.fill(ConfigurationUtils.getAdminLogin(), null, null)
+      val filledForm = formNewAdmin.fill(ConfigurationUtils.getAdminLogin, null, null)
       Ok(views.html.fr.joakimribier.playalbum.configuration(filledForm, _TITLE_HTML))   
     }
   }
@@ -243,19 +242,19 @@ object ApplicationController extends Controller with Secured {
   }
   
   def getPhotoInUploadThumbailDirectory(filename: String) = withAuth { username => implicit request =>
-    getFile(ConfigurationUtils.getPhotoUploadThumbnailDirectory(), filename)(request)
+    getFile(ConfigurationUtils.getPhotoUploadThumbnailFolderPath, filename)(request)
   }
    
   def getPhotoInStandardDirectory(filename: String) = withAuth { username => implicit request =>
-    getFile(ConfigurationUtils.getPhotoStandardDirectory(), filename)(request)
+    getFile(ConfigurationUtils.getPhotoStandardFolderPath, filename)(request)
   }
   
   def getPhotoInThumbailDirectory(filename: String) = Action { implicit request =>
-    getFile(ConfigurationUtils.getPhotoThumbnailDirectory(), filename)(request)
+    getFile(ConfigurationUtils.getPhotoThumbnailFolderPath, filename)(request)
   }
   
   def getPhotoIn800x600Directory(filename: String) = withAuth { username => implicit request =>
-    getFile(ConfigurationUtils.getPhoto800x600Directory(), filename)(request)
+    getFile(ConfigurationUtils.getPhoto800x600FolderPath, filename)(request)
   }
   
   def userPopupNotifyClose = withUser { username => implicit request =>
@@ -268,11 +267,11 @@ object ApplicationController extends Controller with Secured {
   }
   
   def getVideoInStandardDirectory(file: String) = withAuth { username => implicit request =>
-    getFile(ConfigurationUtils.getMediaVideoFolderStandardDirectory(), file)(request)
+    getFile(ConfigurationUtils.getVideoStandardFolderPath, file)(request)
   }
   
   def getVideoInUploadDirectory(file: String) = withAuth { username => implicit request =>
-    getFile(ConfigurationUtils.getMediaVideoFolderUploadDirectory(), file)(request)
+    getFile(ConfigurationUtils.getVideoUploadFolderPath, file)(request)
   }
   
   def getStringPostValueFromKey = Action { implicit request =>

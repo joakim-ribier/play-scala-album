@@ -47,7 +47,7 @@ import models.fr.joakimribier.playalbum.User
 object AuthenticationController extends Controller {
   
   val Logger = LoggerFactory.getLogger("AuthenticationController")
-  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle()
+  private val _TITLE_HTML: String = ConfigurationUtils.getHTMLTitle
   
   val form = Form (
     tuple (
@@ -63,7 +63,7 @@ object AuthenticationController extends Controller {
   )
   
   def login = Action { implicit request =>
-  	val u = User.findUser(Option.apply(ConfigurationUtils.getAdminLogin()))
+  	val u = User.findUser(Option.apply(ConfigurationUtils.getAdminLogin))
     if (u.isDefined) {
     	if (request.flash.get("redirect-url").isDefined) {
     	  val fill = form.fill("nothing", "nothing", Option.empty, Option.empty, Option.empty, Option.apply(request.flash.get("redirect-url").get))
@@ -100,7 +100,7 @@ object AuthenticationController extends Controller {
       	
       	val dateTime = DateTime.now().toString("yyyy-MM-dd'T'HH:mm:ss")
       	val sessionId = "uuid-" + formUsername + "-" + dateTime 
-      	Cache.set(sessionId + "-" + ConfigurationUtils._SESSION_TIMEOUT_KEY, DateTimeUtils.now)
+      	Cache.set(sessionId + "-" + ConfigurationUtils.getSessionTimeoutID, DateTimeUtils.now)
       	MDCUtils.put(sessionId)
       	Logger.info("You've been logged in")
       	
@@ -157,8 +157,8 @@ object AuthenticationController extends Controller {
   private def connectToAccountConfigurationPage(username: String, sessionId: String, succeed: Boolean, message: String) = Action {
     Redirect(routes.AccountConfigurationController.index).withSession(
         Security.username -> username,
-    		ConfigurationUtils._SESSION_ID_KEY -> sessionId,
-    		ConfigurationUtils._SESSION_EMAIL_KEY -> formatUserEmailToString(username)
+    		ConfigurationUtils.getSessionID -> sessionId,
+    		ConfigurationUtils.getSessionEmailID -> formatUserEmailToString(username)
     		).flashing(
     		    "connection" -> "success",
     		    "validation-message" -> message,
@@ -171,20 +171,20 @@ object AuthenticationController extends Controller {
     	if (message.isDefined) {
     		Redirect(url).withSession(
     				Security.username -> username,
-    				ConfigurationUtils._SESSION_ID_KEY -> sessionId,
-    				ConfigurationUtils._SESSION_EMAIL_KEY -> formatUserEmailToString(username)
+    				ConfigurationUtils.getSessionID -> sessionId,
+    				ConfigurationUtils.getSessionEmailID -> formatUserEmailToString(username)
     				).flashing("connection" -> "success", "app-message" -> message.get)
     	} else {
     		Redirect(url).withSession(
     				Security.username -> username,
-    				ConfigurationUtils._SESSION_ID_KEY -> sessionId,
-    				ConfigurationUtils._SESSION_EMAIL_KEY -> formatUserEmailToString(username)).flashing("connection" -> "success")
+    				ConfigurationUtils.getSessionID -> sessionId,
+    				ConfigurationUtils.getSessionEmailID -> formatUserEmailToString(username)).flashing("connection" -> "success")
     	}
     } else {
       Redirect(routes.AccountConfigurationController.index).withSession(
     				Security.username -> username,
-    				ConfigurationUtils._SESSION_ID_KEY -> sessionId,
-    				ConfigurationUtils._SESSION_EMAIL_KEY -> formatUserEmailToString(username)
+    				ConfigurationUtils.getSessionID -> sessionId,
+    				ConfigurationUtils.getSessionEmailID -> formatUserEmailToString(username)
     				).flashing("connection" -> "success")
     }	
   }
@@ -216,7 +216,7 @@ object AuthenticationController extends Controller {
   }
   
   def userTemplate(username: String, session: Session) : UserTemplate = {
-    return new UserTemplate(username, session.get(ConfigurationUtils._SESSION_EMAIL_KEY))
+    return new UserTemplate(username, session.get(ConfigurationUtils.getSessionEmailID))
   }
   
   def buildFeedbackObjFromRequestOrKey(request: RequestHeader, messageKey: Option[String]) : Feedback = {

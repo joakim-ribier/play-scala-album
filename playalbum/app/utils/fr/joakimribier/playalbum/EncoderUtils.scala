@@ -29,7 +29,7 @@ object EncoderUtils {
   private val _EMPTY = ""
     
   def generateTokenForEmailValidation(username: String, addressMail: String) : String = {
-    return generateTokenForEmailValidation(username, addressMail, ConfigurationUtils.getToken())
+    return generateTokenForEmailValidation(username, addressMail, ConfigurationUtils.getToken)
   }
   
   def generateTokenForEmailValidation(username: String, addressMail: String, token: String) : String = {
