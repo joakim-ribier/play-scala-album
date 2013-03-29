@@ -46,8 +46,6 @@ POST	/album/get/post/value/from/key												controllers.fr.joakimribier.playa
 # SEND MAIL CONTROLLER
 
 POST	/album/user/new/address/mail								controllers.fr.joakimribier.playalbum.SendMailController.newEmail
-GET		/album/notify/new/photo/private/:key						controllers.fr.joakimribier.playalbum.SendMailController.notifyNewPhoto(key: String)
-GET		/album/send/mail/comments/private/:key						controllers.fr.joakimribier.playalbum.SendMailController.comments(key: String)
 
 
 # ADMINSTRATOR CONTROLLER

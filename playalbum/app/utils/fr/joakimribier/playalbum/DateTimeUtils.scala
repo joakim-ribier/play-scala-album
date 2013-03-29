@@ -45,4 +45,13 @@ object DateTimeUtils {
     }
     return dateTime.get.isAfter(DateTime.now().minusMinutes(minus.get))
   }
+  
+  def isDayAndHour(dateTime: Option[DateTime], day: Option[Int], hour: Option[Int]) : Boolean = {
+    if (!dateTime.isDefined || !day.isDefined || !hour.isDefined) {
+      throw new IllegalArgumentException("datetime, day and hour fields are required")
+    }
+    return (
+        dateTime.get.getDayOfWeek() == day.get) && (
+        dateTime.get.getHourOfDay() == hour.get) 
+  }
 }

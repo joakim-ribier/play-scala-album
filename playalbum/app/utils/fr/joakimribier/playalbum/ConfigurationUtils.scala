@@ -1,6 +1,11 @@
 package utils.fr.joakimribier.playalbum
 
 import play.Play
+import play.libs.Akka
+import akka.actor._
+import scala.concurrent.duration._
+import play.api.libs.concurrent.Execution.Implicits._
+import actor.fr.joakimribier.playalbum.AppActor
 
 /**
  * 
@@ -34,9 +39,9 @@ object ConfigurationUtils {
   // CONFIGURATION KEYS
   val _MEDIA_FORMAT_VIDEO = "webm"
   val _APP_HOST = "app.host"
-	val _APP_TOKEN = "token"
-	val _APP_TAG_DEFAULT = "tag.default"
-	val _APP_CREATE_NEW_USER_CODE = "app.connection.code"
+  val _APP_TOKEN = "token"
+  val _APP_TAG_DEFAULT = "tag.default"
+  val _APP_CREATE_NEW_USER_CODE = "app.connection.code"
   val _APP_ADMIN_LOGIN = "app.connection.admin.login"
   val _APP_CONNECTION_DATE = "app.connection.date"
   val _APP_HTML_TITLE = "app.html.title"
@@ -53,9 +58,9 @@ object ConfigurationUtils {
   val _APP_MEDIA_VIDEO_UPLOAD_FOLDER= "app.folder.store.upload.video"
   val _APP_MEDIA_VIDEO_STANDARD_FOLDER = "app.folder.store.standard.video"
   val _MAIL_FROM = "app.send.mail.from"
-	val _MAIL_AUTO_SEND_PRIVATE_KEY = "app.send.mail.auto.private.key"
-	val _MAIL_AUTO_SEND_DAY_DURATION = "app.send.mail.auto.day.duration"
-	val _MAIL_AUTO_SEND_COMMENTS_MINUTES_DURATION = "app.send.mail.auto.comment.minutes.duration"
+  val _MAIL_AUTO_SEND_PRIVATE_KEY = "app.send.mail.auto.private.key"
+  val _MAIL_AUTO_SEND_DAY_DURATION = "app.send.mail.auto.day.duration"
+  val _MAIL_AUTO_SEND_COMMENTS_MINUTES_DURATION = "app.send.mail.auto.comment.minutes.duration"
   val _TABLE_USER_KEY = "app.db.tbl.user"
   val _TABLE_EMAIL_KEY = "app.db.tbl.email"
   val _TABLE_MEDIA_KEY = "app.db.tbl.media"
@@ -117,4 +122,24 @@ object ConfigurationUtils {
   }
   
   def sessionExpiredMinutes = getIntValue("app.session.expired.time.minute")
+
+  def getSendingCommentsEveryMinutesDuration = ConfigurationUtils.getIntValue(ConfigurationUtils._MAIL_AUTO_SEND_COMMENTS_MINUTES_DURATION)
+  
+  def schedulers {
+    val appActor = Akka.system.actorOf(Props[AppActor], name = "applicationactor")
+    
+    Akka.system.scheduler.schedule(
+      1 minutes,
+      getSendingCommentsEveryMinutesDuration minutes,
+      appActor,
+      "sendcomments"
+    )
+    
+    Akka.system.scheduler.schedule(
+      1 minutes,
+      1 hours,
+      appActor,
+      "sendnewmedia"
+    )
+  }
 }

@@ -50,7 +50,6 @@ object SendMailController extends Controller with Secured {
 	private val _TITLE_HTML = ConfigurationUtils.getHTMLTitle()
   private val _PRIVATE_KEY = ConfigurationUtils.getStringValue(ConfigurationUtils._MAIL_AUTO_SEND_PRIVATE_KEY)
   private val _DAY_DURATION = ConfigurationUtils.getIntValue(ConfigurationUtils._MAIL_AUTO_SEND_DAY_DURATION)
-  private val _MINUTES_DURATION = ConfigurationUtils.getIntValue(ConfigurationUtils._MAIL_AUTO_SEND_COMMENTS_MINUTES_DURATION)
   private val _ADMIN_LOGIN = ConfigurationUtils.getStringValue(ConfigurationUtils._APP_ADMIN_LOGIN)
   private val _FROM = ConfigurationUtils.getStringValue(ConfigurationUtils._MAIL_FROM)
   
@@ -87,64 +86,42 @@ object SendMailController extends Controller with Secured {
     }
   }
 
-  def notifyNewPhoto(key: String) = Action {
+  def notifyNewPhoto {
     try {
-	    if (key != null && key.equals(_PRIVATE_KEY)) {
-	      
-	      val dateTime = DateTime.now().minusDays(_DAY_DURATION)
-	      val photos = Media.list(dateTime)
-	      val emails = UserEmail.list()
-	      
-	      if (emails != null && emails.size > 0
-	          && photos != null && photos.size > 0) {
-	        
-	        for (email <- emails) {
-	        	sendNotifyNewPhotoMail(dateTime, email, photos)
-	        }
-	      }
-	
-	      Logger.info("send notification new media to user")
-	      Results.Ok
-	    } else {
-	      Logger.error("access at notifyNewPhoto service on SendMail controller with wrong private key [ " + key + " ]")
-	      Results.Unauthorized
-	    }  
+      val dateTime = DateTime.now().minusDays(_DAY_DURATION)
+      val photos = Media.list(dateTime)
+      val emails = UserEmail.list()
+      if (emails != null && emails.size > 0 && photos != null && photos.size > 0) {
+        for (email <- emails) {
+          sendNotifyNewPhotoMail(dateTime, email, photos)
+        }
+      }
+      Logger.info("send notification new media to user")
     } catch {
       case e: Throwable => {
         Logger.error(e.getMessage(), e)
-        Results.ExpectationFailed
       }
     }
   }
   
-  def comments(key: String) = Action {
+  def comments = {
     try {
-	    if (key != null && key.equals(_PRIVATE_KEY)) {
-	      
-	      val dateTime = DateTime.now().minusMinutes(_MINUTES_DURATION)
-	      val mediaIds = Post.listMediaIds(Option.apply(dateTime))
-	      if (!mediaIds.isEmpty) {
-	        
-	        val to = UserEmail.getFromLogin(_ADMIN_LOGIN)
-	        for (mediaId <- mediaIds) {
-	          val media = Media.get(mediaId)
-	          val bcc = Post.listEmails(Option.apply(mediaId))
-	          val comments = Post.descList(Option.apply(mediaId))
-	          sendComments(comments, media, bcc, to.get)("send " + media.title + " comments from " + dateTime.toDate)
-	        }
-	      	Results.Ok
-	      } else {
-	      	Logger.info("there are not new comments since 15 minutes")
-	      	Results.Ok
-	      }
-	    } else {
-	      Logger.error("comments SendMail controller service failed access with key : {}", key)
-	      Results.Unauthorized
-	    }  
+      val dateTime = DateTime.now().minusMinutes(ConfigurationUtils.getSendingCommentsEveryMinutesDuration)
+      val mediaIds = Post.listMediaIds(Option.apply(dateTime))
+      if (!mediaIds.isEmpty) {
+        val to = UserEmail.getFromLogin(_ADMIN_LOGIN)
+        for (mediaId <- mediaIds) {
+          val media = Media.get(mediaId)
+          val bcc = Post.listEmails(Option.apply(mediaId))
+          val comments = Post.descList(Option.apply(mediaId))
+          sendComments(comments, media, bcc, to.get)("send " + media.title + " comments from " + dateTime.toDate)
+        }
+      } else {
+        Logger.info("there are no new comments")
+      }
     } catch {
       case e: Throwable => {
         Logger.error(e.getMessage(), e)
-        Results.ExpectationFailed
       }
     }
   }

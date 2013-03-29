@@ -1,7 +1,5 @@
 import java.io.File
-
 import org.slf4j.LoggerFactory
-
 import play.api.Application
 import play.api.GlobalSettings
 import play.api.mvc.Handler
@@ -61,6 +59,8 @@ object Global extends GlobalSettings {
     
     checkDBConfiguration()
     checkFolderStorePhotos();
+    
+    ConfigurationUtils.schedulers
   }
   
   override def onStop(app: Application) {
